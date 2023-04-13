@@ -58,7 +58,7 @@
 ## 팀 소개 및 역할
 |```FE``` 문경덕|```BE``` 신지송|```BE``` 장혁수|```FE``` 정태훈|
 |:-:|:-:|:-:|:-:|
-|<img src="https://user-images.githubusercontent.com/74173976/216749372-fe3715b9-9249-4e89-b43b-3bf8198c9b0b.png" width=130>|<img src="https://user-images.githubusercontent.com/76612738/227775954-b5469ce3-c92d-4b12-a186-5a20547dabbe.png"/>|<img src="https://user-images.githubusercontent.com/74173976/216749372-fe3715b9-9249-4e89-b43b-3bf8198c9b0b.png" width=130>|<img src="https://user-images.githubusercontent.com/76612738/227775954-b5469ce3-c92d-4b12-a186-5a20547dabbe.png"/>|
-|[@Moon-GD](https://github.com/Moon-GD)|[@gmuz1c](https://github.com/shin-jisong)||[@Moon-GD](https://github.com/Moon-GD)|[@hoonystory98](https://github.com/hoonystory98)|
+|<img src="https://user-images.githubusercontent.com/74173976/216749372-fe3715b9-9249-4e89-b43b-3bf8198c9b0b.png" width=130>|<img src="https://user-images.githubusercontent.com/74173976/231698050-4e9259b4-0b61-47c6-8c2c-a92689f90d3a.png"/>|<img src="https://user-images.githubusercontent.com/76612738/227775954-b5469ce3-c92d-4b12-a186-5a20547dabbe.png"/>|<img src="https://user-images.githubusercontent.com/74173976/231698801-0398e279-9aac-4d43-9204-615efe9d80bf.png" width=130>|
+|[@Moon-GD](https://github.com/Moon-GD)|[@gmuz1c](https://github.com/shin-jisong)|[@zangsu](https://github.com/zangsu)|[@hoonystory98](https://github.com/hoonystory98)|
 |과업 1|과업 2|과업 3|과업 4|
 |과업 5|과업 6|과업 7|과업 8|
