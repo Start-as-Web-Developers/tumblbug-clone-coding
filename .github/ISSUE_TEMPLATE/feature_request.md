@@ -10,10 +10,10 @@ assignees: ''
 ## Issue Number : #숫자 - 제목
 
 ## Tasks
-- 할 일 작성
+- [ ] 할 일 작성
 
 ## Related Issues
-- 관련 이슈
+- #숫자 - 제목 (관련 이슈 연결)
 
 ## Time line
 MM.DD ~ MM.DD
