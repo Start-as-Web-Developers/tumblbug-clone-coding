@@ -22,6 +22,11 @@
   "settings": {
     "react": {
       "version": "detect"
+    },
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
     }
   },
   "rules": {
@@ -34,6 +39,7 @@
       }
     ],
     "@typescript-eslint/explicit-module-boundary-types": "off",
-    "import/prefer-default-export": "off"
+    "import/prefer-default-export": "off",
+    "import/extensions": "off"
   }
 }
