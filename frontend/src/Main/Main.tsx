@@ -3,8 +3,8 @@ import Navbar from '../Navbar/Navbar';
 
 function Main() {
   return (
-    <Navbar/>
-  )
+      <Navbar />
+  );
 }
 
 export default Main;
