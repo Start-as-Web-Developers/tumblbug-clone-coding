@@ -1,0 +1,31 @@
+// common
+$theme-color: #ff8181;
+
+// category Area
+ul.categoryArea {
+    width: 40%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    & li {
+      width: 19%;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      cursor: pointer;
+
+      &:first-child {
+        width: 24%;
+      }
+
+      &:hover {
+        color: $theme-color;
+      }
+
+      & span {
+        font-size: 1rem;
+        font-weight: 700;
+      }
+    }
+  }

@@ -1,7 +1,7 @@
 import React from 'react';
 import './navbar.scss';
-import NavbarFirstRow from './NavbarFirstRow';
-import NavbarSecondRow from './NavbarSecondRow';
+import NavbarFirstRow from './firstRow/NavbarFirstRow';
+import NavbarSecondRow from './secondRow/NavbarSecondRow';
 
 function Navbar() {
   return (
