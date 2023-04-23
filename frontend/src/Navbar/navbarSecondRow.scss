@@ -8,3 +8,19 @@ button {
   cursor: pointer;
 }
 
+// second Row of navbar
+.navbarSecondRow {
+  width: 100%;
+  height: 40%;
+  display: flex;
+  align-items: center;
+
+  & .categoryArea {
+
+  }
+
+  & .searchArea {
+
+  }
+}
+
