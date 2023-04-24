@@ -13,6 +13,7 @@ function LoginBox() {
         <LoginForm />
         <p className="LoginTransferMessage">다른 방법으로 로그인</p>
         <LoginTransfer />
+
         <p className="LoginSuggestion">
           아직 텀블벅 계정이 없으신가요?
           <a href="https://www.google.co.kr">회원가입</a>
@@ -22,12 +23,7 @@ function LoginBox() {
           <a href="https://www.google.co.kr">비밀번호 재설정</a>
         </p>
       </section>
-      <div className="LoginImage">
-        <img
-          src="https://tumblbug-assets.s3.ap-northeast-1.amazonaws.com/static_assets/login/bg_login_email.jpg"
-          alt="ImageForLogin"
-        />
-      </div>
+      <div className="LoginImage" />
     </section>
   );
 }

@@ -38,7 +38,7 @@
         "extensions": [".tsx"]
       }
     ],
-    "react/jsx-a11y/label-has-associated-control": [
+    "jsx-a11y/label-has-associated-control": [
       2,
       {
         "labelAttributes": ["htmlFor"]
