@@ -7,6 +7,7 @@ import "./LoginBox.scss";
 
 function LoginBox() {
   return (
+    // 이메일로 로그인을 위한 부분
     // <section className="LoginSection">
     //   <section className="LoginBox">
     //     <Logo />
@@ -14,7 +15,6 @@ function LoginBox() {
     //     <LoginForm />
     //     <p className="LoginTransferMessage">다른 방법으로 로그인</p>
     //     <LoginTransfer />
-
     //     <p className="LoginSuggestion">
     //       아직 텀블벅 계정이 없으신가요?
     //       <a href="https://www.google.co.kr">회원가입</a>
@@ -25,7 +25,9 @@ function LoginBox() {
     //     </p>
     //   </section>
     //   <div className="LoginImage" />
-    //   </section>
+    // </section>
+
+    // 카카오로 로그인을 위한 부분
     <section className="LoginSection">
       <section className="LoginBox">
         <Logo />
