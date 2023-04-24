@@ -1,7 +1,7 @@
-import React from 'react';
-import Navbar from '../Navbar/Navbar';
-import Body from './Body';
-import './main.scss';
+import React from "react";
+import Navbar from "../Navbar/Navbar";
+import Body from "./Body";
+import "./main.scss";
 
 function Main() {
   return (
