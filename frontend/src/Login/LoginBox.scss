@@ -1,0 +1,17 @@
+.LoginSection {
+  display: flex;
+}
+
+.LoginBox {
+  display: flex;
+  width: 50%;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: 5vh 7.5vw 5vh 15vw;
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 5vh 0;
+  }
+}

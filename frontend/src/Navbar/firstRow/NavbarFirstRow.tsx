@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 import Logo from "../../MainLogo/Logo";
-import NavbarProfileImage from './NavbarProfileImage';
-import './navbarFirstRow.scss';
+import NavbarProfileImage from "./NavbarProfileImage";
+import "./navbarFirstRow.scss";
 
 function NavbarFirstRow() {
   return (
