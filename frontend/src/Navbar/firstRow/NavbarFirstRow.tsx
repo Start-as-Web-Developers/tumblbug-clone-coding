@@ -1,5 +1,5 @@
 import React from "react";
-import Logo from "../../MainLogo/Logo";
+import Logo from "../../TumblbugLogo/Logo";
 import NavbarProfileImage from "./NavbarProfileImage";
 import "./navbarFirstRow.scss";
 

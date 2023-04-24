@@ -1,8 +1,15 @@
 import React from "react";
 import Navbar from "../Navbar/Navbar";
+import Body from "./Body";
+import "./main.scss";
 
 function Main() {
-  return <Navbar />;
+  return (
+    <section className="main">
+      <Navbar />
+      <Body />
+    </section>
+  );
 }
 
 export default Main;
