@@ -1,6 +1,6 @@
 .LoginSection {
   display: flex;
-  height: 100%;
+  height: 100vh;
 }
 
 .LoginBox {
@@ -44,7 +44,7 @@
     color: gray;
     font-size: 0.75rem;
     font-weight: 500;
-    margin: 1em 0;
+    margin: 0.5rem 0;
 
     a {
       margin-left: 1em;
@@ -56,5 +56,10 @@
 .LoginImage {
   flex-grow: 1;
   background-image: url("https://tumblbug-assets.s3.ap-northeast-1.amazonaws.com/static_assets/login/bg_login_email.jpg");
+  background-size: cover;
+}
+.LoginImageKakao {
+  flex-grow: 1;
+  background-image: url("https://tumblbug-assets.s3.ap-northeast-1.amazonaws.com/static_assets/login/bg_login_kakao.jpg");
   background-size: cover;
 }

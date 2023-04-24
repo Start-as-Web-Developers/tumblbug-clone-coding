@@ -14,6 +14,29 @@ function LoginTransfer() {
           fillOpacity="0.9"
         />
       </svg>
+      <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
+        <circle cx="17" cy="17" r="14.875" fill="#D0D0D0" />
+        <path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M24.5557 10.8608H9.44458V12.0886H24.5557V10.8608ZM24.5557 12.0887L17.0001 17.8183L9.44458 12.0887H24.5557Z"
+          fill="white"
+        />
+        <path
+          d="M20.1483 16.9997L24.5557 20.2737L24.5557 13.7256L20.1483 16.9997Z"
+          fill="white"
+        />
+        <path
+          d="M13.852 16.9997L9.44458 20.2737L9.44458 13.7256L13.852 16.9997Z"
+          fill="white"
+        />
+        <path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M17.0001 19.4554L19.1589 17.8184L24.5557 21.9109L24.5557 23.1387H9.44458V21.9109L14.8414 17.8184L17.0001 19.4554Z"
+          fill="white"
+        />
+      </svg>
     </section>
   );
 }
