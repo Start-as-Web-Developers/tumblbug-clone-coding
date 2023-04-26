@@ -1,0 +1,196 @@
+.footer {
+  width: 70vw;
+  height: 35vh;
+  padding: 0 15vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+
+  & .footerServiceRow {
+    width: 100%;
+    height: 45%;
+    flex-grow: 4;
+    display: grid;
+    grid-template-columns: repeat(8, auto);
+    gap: 1%;
+    
+    & .footerServiceRow__column {
+      display: flex;
+      flex-direction: column;
+      align-items: left;
+      justify-content: baseline;
+      font-weight: 500;
+      font-size: 0.8rem;
+      color: #7B7E7F;
+
+      & h2 {
+        color: #000;
+        font-weight: 700;
+        font-size: 1rem;
+        flex-grow: 2;
+      }
+
+      & h4 {
+        font-weight: 600;
+        flex-grow: 1;
+      }
+    }
+
+    & .footerServiceRow__column02 {
+      height: 65%;
+      display: flex;
+      flex-direction: column;
+      align-items: left;
+      justify-content: baseline;
+      font-weight: 500;
+      font-size: 0.8rem;
+      color: #7B7E7F;
+
+      & h2 {
+        color: #000;
+        font-weight: 700;
+        font-size: 1rem;
+        flex-grow: 2;
+      }
+
+      & h4 {
+        font-weight: 600;
+        flex-grow: 1;
+      }
+    }
+
+    & .footerServiceRow__appColumn {
+      display: flex;
+      flex-direction: column;
+      height: 80%;
+
+      & h2 {
+        font-size: 1rem;
+        font-weight: 700;
+      }
+
+      & svg {
+        margin-right: 3%;
+        font-size: 0.8rem;
+      }
+
+      & div {
+        margin-top: 7%;
+        padding: 5%;
+        background-color: #f6f5f5;
+        width: 80%;
+        height: 15%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &:last-child {
+          margin-top: 5%;
+        }
+
+        & h3 {
+          color: rgb(109, 109, 109);
+          font-weight: 700;
+          font-size: 0.8rem;
+        }
+      }
+    }
+
+    & .footerServiceRow__serviceColumn {
+      width: 100%;
+      height: 60%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      & h2 {
+        font-size: 1rem;
+        font-weight: 700;
+      }
+
+      & h4 {
+        color: rgb(109, 109, 109);
+        font-size: 0.7rem;
+        font-weight: 500;
+      }
+
+      & div {
+        & h5 {
+          font-size: 0.8rem;
+          width: 70%;
+          text-align: center;
+          border: 1px solid rgba(0, 0, 0, 0.08);
+          padding: 3%;
+        }
+      }
+    }
+  }
+
+  & div.footer__firstLine,
+  & div.footer__secondLine {
+    background-color: rgba(0, 0, 0, 0.08);
+    height: 1px;
+    width: 100%;
+  }
+
+  & div.footer__firstLine {
+    margin-bottom: 1.5vh;
+  }
+
+  & div.footer__secondLine {
+    margin: 1.5vh 0;
+  }
+
+  & .footerCompanyExplainRow {
+    width: 100%;
+    height: 20%;
+    flex-grow: 2;
+    display: flex;
+    padding: 1% 0;
+    flex-direction: column;
+    justify-content: space-between;
+    font-size: 0.7rem;
+
+    & .footerCompanyExplainRow__companyInfo,
+    & .footerCompanyExplainRow__phoneInfo {
+      display: flex;
+      align-items: center;      
+
+      & h3 {
+        font-size: 0.8rem;
+        font-weight: 700;
+      }
+
+      & h4 {
+        margin: 0 1%;
+      }
+    }
+
+    & .footerCompanyExplainRow__Inc {
+      font-size: 0.8rem;
+      color: rgb(158, 158, 158);
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  & .footerLawRow {
+    width: 100vw;
+    height: 15%;
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0;
+
+    & h5 {
+      font-weight: 500;
+      font-size: 0.7rem;
+      color: rgb(109, 109, 109);
+      width: 70%;
+      margin:0 auto;
+      line-height: 1.5;
+    }
+  }
+}
