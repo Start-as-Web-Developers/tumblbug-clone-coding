@@ -70,7 +70,7 @@ function BodyFilterBtnArea() {
     });
 
     // prevent event bubbling
-    eventTo($filterBox, (event: Event) => event.stopPropagation);
+    eventTo($filterBox, (event: Event) => event.stopPropagation());
 
   }, [filterBoxOpen]);
 
