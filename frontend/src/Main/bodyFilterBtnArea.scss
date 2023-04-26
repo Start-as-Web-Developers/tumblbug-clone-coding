@@ -73,7 +73,7 @@ $filter-box-horizontal-padding: 3%;
         & h2 {
           display: flex;
           align-items: center;
-          width: 100%;
+          width: calc(100% - 2 * $filter-box-horizontal-padding);
           height: 15%;
           padding: 2% $filter-box-horizontal-padding;
           font-weight: 700;
@@ -88,7 +88,7 @@ $filter-box-horizontal-padding: 3%;
         & h3 {
           display: flex;
           align-items: center;
-          width: 100%;
+          width: calc(100% - 2 * $filter-box-horizontal-padding);
           height: 15%;
           padding: 2% $filter-box-horizontal-padding;
           color: #000;
