@@ -1,0 +1,65 @@
+.LoginSection {
+  display: flex;
+  height: 100vh;
+}
+
+.LoginBox {
+  display: flex;
+  width: 50%;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: 5vh 7.5vw 5vh 15vw;
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 5vh 0;
+  }
+
+  .LoginTransferMessage {
+    display: flex;
+    color: gray;
+    font-size: 0.75rem;
+    text-align: center;
+    align-items: center;
+  }
+  .LoginTransferMessage::before {
+    content: "";
+    box-sizing: border-box;
+    margin-right: 1rem;
+    flex-grow: 1;
+    background-color: lightgray;
+    height: 1px;
+  }
+  .LoginTransferMessage::after {
+    content: "";
+    box-sizing: border-box;
+    margin-left: 1rem;
+    flex-grow: 1;
+    background-color: lightgray;
+    height: 1px;
+  }
+
+  .LoginSuggestion {
+    color: gray;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin: 0.5rem 0;
+
+    a {
+      margin-left: 1em;
+      color: turquoise;
+    }
+  }
+}
+
+.LoginImage {
+  flex-grow: 1;
+  background-image: url("https://tumblbug-assets.s3.ap-northeast-1.amazonaws.com/static_assets/login/bg_login_email.jpg");
+  background-size: cover;
+}
+.LoginImageKakao {
+  flex-grow: 1;
+  background-image: url("https://tumblbug-assets.s3.ap-northeast-1.amazonaws.com/static_assets/login/bg_login_kakao.jpg");
+  background-size: cover;
+}
