@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from 'react-router-dom';
 import Logo from "../../TumblbugLogo/Logo";
 import NavbarProfileImage from "./NavbarProfileImage";
 import "./navbarFirstRow.scss";
@@ -14,7 +15,7 @@ function NavbarFirstRow() {
         <div className="navbarFirstRow__loginArea">
           <NavbarProfileImage />
           <button type="button" className="navbarFirstRow__loginBtn">
-            로그인/회원가입
+            <Link to="/login">로그인/회원가입</Link>
           </button>
         </div>
       </div>
