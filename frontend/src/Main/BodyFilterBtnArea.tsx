@@ -69,6 +69,9 @@ function BodyFilterBtnArea() {
       setFilterBoxOpen(!filterBoxOpen);
     });
 
+    // prevent event bubbling
+    eventTo($filterBox, (event: Event) => event.stopPropagation);
+
   }, [filterBoxOpen]);
 
   return (

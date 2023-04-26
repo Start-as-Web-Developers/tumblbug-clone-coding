@@ -47,7 +47,7 @@ const changeMultiCSS = (
  */
 const eventTo = (
   $target: HTMLElement,
-  eventHandler: () => void,
+  eventHandler: (() => void) | ((event:Event) => void),
   eventType = "click"
 ) => {
   $target.addEventListener(eventType, eventHandler);
