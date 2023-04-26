@@ -1,0 +1,133 @@
+.cardArea {
+  width: 100%;
+  height: 70%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin-bottom: 5%;
+
+  & .cardContainer {
+    display: flex;
+    flex-direction: column;
+    width: 23%;
+    margin-right: 2%;
+    height: 40vh;
+
+  & .cardContainer__thumbNail {
+    width: 100%;
+    height: 50%;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    & img {
+      transition: 0.2s;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+
+      &:hover {
+        transform: scale(105%);
+      }
+    }
+
+    & svg {
+      cursor: pointer;
+      position:absolute;
+      width: 12%;
+      height: 12%;
+      right: 5%;
+      bottom: 5%;
+      color: #fff;
+    }
+  }
+
+  & .cardContainer__categoryArea {
+    width: 100%;
+    height: 5%;
+    font-size: 0.6rem;
+    padding: 1% 0;
+    display: flex;
+    align-items: center;
+
+    & span {
+      margin-right: 2%;
+      }
+
+      & :first-child {
+        cursor: pointer;
+      }
+    }
+
+    & .cardContainer__cardTitle {
+      width: 100%;
+      height: 12%;
+      font-size: 1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    & .cardContainer__cardExplain {
+      padding: 1% 0;
+      width: 100%;
+      height: 12%;
+      display: flex;
+      align-items: center;
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: rgb(158, 158, 158);
+    }
+
+    & .cardContainer__percentBarArea {
+      width: 100%;
+      height: 15%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      & .cardContainer__percentTextArea {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        height: 60%;
+
+        & h2 {
+          flex-grow: 1;
+          font-size: 0.9rem;
+          font-weight: 700;
+          color: #ff5757;
+        }
+
+        & h4 {
+          flex-grow: 5;
+          font-size: 0.7rem;
+          text-align: left;
+        }
+
+        & h3 {
+          flex-grow: 1;
+          font-size: 0.8rem;
+          text-align: right;
+          color: rgb(109, 109, 109);
+        }
+      }
+
+      & .cardContainer__percentBar {
+        width: 100%;
+        height: 5%;
+        background-color: rgb(208, 208, 208);
+
+        & .cardContainer__innerPercentBar {
+          width: 50%;
+          height: 100%;
+          background-color: #ff5757;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,48 @@
+// common
+$filter-btn-fontsize: 0.8rem;
+$filter-btn-width: 45%;
+$filter-btn-height: 100%;
+$filter-btn-outline: 1.5px solid #f2f2f2;
+$filter-btn-padding: 5% 1.5%;
+
+// 필터 버튼 영역
+.filterBtnArea {
+  padding: 1% 0;
+  width: 15%;
+  height: 10%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #5e5e5e;
+  font-weight: 500;
+
+  & .filterBtnArea__percentBtn {
+    padding: $filter-btn-padding;
+    width: $filter-btn-width;
+    height: $filter-btn-height;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    outline: $filter-btn-outline;
+    cursor: pointer;
+
+    & span {
+      font-size: $filter-btn-fontsize;
+    }
+
+    & svg {
+      font-size: $filter-btn-fontsize;
+      transition: 0.5s;
+    }
+  }
+
+  & .filterBtnArea__editorRecommendBtn {
+    padding: $filter-btn-padding;
+    width: $filter-btn-width;
+    height: $filter-btn-height;
+    font-size: $filter-btn-fontsize;
+    outline: $filter-btn-outline;
+    text-align: center;
+    cursor: pointer;
+  }
+}
