@@ -13,8 +13,8 @@ describe("changeCSS()", () => {
 
   test("don't set css value for improper inputs", () => {
     const $target = document.createElement("div");
-    const property = "impropervalue";
-    const value = "rgb(255, 255, 255)";
+    const property = "improper property";
+    const value = "improper value";
 
     changeCSS($target, property, value);
 
