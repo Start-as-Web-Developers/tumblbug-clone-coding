@@ -24,7 +24,7 @@ describe("changeCSS()", () => {
 });
 
 describe("changeMultiCSS()", () => {
-  test("input: cssObjArray <normal>", () => {
+  test("<normal> input: cssObjArray", () => {
     const $target = document.createElement("div");
     const cssObjArray: cssObj[] = [
       {
@@ -49,7 +49,7 @@ describe("changeMultiCSS()", () => {
     });
   });
 
-  test("input: cssObjArray, value of inputs are weird <abnormal>", () => {
+  test("<abnormal> input: cssObjArray, value of inputs are weird", () => {
     const $target = document.createElement("div");
     const cssObjArray = [
       // improper key
