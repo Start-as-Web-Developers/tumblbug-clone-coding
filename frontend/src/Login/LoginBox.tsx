@@ -1,6 +1,5 @@
 import React from "react";
 import Logo from "../TumblbugLogo/Logo";
-import LoginForm from "./LoginForm/LoginForm";
 import LoginFormKakao from "./LoginFormKakao/LoginFormKakao";
 import LoginTransfer from "./LoginTransfer/LoginTransfer";
 import "./LoginBox.scss";

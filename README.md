@@ -1,4 +1,4 @@
-# Tumblbug clone coding  
+# Tumblbug clone coding   
 
 <br>
 
@@ -36,7 +36,12 @@
 |Testing|<img src="https://img.shields.io/badge/Jest-C21325?style=flat&logo=Jest&logoColor=white"/>|
 
 ### BE
-<br>
+|Types|Techs|
+|:-|:-|
+|Language|<img src="https://img.shields.io/badge/java-007396?style=flat&logo=java&logoColor=white">|
+|Framework|<img src="https://img.shields.io/badge/spring-6DB33F?style=flat&logo=Spring&logoColor=white"> <img src="https://img.shields.io/badge/springboot-6DB33F?style=flat&logo=SpringBoot&logoColor=white">|
+|Database| <img src="https://img.shields.io/badge/mariaDB-003545?style=flat&logo=mariaDB&logoColor=white">|
+|Infra|<img src="https://img.shields.io/badge/amazonaws-232F3E?style=flat&logo=amazonaws&logoColor=white">|
 
 ## 아키텍쳐
 추후 기입
