@@ -51,7 +51,7 @@ function SignupBox() {
             />
           </label>
           <div className="SignupLabel">
-            <label htmlFor="SignupAcceptAll">
+            <label htmlFor="SignupAcceptAll" className="SignupCheckbox">
               <input
                 type="checkbox"
                 id="SignupAcceptAll"
@@ -60,7 +60,7 @@ function SignupBox() {
               <span className="SignupAcceptLabel">전체동의</span>
             </label>
             <hr />
-            <label htmlFor="SignupAcceptAge">
+            <label htmlFor="SignupAcceptAge" className="SignupCheckbox">
               <input
                 type="checkbox"
                 id="SignupAcceptAge"
@@ -70,7 +70,7 @@ function SignupBox() {
                 만 14세 이상입니다. (필수)
               </span>
             </label>
-            <label htmlFor="SignupAcceptTerms">
+            <label htmlFor="SignupAcceptTerms" className="SignupCheckbox">
               <input
                 type="checkbox"
                 id="SignupAcceptTerms"
@@ -80,7 +80,7 @@ function SignupBox() {
                 텀블벅 이용 약관동의 (필수)
               </span>
             </label>
-            <label htmlFor="SignupAcceptPrivacy">
+            <label htmlFor="SignupAcceptPrivacy" className="SignupCheckbox">
               <input
                 type="checkbox"
                 id="SignupAcceptPrivacy"
@@ -90,7 +90,7 @@ function SignupBox() {
                 개인정보 수집 및 이용 동의 (필수)
               </span>
             </label>
-            <label htmlFor="SignupAcceptShare">
+            <label htmlFor="SignupAcceptShare" className="SignupCheckbox">
               <input
                 type="checkbox"
                 id="SignupAcceptShare"
@@ -100,7 +100,7 @@ function SignupBox() {
                 개인정보 제 3자 제공 동의 (선택)
               </span>
             </label>
-            <label htmlFor="SignupAcceptMarketing">
+            <label htmlFor="SignupAcceptMarketing" className="SignupCheckbox">
               <input
                 type="checkbox"
                 id="SignupAcceptMarketing"
