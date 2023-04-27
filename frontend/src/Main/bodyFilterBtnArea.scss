@@ -1,22 +1,29 @@
 // common
 $filter-btn-fontsize: 0.8rem;
-$filter-btn-width: 45%;
+$filter-btn-width: 35%;
 $filter-btn-height: 100%;
-$filter-btn-outline: 1.5px solid #f2f2f2;
-$filter-btn-padding: 5% 1.5%;
+$filter-btn-outline-color: #f2f2f2;
+$filter-btn-outline: 1.5px solid $filter-btn-outline-color;
+$filter-btn-padding: 5% 1%;
+$common-border-radius: 3px;
+$filter-box-theme-color: #FF5757;
+$filter-box-hover-backgroundcolor: rgb(245, 245, 245);
+$filter-box-horizontal-padding: 3%;
 
 // 필터 버튼 영역
 .filterBtnArea {
   padding: 1% 0;
-  width: 15%;
+  width: 20%;
   height: 10%;
   display: flex;
-  justify-content: space-between;
+  justify-content: baseline;
   align-items: center;
   color: #5e5e5e;
   font-weight: 500;
+  user-select: none;
 
   & .filterBtnArea__percentBtn {
+    position: relative;
     padding: $filter-btn-padding;
     width: $filter-btn-width;
     height: $filter-btn-height;
@@ -25,6 +32,8 @@ $filter-btn-padding: 5% 1.5%;
     align-items: center;
     outline: $filter-btn-outline;
     cursor: pointer;
+    margin-right: 5%;
+    border-radius: $common-border-radius;
 
     & span {
       font-size: $filter-btn-fontsize;
@@ -33,6 +42,142 @@ $filter-btn-padding: 5% 1.5%;
     & svg {
       font-size: $filter-btn-fontsize;
       transition: 0.5s;
+    }
+
+    & .filterBox {
+      position: absolute;
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: baseline;
+      width: 250%;
+      height: 700%;
+      left: 0;
+      top: 120%;
+      padding: 10% 0;
+      outline: 1.5px solid $filter-btn-outline-color;
+      border-radius: $common-border-radius;
+      box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
+      background-color: #fff;
+      z-index: 1;
+
+      & .filterBox__selectArea {
+        flex-grow: 2;
+        width: 100%;
+        height: 45%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: baseline;
+        
+        & h2 {
+          display: flex;
+          align-items: center;
+          width: calc(100% - 2 * $filter-box-horizontal-padding);
+          height: 15%;
+          padding: 2% $filter-box-horizontal-padding;
+          font-weight: 700;
+          color: $filter-box-theme-color;
+          font-size: 0.8rem;
+
+          &:hover {
+            background-color: $filter-box-hover-backgroundcolor;
+          }
+        }
+
+        & h3 {
+          display: flex;
+          align-items: center;
+          width: calc(100% - 2 * $filter-box-horizontal-padding);
+          height: 15%;
+          padding: 2% $filter-box-horizontal-padding;
+          color: #000;
+          font-weight: 500;
+          font-size: 0.7rem;
+
+          &:hover {
+            background-color: $filter-box-hover-backgroundcolor;
+          }
+        }
+
+        &::after {
+          content: "";
+          display: block;
+          width: 100%;
+          height: 4px;
+          background-color: $filter-btn-outline-color;
+          margin-bottom: 5%;
+        }
+      }
+
+      & h3.filterBox__selfInputString {
+        color: #000;
+        flex-grow: 0.8;
+        font-weight: 500;
+        font-size: 0.7rem;
+        width: 100%;
+        height: 1%;
+        padding: 0 $filter-box-horizontal-padding;
+        display: flex;
+        align-items: center;
+      } 
+
+      & .filterBox__inputArea {
+        flex-grow: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 8%;
+        padding: 0 $filter-box-horizontal-padding;
+
+        & input {
+          border: none;
+          height: 60%;
+          width: 35%;
+          padding-right: 8%;
+          border-radius: $common-border-radius;
+          outline: 1px solid #cecece;          
+
+          &::-webkit-outer-spin-button,
+          &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+          }
+        }
+
+        & span {
+          color: #000;
+          font-size: 0.8rem;
+          margin: 0 1%;
+
+          &:nth-child(2),
+          &:nth-child(5) {
+            position: absolute;
+            cursor: default;
+            font-size: 0.7rem;
+          }
+
+          &:nth-child(2) {
+            left: 38%;
+          }
+
+          &:nth-child(5) {
+            right: 4%;
+          }
+        }
+      }
+
+      & button {
+        width: calc(100% - (2 * $filter-box-horizontal-padding));
+        padding: 0 2%;
+        flex-grow: 0.6;
+        align-self: center;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: #888;
+        background-color: #ECECEC;
+        cursor: pointer;
+      }
     }
   }
 
@@ -43,6 +188,16 @@ $filter-btn-padding: 5% 1.5%;
     font-size: $filter-btn-fontsize;
     outline: $filter-btn-outline;
     text-align: center;
+    outline: 0.1vh solid #ececec;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: $common-border-radius;
+
+    & svg {
+      display: none;
+      width: 20%;
+    }
   }
 }
