@@ -50,6 +50,11 @@ const eventTo = (
   eventHandler: (() => void) | ((event:Event) => void),
   eventType = "click"
 ) => {
+  const validateEventTypes = ["click"];
+
+  if (!validateEventTypes.includes(eventType)) {
+    throw new Error(`[Error] Invalid event type: ${eventType}`);
+  }
   $target.addEventListener(eventType, eventHandler);
 };
 
@@ -67,3 +72,4 @@ function $(cssSelector: string, root = document.body): HTMLElement | null {
 }
 
 export { changeCSS, changeMultiCSS, eventTo, $ };
+export type { cssObj };
