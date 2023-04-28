@@ -1,9 +1,91 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import Logo from "../../TumblbugLogo/Logo";
 import "./Signup.scss";
 import "../LoginForm/LoginForm.scss";
 
 function SignupBox() {
+  const [allChecked, setAllChecked] = useState(false);
+  const [checkboxes, setCheckboxes] = useState([
+    { id: 1, checked: false, required: true },
+    { id: 2, checked: false, required: true },
+    { id: 3, checked: false, required: true },
+    { id: 4, checked: false, required: false },
+    { id: 5, checked: false, required: false },
+  ]);
+  const [showMessage, setShowMessage] = useState(false);
+  const [email, setEmail] = useState("");
+  const [emailConfirm, setEmailConfirm] = useState("");
+  const [isValidEmail, setIsValidEmail] = useState(true);
+  const [isValidEmailConfirm, setIsValidEmailConfirm] = useState(true);
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [isValidPassword, setIsValidPassword] = useState(true);
+  const [isValidPasswordConfirm, setIsValidPasswordConfirm] = useState(true);
+
+  const handleAllChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { checked } = event.target;
+    setAllChecked(checked);
+    setCheckboxes((prevCheckboxes) =>
+      prevCheckboxes.map((checkbox) => ({ ...checkbox, checked }))
+    );
+  };
+
+  const handleCheckboxChecked =
+    (id: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
+      const { checked } = event.target;
+      setCheckboxes((prevCheckboxes) =>
+        prevCheckboxes.map((checkbox) =>
+          checkbox.id === id ? { ...checkbox, checked } : checkbox
+        )
+      );
+      setAllChecked(
+        (prevAllChecked) =>
+          prevAllChecked ||
+          (checkboxes.filter(
+            (checkbox) => checkbox.required && !checkbox.checked
+          ).length === 0 &&
+            checked)
+      );
+    };
+
+  useEffect(() => {
+    const hasUncheckedRequired = checkboxes.some(
+      (checkbox) => checkbox.required && !checkbox.checked
+    );
+    setShowMessage(hasUncheckedRequired);
+  }, [checkboxes]);
+
+  const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const emailValue = event.target.value;
+    setEmail(emailValue);
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    setIsValidEmail(emailRegex.test(emailValue));
+  };
+  const handleEmailConfirmChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const emailConfirmValue = event.target.value;
+    setEmailConfirm(emailConfirmValue);
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    setIsValidEmailConfirm(emailRegex.test(emailConfirmValue));
+  };
+  const handlePasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const passwordValue = event.target.value;
+    setPassword(passwordValue);
+
+    const passwordRegex = /^.{6,20}$/;
+    setIsValidPassword(passwordRegex.test(passwordValue));
+  };
+  const handlePasswordConfirmChange = (
+    event: ChangeEvent<HTMLInputElement>
+  ) => {
+    const passwordConfirmValue = event.target.value;
+    setPasswordConfirm(passwordConfirmValue);
+
+    const passwordRegex = /^.{6,20}$/;
+    setIsValidPasswordConfirm(passwordRegex.test(passwordConfirmValue));
+  };
+
   return (
     <section className="SignupSection">
       <div className="SignupImage" />
@@ -25,30 +107,56 @@ function SignupBox() {
             <input
               type="email"
               id="useremail"
-              className="LoginInput"
+              className={`LoginInput ${!isValidEmail && "InvalidInput"}`}
               placeholder="이메일 주소를 입력해주세요."
+              value={email}
+              onChange={handleEmailChange}
             />
+            {!isValidEmail && (
+              <p className="WarningMessage">유효하지 않은 이메일 형식입니다.</p>
+            )}
             <input
               type="email"
               id="useremailConfirm"
-              className="LoginInput"
+              className={`LoginInput ${!isValidEmailConfirm && "InvalidInput"}`}
               placeholder="이메일 주소를 확인합니다."
+              value={emailConfirm}
+              onChange={handleEmailConfirmChange}
             />
+            {!isValidEmailConfirm && (
+              <p className="WarningMessage">유효하지 않은 이메일 형식입니다.</p>
+            )}
           </label>
           <label htmlFor="userpassword" className="SignupLabel">
             <p className="LoginLabel">비밀번호</p>
             <input
               type="password"
               id="userpassword"
-              className="LoginInput"
+              className={`LoginInput ${!isValidPassword && "InvalidInput"}`}
               placeholder="비밀번호를 입력해주세요."
+              value={password}
+              onChange={handlePasswordChange}
             />
+            {!isValidPassword && (
+              <p className="WarningMessage">
+                비밀번호는 6자 이상, 20자 이하로 입력하세요.
+              </p>
+            )}
             <input
               type="password"
               id="UserPasswordConfirm"
-              className="LoginInput"
+              className={`LoginInput ${
+                !isValidPasswordConfirm && "InvalidInput"
+              }`}
               placeholder="비밀번호를 확인합니다."
+              value={passwordConfirm}
+              onChange={handlePasswordConfirmChange}
             />
+            {!isValidPasswordConfirm && (
+              <p className="WarningMessage">
+                비밀번호는 6자 이상, 20자 이하로 입력하세요.
+              </p>
+            )}
           </label>
           <div className="SignupLabel">
             <label htmlFor="SignupAcceptAll" className="SignupCheckbox">
@@ -56,6 +164,8 @@ function SignupBox() {
                 type="checkbox"
                 id="SignupAcceptAll"
                 className="LoginCheck"
+                checked={allChecked}
+                onChange={handleAllChecked}
               />
               <span className="SignupAcceptLabel">전체동의</span>
             </label>
@@ -65,6 +175,8 @@ function SignupBox() {
                 type="checkbox"
                 id="SignupAcceptAge"
                 className="LoginCheck"
+                checked={checkboxes[0].checked}
+                onChange={handleCheckboxChecked(1)}
               />
               <span className="SignupAcceptLabel">
                 만 14세 이상입니다. (필수)
@@ -75,6 +187,8 @@ function SignupBox() {
                 type="checkbox"
                 id="SignupAcceptTerms"
                 className="LoginCheck"
+                checked={checkboxes[1].checked}
+                onChange={handleCheckboxChecked(2)}
               />
               <span className="SignupAcceptLabel">
                 텀블벅 이용 약관동의 (필수)
@@ -85,6 +199,8 @@ function SignupBox() {
                 type="checkbox"
                 id="SignupAcceptPrivacy"
                 className="LoginCheck"
+                checked={checkboxes[2].checked}
+                onChange={handleCheckboxChecked(3)}
               />
               <span className="SignupAcceptLabel">
                 개인정보 수집 및 이용 동의 (필수)
@@ -95,6 +211,8 @@ function SignupBox() {
                 type="checkbox"
                 id="SignupAcceptShare"
                 className="LoginCheck"
+                checked={checkboxes[3].checked}
+                onChange={handleCheckboxChecked(4)}
               />
               <span className="SignupAcceptLabel">
                 개인정보 제 3자 제공 동의 (선택)
@@ -105,11 +223,18 @@ function SignupBox() {
                 type="checkbox"
                 id="SignupAcceptMarketing"
                 className="LoginCheck"
+                checked={checkboxes[4].checked}
+                onChange={handleCheckboxChecked(5)}
               />
               <span className="SignupAcceptLabel">
                 마케팅 정보 수신 동의 (선택)
               </span>
             </label>
+            {showMessage && (
+              <p className="RequireCheckMessage">
+                필수 동의 내용을 체크해주세요.
+              </p>
+            )}
           </div>
           <button type="submit" className="LoginButton">
             가입하기
