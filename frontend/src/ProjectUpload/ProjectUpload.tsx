@@ -3,6 +3,7 @@ import ProjectRegisterColumn from './ProjectRegisterColumn';
 import "./projectUpload.scss";
 import ProjectPreviewColumn from './ProjectPreviewColumn';
 import CategorySelectModal from './CategorySelectModal';
+import CardAddModal from './CardAddModal';
 
 function ProjectUpload() {
   return (
@@ -10,6 +11,7 @@ function ProjectUpload() {
       <ProjectRegisterColumn />
       <ProjectPreviewColumn />
       <CategorySelectModal />
+      <CardAddModal/>
     </section>
   );
 }

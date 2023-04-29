@@ -2,6 +2,7 @@ $theme-font-color: rgb(250, 100, 98);
 $theme-button-color: rgb(250, 100, 98);
 $common-border-radius: 5px;
 $card-outline-color: rgba(0, 0, 0, 0.2);
+$input-background-color: rgb(233, 232, 232);
 
 .projectRegisterColumn {
   width: 47%;
@@ -39,7 +40,7 @@ $card-outline-color: rgba(0, 0, 0, 0.2);
 
     & input {
       border: none;
-      background-color: rgb(233, 232, 232);
+      background-color: $input-background-color;
       border-radius: $common-border-radius;
     }
 

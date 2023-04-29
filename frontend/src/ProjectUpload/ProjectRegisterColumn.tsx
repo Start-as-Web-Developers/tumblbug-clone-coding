@@ -5,8 +5,18 @@ import "./ProjectRegisterColumn.scss";
 function ProjectRegisterColumn() {
   function openModal() {
     const $modal = $(".categorySelectModal");
-    if($modal) {
+    const $modalOpenBtn = $(".categoryRow__openBtn");
+
+    if ($modal && $modalOpenBtn) {
       changeCSS($modal, "top", "0");
+      $modalOpenBtn.innerHTML = "카테고리 재탐색";
+    }
+  }
+
+  function openCardAddModal() {
+    const $cardOpenModal = $(".cardAddModal");
+    if ($cardOpenModal) {
+      changeCSS($cardOpenModal, "top", "0");
     }
   }
 
@@ -35,7 +45,11 @@ function ProjectRegisterColumn() {
         </div>
         <div className="categoryRow">
           <h2>카테고리</h2>
-          <button type="button" onClick={openModal}>
+          <button
+            className="categoryRow__openBtn"
+            type="button"
+            onClick={openModal}
+          >
             카테고리 탐색
           </button>
           <span className="categoryRow__categoryName">
@@ -72,22 +86,15 @@ function ProjectRegisterColumn() {
       <section className="projectSponsorArea">
         <h1>
           <span>선물 방식 등록</span>
-          <button type="button">+</button>
+          <button
+            type="button"
+            className="projectSponsorArea__cardAddBtn"
+            onClick={openCardAddModal}
+          >
+            +
+          </button>
         </h1>
-        <div className="sponsorCardArea">
-          <div className="sponsorCardArea__card">
-            <h2>후원 금액</h2>
-            <h3>후원 설명</h3>
-          </div>
-          <div className="sponsorCardArea__card">
-            <h2>후원 금액</h2>
-            <h3>후원 설명</h3>
-          </div>
-          <div className="sponsorCardArea__card">
-            <h2>후원 금액</h2>
-            <h3>후원 설명</h3>
-          </div>
-        </div>
+        <div className="sponsorCardArea"> </div>
       </section>
     </section>
   );
