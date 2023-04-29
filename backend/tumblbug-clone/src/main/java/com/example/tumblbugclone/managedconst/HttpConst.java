@@ -1,6 +1,9 @@
 package com.example.tumblbugclone.managedconst;
 
 public class HttpConst {
+    //== URL ==//
+    public static final String USER_URI = "/user";
+    public static final String USER_SIGNUP_URI = "/signup";
 
     //== 헤더 이름 ==//
     public static final String HEADER_NAME_ERROR_MESSAGE = "error-message";

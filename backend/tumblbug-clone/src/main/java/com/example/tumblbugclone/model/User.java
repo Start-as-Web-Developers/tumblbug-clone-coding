@@ -1,7 +1,10 @@
 package com.example.tumblbugclone.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 @Data
 public class User {
     Long userIdx;

@@ -17,7 +17,14 @@ public class UserRepository {
         return userRepository;
     }
 
+    public void clear(){
+        id = 0l;
+        userDB.clear();
+    }
+
     public long save(User user) throws Exception{
+        System.out.println("try to save " + user.getUserName());
+        System.out.println(id);
         if(userDB.isEmpty() == false) {
             try {
                 isDuplicatedId(user.getUserId());
@@ -29,6 +36,7 @@ public class UserRepository {
         id++;
         user.setUserIdx(id);
         userDB.put(id, user);
+        System.out.println("save success : " + user.getUserName());
 
         return id;
     }

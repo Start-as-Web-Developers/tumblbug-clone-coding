@@ -18,6 +18,7 @@ public class UserRepositoryTest {
 
     @Before
     public void 유저1_저장(){
+        userRepository.clear();
         User user1 = new User("userName1", "userId1", "userPassword1","userEmail1");
         try {
             userRepository.save(user1);
