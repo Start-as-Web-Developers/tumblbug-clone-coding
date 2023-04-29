@@ -38,6 +38,7 @@ $modal-transition: 0.3s;
       grid-template-rows: repeat(3, 1fr);
       grid-template-columns: repeat(7, 1fr);
       place-items: center;
+      overflow: hidden;
 
       & .logoContainer {
         display: flex;
@@ -53,7 +54,6 @@ $modal-transition: 0.3s;
         &:hover {
           background-color: $theme-background-color;
           color: #fff;
-          transform: scale(105%);
         }
 
         & h3 {
