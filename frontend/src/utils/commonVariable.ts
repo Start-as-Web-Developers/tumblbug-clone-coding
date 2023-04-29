@@ -24,9 +24,21 @@ const CATEGORY_BOX_POSITION = {
   CLICKED: "14vh",
 };
 
+const CATEGORY_SELECT_MODAL = {
+  original: "-100vh",
+  POPUP: "0",
+}
+
+const CARD_ADD_MODAL = {
+  ORIGINAL: "-100vh",
+  POPUP: "0",
+};
+
 export {
   EDITOR_FILTER_BTN,
   ACHIEVEMENT_BTN,
   NAVBAR_BOX_SHADOW,
   CATEGORY_BOX_POSITION,
+  CATEGORY_SELECT_MODAL,
+  CARD_ADD_MODAL,
 };

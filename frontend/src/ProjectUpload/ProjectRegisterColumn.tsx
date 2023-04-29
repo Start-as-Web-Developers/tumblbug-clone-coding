@@ -1,23 +1,65 @@
 import React from 'react';
 import { $, changeCSS } from '../utils/commonFunction';
+import { CARD_ADD_MODAL, CATEGORY_SELECT_MODAL } from '../utils/commonVariable';
 import "./ProjectRegisterColumn.scss";
 
-function ProjectRegisterColumn() {
-  function openModal() {
-    const $modal = $(".categorySelectModal");
-    const $modalOpenBtn = $(".categoryRow__openBtn");
+interface secondRowInfo {
+  className: string,
+  headerName: string
+};
 
-    if ($modal && $modalOpenBtn) {
-      changeCSS($modal, "top", "0");
-      $modalOpenBtn.innerHTML = "카테고리 재탐색";
-    }
+function ProjectRegisterColumn() {
+  const secondRowInfos: secondRowInfo[] = [
+    {
+      className: "introduceRow",
+      headerName: "상세 소개",
+    },
+    {
+      className: "budgeRow",
+      headerName: "예산 계획",
+    },
+    {
+      className: "scheduleRow",
+      headerName: "일정 계획",
+    },
+    {
+      className: "teamExplainRow",
+      headerName: "팀 소개",
+    },
+    {
+      className: "sponsorExplainRow",
+      headerName: "선물 설명",
+    },
+    {
+      className: "notifyRow",
+      headerName: "신뢰와 안전",
+    },
+  ];
+
+  /**
+   * 카테고리 탐색 버튼의 텍스트를 변경하여
+   * 사용자에게 카테고리 탐색 이력이 있음을 알려줍니다.
+   */
+  const markBtnAsVisited = ():void => {
+    const $modalOpenBtn = $(".categoryRow__openBtn") as HTMLElement;
+    $modalOpenBtn.innerHTML = "카테고리 재탐색";
   }
 
-  function openCardAddModal() {
-    const $cardOpenModal = $(".cardAddModal");
-    if ($cardOpenModal) {
-      changeCSS($cardOpenModal, "top", "0");
-    }
+  /**
+   * 카테고리 선택 modal을 팝업합니다.
+   */
+  const openModal = ():void => {
+    const $modal = $(".categorySelectModal") as HTMLElement;
+    changeCSS($modal, "top", CATEGORY_SELECT_MODAL.POPUP);
+    markBtnAsVisited();
+  }
+
+  /**
+   * 후원 카드 생성 modal을 팝업합니다.
+   */
+  const openCardAddModal = ():void => {
+    const $cardOpenModal = $(".cardAddModal") as HTMLElement;
+    changeCSS($cardOpenModal, "top", CARD_ADD_MODAL.POPUP);
   }
 
   return (
@@ -58,30 +100,12 @@ function ProjectRegisterColumn() {
         </div>
       </section>
       <section className="projectDescriptionArea">
-        <div className="introduceRow">
-          <h2>상세 소개</h2>
-          <input type="text" placeholder="상세 소개 입력" />
-        </div>
-        <div className="budgeRow">
-          <h2>예산 계획</h2>
-          <input type="text" placeholder="예산 계획 입력" />
-        </div>
-        <div className="scheduleRow">
-          <h2>일정 계획</h2>
-          <input type="text" placeholder="일정 계획 입력" />
-        </div>
-        <div className="teamExplainRow">
-          <h2>팀 소개</h2>
-          <input type="text" placeholder="팀 소개 입력" />
-        </div>
-        <div className="sponsorExplainRow">
-          <h2>선물 설명</h2>
-          <input type="text" placeholder="선물 설명 입력" />
-        </div>
-        <div className="notifyRow">
-          <h2>신뢰와 안전</h2>
-          <input type="text" placeholder="신뢰와 안전 입력" />
-        </div>
+        {secondRowInfos.map(({ className, headerName }) => (
+          <div className={className} key={className}>
+            <h2>{headerName}</h2>
+            <input type="text" placeholder={`${headerName} 입력`} />
+          </div>
+        ))}
       </section>
       <section className="projectSponsorArea">
         <h1>
