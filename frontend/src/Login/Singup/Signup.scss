@@ -1,0 +1,143 @@
+.SignupSection {
+  display: flex;
+  height: 100vh;
+}
+
+.SignupBox {
+  display: flex;
+  width: 50%;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: 5vh 10vw 5vh 10vw;
+  overflow-y: auto;
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 5vh 0;
+  }
+
+  .SignuptoLogin {
+    color: gray;
+    font-size: 0.75rem;
+    text-align: center;
+    margin-bottom: 5vh;
+    * {
+      margin: 0.5rem 0;
+    }
+    a {
+      color: turquoise;
+    }
+  }
+  .SignupTransferMessage {
+    display: flex;
+    color: gray;
+    font-size: 0.75rem;
+    text-align: center;
+    align-items: center;
+  }
+  .SignupTransferMessage::before {
+    content: "";
+    box-sizing: border-box;
+    margin-right: 1rem;
+    flex-grow: 1;
+    background-color: lightgray;
+    height: 1px;
+  }
+  .SignupTransferMessage::after {
+    content: "";
+    box-sizing: border-box;
+    margin-left: 1rem;
+    flex-grow: 1;
+    background-color: lightgray;
+    height: 1px;
+  }
+  footer {
+    color: gray;
+    font-size: 0.75rem;
+    text-align: center;
+  }
+}
+
+.SignupImage {
+  width: 50vw;
+  background-image: url("https://tumblbug-assets.s3.ap-northeast-1.amazonaws.com/static_assets/login/bg_signup_kakao.jpg");
+  background-size: cover;
+}
+
+.SignupForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 5vh;
+
+  * {
+    margin: 0.25rem 0;
+  }
+
+  p {
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  .SignupLabel {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    .SignupCheckbox {
+      cursor: pointer;
+    }
+    label[for="SignupAcceptAll"] {
+      font-weight: bold;
+    }
+  }
+  .InvalidInput {
+    outline: 1px solid red;
+  }
+  .WarningMessage {
+    color: red;
+    margin: 0.5rem 0;
+  }
+  .LoginInput {
+    width: 100%;
+    height: 3em;
+  }
+  .LoginCheck {
+    width: 1rem;
+    height: 1rem;
+    margin-right: 1rem;
+  }
+  .RequireCheckMessage {
+    color: red;
+    margin: 0.5rem 0;
+  }
+
+  button {
+    background-color: tomato;
+    color: #fff;
+    font-size: 1em;
+    font-weight: 700;
+    cursor: pointer;
+    &:hover {
+      opacity: 0.5;
+    }
+    width: 100%;
+    height: 3rem;
+    border: none;
+  }
+}
+
+.LoginButtonKakao {
+  display: flex;
+  background-color: #fee500;
+  color: #000;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  border: none;
+  margin: 1rem 0 3rem;
+  padding: 0.5rem 0;
+}
