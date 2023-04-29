@@ -13,9 +13,11 @@ public class User {
     String userImg;
     String lastLogin;
 
-    public User(String userName, String UserId, String userPassword, String userEmail){
-
+    public User(String userName, String userId, String userPassword, String userEmail){
+        this.userName = userName;
+        this.userId = userId;
+        this.userPassword = userPassword;
+        this.userEmail = userEmail;
     }
 
-    //userIdx를 어떻게 주입시키지? -> 일단 setter 사용
 }
