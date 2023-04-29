@@ -1,7 +1,15 @@
 import React from 'react';
+import { $, changeCSS } from '../utils/commonFunction';
 import "./ProjectRegisterColumn.scss";
 
 function ProjectRegisterColumn() {
+  function openModal() {
+    const $modal = $(".categorySelectModal");
+    if($modal) {
+      changeCSS($modal, "top", "0");
+    }
+  }
+
   return (
     <section className="projectRegisterColumn">
       <h1 className="projectRegisterColumn__title">Register Project</h1>
@@ -27,8 +35,12 @@ function ProjectRegisterColumn() {
         </div>
         <div className="categoryRow">
           <h2>카테고리</h2>
-          <button type="button">카테고리 탐색</button>
-          <span>선택된 카테고리가 없습니다</span>
+          <button type="button" onClick={openModal}>
+            카테고리 탐색
+          </button>
+          <span className="categoryRow__categoryName">
+            선택된 카테고리가 없습니다
+          </span>
         </div>
       </section>
       <section className="projectDescriptionArea">

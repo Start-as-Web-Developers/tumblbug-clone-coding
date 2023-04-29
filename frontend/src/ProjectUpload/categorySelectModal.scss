@@ -5,13 +5,14 @@ $theme-background-color: rgb(250, 100, 98);
 .categorySelectModal {
   position: absolute;
   left: 0;
-  top: 0;
+  top: -100vh;
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.7);
+  transition: 0.3s;
 
   & .modalContainer {
     width: calc(60% - 2 * $modal-container-vertical-padding);
@@ -49,6 +50,7 @@ $theme-background-color: rgb(250, 100, 98);
         &:hover {
           background-color: $theme-background-color;
           color: #fff;
+          transform: scale(105%);
         }
 
         & h3 {

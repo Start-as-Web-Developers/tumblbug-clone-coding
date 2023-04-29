@@ -5,6 +5,7 @@ import {
   Logo12, Logo13, Logo14, Logo15, Logo16,
   Logo17, Logo18, Logo19, Logo20, Logo21,
   Logo22 } from '../Navbar/categoryBox/Logo';
+import { $, changeCSS } from '../utils/commonFunction';
 import "./categorySelectModal.scss";
 
 type logoObj = {
@@ -100,16 +101,35 @@ function CategorySelectModal() {
     },
   ];
 
+  function closeModal(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    const $self = event.target as Element;
+    const $categorySelectModal = $self.closest(
+      ".categorySelectModal"
+    ) as HTMLElement;
+    const $modalCategoryName = $self.querySelector("h3") as HTMLElement;
+    const $infoCategoryText = $(".categoryRow__categoryName") as HTMLElement;
+    
+    $infoCategoryText.textContent = $modalCategoryName.textContent as string;
+    changeCSS($categorySelectModal, "top", "-100vh");
+  }
+
   return (
     <section className="categorySelectModal">
       <section className="modalContainer">
         <h1>Click Category</h1>
         <section className="modalContainer__selectBox">
-          {logoObjArray.map(({component, logoName}) => (
-            <div className="logoContainer" key={component.name}>
+          {logoObjArray.map(({ component, logoName }) => (
+            <button
+              className="logoContainer"
+              key={component.name}
+              type="button"
+              onClick={(
+                event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+              ) => closeModal(event)}
+            >
               {component()}
               <h3>{logoName}</h3>
-            </div>
+            </button>
           ))}
         </section>
       </section>
