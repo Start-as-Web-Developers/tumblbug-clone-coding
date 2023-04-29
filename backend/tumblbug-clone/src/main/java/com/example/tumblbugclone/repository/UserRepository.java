@@ -1,6 +1,7 @@
 package com.example.tumblbugclone.repository;
 
-import com.example.tumblbugclone.managedconst.UserConst;
+import com.example.tumblbugclone.Exception.UserEmailDuplicatedException;
+import com.example.tumblbugclone.Exception.UserIdDuplicatedException;
 import com.example.tumblbugclone.model.User;
 
 import java.util.HashMap;
@@ -16,13 +17,14 @@ public class UserRepository {
         return userRepository;
     }
 
-    public long save(User user){
-        //System.out.println(user.getUserName());
+    public long save(User user) throws Exception{
         if(userDB.isEmpty() == false) {
-            if (isDuplicatedId(user.getUserId()))
-                return UserConst.DUPLICATED_ID;
-            if (isDuplicatedEmail(user.getUserEmail()))
-                return UserConst.DUPLICATED_EMAIL;
+            try {
+                isDuplicatedId(user.getUserId());
+                isDuplicatedEmail(user.getUserEmail());
+            }catch (Exception e){
+                throw e;
+            }
         }
         id++;
         user.setUserIdx(id);
@@ -31,32 +33,26 @@ public class UserRepository {
         return id;
     }
 
-    private boolean isDuplicatedId(String userId){
+    private boolean isDuplicatedId(String userId) throws UserIdDuplicatedException {
         for(long checkId = 1l; checkId<=id; checkId++){
-            try {
-                User checkUser = userDB.get(checkId);
-                if(checkUser.getUserId().equals(userId))
-                    return true;
-            }
-            catch (Exception e){
-                System.out.println("checkId = " + checkId);
-                throw e;
+            User checkUser = userDB.get(checkId);
+            if(checkUser.getUserId().equals(userId)){
+                throw new UserIdDuplicatedException();
             }
         }
         return false;
     }
 
-    private boolean isDuplicatedEmail(String userEmail){
+    private boolean isDuplicatedEmail(String userEmail) throws UserEmailDuplicatedException {
         for(long checkId = 1l; checkId<=id; checkId++){
             User checkUser = userDB.get(checkId);
             if(checkUser.getUserEmail().equals(userEmail))
-                return true;
+                throw new UserEmailDuplicatedException();
         }
         return false;
     }
 
     public User findUserByIdx(long idx){
-        //user가 존재하지 않으면 null 반환??
         return userDB.get(idx);
     }
 }
