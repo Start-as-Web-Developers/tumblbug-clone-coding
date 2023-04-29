@@ -1,6 +1,7 @@
 $theme-font-color: rgb(250, 100, 98);
 $theme-button-color: rgb(250, 100, 98);
 $common-border-radius: 5px;
+$card-outline-color: rgba(0, 0, 0, 0.2);
 
 .projectRegisterColumn {
   width: 47%;
@@ -149,6 +150,10 @@ $common-border-radius: 5px;
       justify-content: flex-start;
       align-items: center;
 
+      & h2 {
+        width: 12%;
+      }
+
       & button {
         width: 20%;
         padding: 1% 0;
@@ -174,6 +179,7 @@ $common-border-radius: 5px;
   & .projectDescriptionArea { 
     width: 100%;
     height: 30%;
+    padding: 1% 0;
     
     &::after {
       content: "";
@@ -182,10 +188,115 @@ $common-border-radius: 5px;
       height: 2px;
       background-color:rgba(0, 0, 0, 0.1);
     }
+
+    & .introduceRow, 
+    & .budgeRow,
+    & .scheduleRow, 
+    & .teamExplainRow, 
+    & .sponsorExplainRow,
+    & .notifyRow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 10%;
+      width: 80%;
+      height: 16%;
+
+      & h2 {
+        font-size: 1rem;
+        font-weight: 700;
+      }
+
+      & input {
+        height: 80%;
+        width: 55%;
+        text-align: center;
+        font-weight: 700;
+        color: rgba(0, 0, 0, 0.7);
+        border: none;
+        background-color: rgb(233, 232, 232);
+        border-radius: $common-border-radius;
+
+        &::placeholder {
+          font-size: 0.9rem;
+          font-weight: 600;
+          color:rgba(0, 0, 0, 0.3);
+        }
+      }
+    }
   }
 
   & .projectSponsorArea {
     width: 100%;
     height: 30%;
+    position: relative;
+
+    & h1 {
+      display: flex;
+      justify-content: space-between;
+      width: 20%;
+      padding-left: 10%;
+      height: 10%;
+      font-size: 1rem;
+      font-weight: 700;
+      color: $theme-font-color;
+
+      & button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: $theme-button-color;
+        color: #fff;
+        border-radius: 50%;
+        height: 1vw;
+        width: 1vw;
+        font-size: 1.5rem;
+
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+
+    & .sponsorCardArea {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      width: 80%;
+      padding-left: 10%;
+      padding-right: 10%;
+      height: 80%;
+
+      & .sponsorCardArea__card {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        width: 48%;
+        height: 30%;
+        border-radius: $common-border-radius;
+        outline: 1px solid $card-outline-color;
+        box-shadow: 0 2px 4px $card-outline-color;
+        transition: 0.5s;
+        cursor: pointer;
+
+        &:hover {
+          margin-top: -0.5%;
+          margin-bottom: 0.5%;
+        }
+
+        & h2 {
+          font-size: 0.8rem;
+          font-weight: 600;
+        }
+
+        & h3 {
+          font-size: 0.7rem;
+          font-weight: 500;
+        }
+      }
+    }
   }
 }
