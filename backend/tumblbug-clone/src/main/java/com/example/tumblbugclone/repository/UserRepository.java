@@ -1,5 +1,7 @@
 package com.example.tumblbugclone.repository;
 
+import com.example.tumblbugclone.Exception.UserCantFindException;
+import com.example.tumblbugclone.Exception.UserCantModifyIdException;
 import com.example.tumblbugclone.Exception.UserEmailDuplicatedException;
 import com.example.tumblbugclone.Exception.UserIdDuplicatedException;
 import com.example.tumblbugclone.model.User;
@@ -60,7 +62,29 @@ public class UserRepository {
         return false;
     }
 
-    public User findUserByIdx(long idx){
+    public User findUserByIdx(long idx) throws UserCantFindException {
+        if(idx > id)
+            throw new UserCantFindException();
         return userDB.get(idx);
+    }
+
+    public long modify(User user) throws Exception {
+
+        Long userIdx = user.getUserIdx();
+        if(userIdx == null)
+            throw new UserCantFindException();
+        if(userIdx > id)
+            throw new UserCantFindException();
+
+        User originalUser = userDB.get(userIdx);
+
+        System.out.println("originalUser.getUserId().equals(user.getUserId()) = " + originalUser.getUserId().equals(user.getUserId()));
+        System.out.println("originalUser.getUserId() = " + originalUser.getUserId());
+        System.out.println(" = " +user.getUserId());
+        if(originalUser.getUserId().equals(user.getUserId()) == false)
+            throw new UserCantModifyIdException();
+
+        userDB.put(userIdx, user);
+        return userIdx;
     }
 }

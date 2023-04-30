@@ -76,8 +76,6 @@ public class UserControllerTest {
 
         User user2 = new User("userName2", "userId2", "userPassword2", "userEmail1");
 
-
-
         mockMvc.perform(post("/user/signup")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(user2))
@@ -85,4 +83,17 @@ public class UserControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(header().string(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.DUPLICATED_USER_EMAIL_MESSAGE));
     }
+
+    //== TODO ==//
+
+    @Test
+    public void 회원Idx로_회원_조회_inWeb() throws Exception{
+        //given
+        //when
+
+        //then
+    }
+    //1. 회원 조회
+    //2. 회원 삭제
+    //3. 회원 수정
 }
