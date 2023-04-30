@@ -9,9 +9,11 @@ function NavbarFirstRow() {
     <section className="navbarFirstRow">
       <Logo />
       <div className="navbarFirstRow__btnArea">
-        <button type="button" className="navbarFirstRow__upLoadBtn">
-          프로젝트 올리기
-        </button>
+        <Link to="/project-upload">
+          <button type="button" className="navbarFirstRow__upLoadBtn">
+            프로젝트 올리기
+          </button>
+        </Link>
         <div className="navbarFirstRow__loginArea">
           <NavbarProfileImage />
           <button type="button" className="navbarFirstRow__loginBtn">

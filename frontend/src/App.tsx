@@ -1,8 +1,9 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import LoginBox from "./Login/LoginBox";
+import LoginBox from './Login/LoginBox';
+import Main from './Main/Main';
+import ProjectUpload from './ProjectUpload/ProjectUpload';
 import SignupForm from "./Login/Singup/Signup";
-import Main from "./Main/Main";
 
 function App() {
   const router = createBrowserRouter([
@@ -12,7 +13,11 @@ function App() {
     },
     {
       path: "/login",
-      element: <LoginBox />,
+      element: <LoginBox/>
+    }, 
+    {
+      path: "/project-upload",
+      element: <ProjectUpload/>
     },
     {
       path: "/register",
