@@ -14,4 +14,31 @@ const ACHIEVEMENT_BTN = {
   CLICKED_BACKGROUNDCOLOR: "#f2f2f2",
 }
 
-export { EDITOR_FILTER_BTN, ACHIEVEMENT_BTN };
+const NAVBAR_BOX_SHADOW = {
+  ORIGINAL: "0px 1px 6px rgba(0, 0, 0, 0.08)",
+  CATEGORY_CLICKED: "0px 0px 0px #fff",
+};
+
+const CATEGORY_BOX_POSITION = {
+  ORIGINAL: "-36vh",
+  CLICKED: "14vh",
+};
+
+const CATEGORY_SELECT_MODAL = {
+  original: "-100vh",
+  POPUP: "0",
+}
+
+const CARD_ADD_MODAL = {
+  ORIGINAL: "-100vh",
+  POPUP: "0",
+};
+
+export {
+  EDITOR_FILTER_BTN,
+  ACHIEVEMENT_BTN,
+  NAVBAR_BOX_SHADOW,
+  CATEGORY_BOX_POSITION,
+  CATEGORY_SELECT_MODAL,
+  CARD_ADD_MODAL,
+};

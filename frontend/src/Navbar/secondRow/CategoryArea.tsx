@@ -1,22 +1,24 @@
 import React, {useEffect, useState} from 'react';
 import { FiMenu } from "react-icons/fi";
+import { $, changeCSS, eventTo } from '../../utils/commonFunction';
+import { CATEGORY_BOX_POSITION, NAVBAR_BOX_SHADOW } from '../../utils/commonVariable';
 import './categoryArea.scss';
 
 function CategoryArea() {
   const [categoryOpen, setCategoryOpen] = useState(false);
 
   function eventToCategoryBtn() {
-    const $categoryBtn = document.querySelector(".categoryBtn") as HTMLElement;
-    $categoryBtn.addEventListener("click", () => {
-      const $navbar = document.querySelector(".navbar") as HTMLElement;
-      const $categoryBox = document.querySelector(".categoryBox") as HTMLElement;
+    const $categoryBtn = $(".categoryBtn") as HTMLElement;
+    const $navbar = $(".navbar") as HTMLElement;
+    const $categoryBox = $(".categoryBox") as HTMLElement;
 
+    eventTo($categoryBtn, () => {
       if (categoryOpen) {
-        $navbar.style.boxShadow = '0px 1px 6px rgba(0, 0, 0, 0.08)';
-        $categoryBox.style.top = "-36vh";
+        changeCSS($navbar, "box-shadow", NAVBAR_BOX_SHADOW.ORIGINAL);
+        changeCSS($categoryBox, "top", CATEGORY_BOX_POSITION.ORIGINAL);
       } else {
-        $categoryBox.style.top = "14vh";
-        $navbar.style.boxShadow = "0px 0px 0px #fff";
+        changeCSS($categoryBox, "top", CATEGORY_BOX_POSITION.CLICKED);
+        changeCSS($navbar, "box-shadow", NAVBAR_BOX_SHADOW.CATEGORY_CLICKED);
       }
 
       setCategoryOpen(!categoryOpen);
@@ -37,18 +39,10 @@ function CategoryArea() {
         <FiMenu />
         <span>카테고리</span>
       </li>
-      <li>
-        <span>인기</span>
-      </li>
-      <li>
-        <span>신규</span>
-      </li>
-      <li>
-        <span>마감임박</span>
-      </li>
-      <li>
-        <span>공개예정</span>
-      </li>
+      <li><span>인기</span></li>
+      <li><span>신규</span></li>
+      <li><span>마감임박</span></li>
+      <li><span>공개예정</span></li>
     </ul>
   );
 }

@@ -15,12 +15,4 @@ function Main() {
   );
 }
 
-// function Login() {
-//   return (
-//     <section className="main">
-//       <LoginBox />
-//     </section>
-//   );
-// }
-
 export default Main;

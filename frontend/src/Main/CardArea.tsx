@@ -1,6 +1,7 @@
 import React from 'react';
 import './cardArea.scss';
 import { AiOutlineHeart } from "react-icons/ai";
+import { formatKoreanCurrency } from '../utils/commonFunction';
 
 function CardArea() {
   type cardContent = {
@@ -101,25 +102,6 @@ function CardArea() {
       sponsor: 100,
     },
   ];
-
-  function formatKoreanCurrency(num: number): string {
-    const money = num.toString();
-
-    if (money.length <= 4) {
-      return money;
-    }
-
-    const moneyArray = [];
-    for (let i = money.length; i > 0; i -= 3) {
-      const start = Math.max(i - 3, 0);
-      const end = i;
-      const slicedNumber = money.slice(start, end);
-      moneyArray.unshift(slicedNumber);
-    }
-
-    const koreaMoney = moneyArray.join(",");
-    return koreaMoney;
-  }
 
   function getPercent(totalMoney: number, goalMoney: number): string {
     const percent = totalMoney / goalMoney;
