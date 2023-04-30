@@ -1,6 +1,6 @@
 import React from "react";
 import { $, changeCSS, createMultiElements, formatKoreanCurrency } from "../utils/commonFunction";
-import { CARD_ADD_MODAL } from "../utils/commonVariable";
+import { CARD_ADD_MODAL, KOREA_MONEY_MAX_LENGTH } from "../utils/commonVariable";
 import "./cardAddModal.scss";
 
 /**
@@ -83,10 +83,9 @@ const updateMoneyInfoElement = (inputValue:string):void => {
   }
   
   const $moneyInfoElement = $(".cardAddForm__moneyForm > span") as HTMLElement;
-  if (inputValue.length >= 9) {
+  if (inputValue.length >= KOREA_MONEY_MAX_LENGTH) {
     $moneyInfoElement.innerHTML = "숫자가 너무 큽니다";
-  }
-  else {
+  } else {
     const koreaMoneyString = formatKoreanCurrency(inputValue);
     $moneyInfoElement.innerHTML = `${koreaMoneyString}원`;
   }

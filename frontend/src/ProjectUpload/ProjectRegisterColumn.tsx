@@ -1,6 +1,6 @@
 import React from 'react';
-import { $, changeCSS } from '../utils/commonFunction';
-import { CARD_ADD_MODAL, CATEGORY_SELECT_MODAL } from '../utils/commonVariable';
+import { $, changeCSS, formatKoreanCurrency } from '../utils/commonFunction';
+import { CARD_ADD_MODAL, CATEGORY_SELECT_MODAL, KOREA_MONEY_MAX_LENGTH } from '../utils/commonVariable';
 import "./ProjectRegisterColumn.scss";
 
 interface secondRowInfo {
@@ -62,6 +62,23 @@ function ProjectRegisterColumn() {
     changeCSS($cardOpenModal, "top", CARD_ADD_MODAL.POPUP);
   }
 
+  const setGoalMoneyInfoToKoreaMoney = () => {
+    const $goalMoneyInput = $(".dueRow__goalMoneyInput") as HTMLInputElement;
+    const inputValue:string = $goalMoneyInput.value;
+    
+    if(Number.isNaN(parseInt(inputValue, 10))) {
+      return;
+    }
+    
+    const $moneyInfo = $(".dueRow__moneyInfo") as HTMLElement;
+
+    if (inputValue.length >= KOREA_MONEY_MAX_LENGTH) {
+      $moneyInfo.innerHTML = `너무 큰 숫자`;
+    } else {
+      $moneyInfo.innerHTML = `${formatKoreanCurrency(inputValue)}원`;
+    }
+  }
+
   return (
     <section className="projectRegisterColumn">
       <h1 className="projectRegisterColumn__title">Register Project</h1>
@@ -82,8 +99,13 @@ function ProjectRegisterColumn() {
           <h2>마감 기한</h2>
           <input type="date" />
           <h2>목표 금액</h2>
-          <span>1,000원</span>
-          <input type="number" placeholder="목표 금액 입력" value="1000" />
+          <span className="dueRow__moneyInfo">1,000원</span>
+          <input
+            type="number"
+            placeholder="목표 금액 입력"
+            className="dueRow__goalMoneyInput"
+            onChange={setGoalMoneyInfoToKoreaMoney}
+          />
         </div>
         <div className="categoryRow">
           <h2>카테고리</h2>
