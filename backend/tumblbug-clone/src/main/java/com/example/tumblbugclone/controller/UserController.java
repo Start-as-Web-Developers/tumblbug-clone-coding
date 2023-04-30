@@ -1,14 +1,9 @@
 package com.example.tumblbugclone.controller;
 
-import com.example.tumblbugclone.Exception.UserCantFindException;
-import com.example.tumblbugclone.Exception.UserCantModifyIdException;
-import com.example.tumblbugclone.Exception.UserEmailDuplicatedException;
-import com.example.tumblbugclone.Exception.UserIdDuplicatedException;
+import com.example.tumblbugclone.Exception.userexception.*;
 import com.example.tumblbugclone.managedconst.HttpConst;
-import com.example.tumblbugclone.managedconst.UserConst;
 import com.example.tumblbugclone.model.User;
 import com.example.tumblbugclone.repository.UserRepository;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
@@ -52,28 +47,52 @@ public class UserController {
     public ResponseEntity update(@PathVariable String userIdx, @RequestBody User modifiedUser){
 
         long modifyUserIdx = Long.parseLong(userIdx);
-
+        HttpHeaders responseHeader = new HttpHeaders();
         try {
-            User originalUser = userRepository.findUserByIdx(modifyUserIdx);
+            userRepository.findUserByIdx(modifyUserIdx);
             userRepository.modify(modifiedUser);
         }catch(UserCantFindException e){
-            HttpHeaders responseHeader = new HttpHeaders();
             responseHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.NO_USER_FIND_MESSAGE);
 
             return ResponseEntity.badRequest()
                     .headers(responseHeader)
                     .body("");
         }catch (UserCantModifyIdException e){
-            HttpHeaders responseHeader = new HttpHeaders();
             responseHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.CANT_MODIFY_USER_ID_MESSAGE);
+
+            return ResponseEntity.badRequest()
+                    .headers(responseHeader)
+                    .body("");
+        }catch (UnregisterUserException e){
+            responseHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.UNREGISTER_USER_MESSAGE);
 
             return ResponseEntity.badRequest()
                     .headers(responseHeader)
                     .body("");
         }
 
-        return ResponseEntity.ok("")
-                ;
+        return ResponseEntity.ok("");
 
+    }
+
+    @DeleteMapping
+    public ResponseEntity unregister(@RequestBody User deleteUser){
+
+        HttpHeaders responseHeader = new HttpHeaders();
+        try {
+            userRepository.unregister(deleteUser.getUserIdx());
+        }catch (UserCantFindException e){
+            responseHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.NO_USER_FIND_MESSAGE);
+            return ResponseEntity.badRequest()
+                    .headers(responseHeader)
+                    .body("");
+        } catch (UnregisterUserException e) {
+            responseHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.UNREGISTER_USER_MESSAGE);
+            return ResponseEntity.badRequest()
+                    .headers(responseHeader)
+                    .body("");
+        }
+
+        return ResponseEntity.ok("");
     }
 }

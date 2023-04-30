@@ -1,4 +1,4 @@
-package com.example.tumblbugclone.Exception;
+package com.example.tumblbugclone.Exception.userexception;
 
 public class UserCantFindException extends Exception{
     public UserCantFindException() {

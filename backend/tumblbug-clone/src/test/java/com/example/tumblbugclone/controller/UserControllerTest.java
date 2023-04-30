@@ -1,5 +1,6 @@
 package com.example.tumblbugclone.controller;
 
+import com.example.tumblbugclone.Exception.userexception.UnregisterUserException;
 import com.example.tumblbugclone.managedconst.HttpConst;
 import com.example.tumblbugclone.model.User;
 import com.example.tumblbugclone.repository.UserRepository;
@@ -144,7 +145,42 @@ public class UserControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(header().string(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.NO_USER_FIND_MESSAGE));
     }
-    //1. 회원 조회
-    //2. 회원 삭제
+
+    @Test(expected = UnregisterUserException.class)
+    public void 회원탈퇴_성공_테스트() throws Exception{
+        //given
+        User deleteUser = new User("userName1", "userId1", "userPassword1", "userEmail1");
+        deleteUser.setUserIdx(1l);
+
+        //when
+        mockMvc.perform(delete(HttpConst.USER_URI)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(deleteUser)))
+                .andExpect(status().isOk());
+
+        //then
+        userRepository.findUserByIdx(1l);
+    }
+    
+    @Test
+    public void 이미_탈퇴한_회원_탈퇴_inWeb() throws Exception{
+        //given
+        User deleteUser = new User("userName1", "userId1", "userPassword1", "userEmail1");
+        deleteUser.setUserIdx(1l);
+
+        //when
+        mockMvc.perform(delete(HttpConst.USER_URI)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(deleteUser)))
+                .andExpect(status().isOk());
+
+        //then
+        mockMvc.perform(delete(HttpConst.USER_URI)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(deleteUser)))
+                .andExpect(status().isBadRequest())
+                .andExpect(header().string(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.UNREGISTER_USER_MESSAGE));
+    }
+
 
 }

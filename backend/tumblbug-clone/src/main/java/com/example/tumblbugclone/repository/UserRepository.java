@@ -1,9 +1,6 @@
 package com.example.tumblbugclone.repository;
 
-import com.example.tumblbugclone.Exception.UserCantFindException;
-import com.example.tumblbugclone.Exception.UserCantModifyIdException;
-import com.example.tumblbugclone.Exception.UserEmailDuplicatedException;
-import com.example.tumblbugclone.Exception.UserIdDuplicatedException;
+import com.example.tumblbugclone.Exception.userexception.*;
 import com.example.tumblbugclone.model.User;
 
 import java.util.HashMap;
@@ -62,21 +59,26 @@ public class UserRepository {
         return false;
     }
 
-    public User findUserByIdx(long idx) throws UserCantFindException {
+    public User findUserByIdx(long idx) throws UserCantFindException, UnregisterUserException {
         if(idx > id)
             throw new UserCantFindException();
-        return userDB.get(idx);
+        User findUser = getRegisteredUser(idx);
+        return findUser;
     }
 
-    public long modify(User user) throws UserCantFindException,UserCantModifyIdException {
+    private User getRegisteredUser(long idx) throws UnregisterUserException {
+        User findUser = userDB.get(idx);
+        if(findUser.isActive() == false)
+            throw new UnregisterUserException();
+        return findUser;
+    }
+
+    public long modify(User user) throws UserCantFindException, UserCantModifyIdException, UnregisterUserException {
 
         Long userIdx = user.getUserIdx();
-        if(userIdx == null)
-            throw new UserCantFindException();
-        if(userIdx > id)
-            throw new UserCantFindException();
+        verifyUserIdx(userIdx);
 
-        User originalUser = userDB.get(userIdx);
+        User originalUser = getRegisteredUser(userIdx);
 
         System.out.println("originalUser.getUserId().equals(user.getUserId()) = " + originalUser.getUserId().equals(user.getUserId()));
         System.out.println("originalUser.getUserId() = " + originalUser.getUserId());
@@ -86,5 +88,22 @@ public class UserRepository {
 
         userDB.put(userIdx, user);
         return userIdx;
+    }
+
+    private void verifyUserIdx(Long userIdx) throws UserCantFindException {
+        if(userIdx == null)
+            throw new UserCantFindException();
+        if(userIdx > id)
+            throw new UserCantFindException();
+    }
+
+    public void unregister(long userIdx) throws UserCantFindException, UnregisterUserException {
+        verifyUserIdx(userIdx);
+
+        User user = getRegisteredUser(userIdx);
+        User unregisterUser = user.copy();
+        unregisterUser.setActive(false);
+
+        userDB.put(userIdx, unregisterUser);
     }
 }

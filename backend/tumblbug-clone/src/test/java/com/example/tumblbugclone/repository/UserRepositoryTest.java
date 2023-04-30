@@ -1,20 +1,11 @@
 package com.example.tumblbugclone.repository;
 
-import com.example.tumblbugclone.Exception.UserCantFindException;
-import com.example.tumblbugclone.Exception.UserCantModifyIdException;
-import com.example.tumblbugclone.Exception.UserEmailDuplicatedException;
-import com.example.tumblbugclone.Exception.UserIdDuplicatedException;
-import com.example.tumblbugclone.managedconst.UserConst;
+import com.example.tumblbugclone.Exception.userexception.*;
 import com.example.tumblbugclone.model.User;
 import org.assertj.core.api.Assertions;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-
-import static org.junit.Assert.*;
 
 public class UserRepositoryTest {
 
@@ -120,5 +111,30 @@ public class UserRepositoryTest {
         //then
     }
 
+    @Test(expected = UnregisterUserException.class)
+    public void 회원_탈퇴_테스트() throws Exception{
+        //given
+
+        User user = new User("userName2", "userId2", "userPassword2", "userEmail2");
+        long userIdx = userRepository.save(user);
+
+        //when
+        userRepository.unregister(userIdx);
+
+        //then
+        User unregisteredUser = userRepository.findUserByIdx(userIdx);
+    }
+
+    @Test(expected = UnregisterUserException.class)
+    public void 이미_탈퇴한_회원_탈퇴_테스트() throws Exception{
+        User user = new User("userName2", "userId2", "userPassword2", "userEmail2");
+        long userIdx = userRepository.save(user);
+
+        //when
+        userRepository.unregister(userIdx);
+
+        //then
+        userRepository.unregister(userIdx);
+    }
 
 }
