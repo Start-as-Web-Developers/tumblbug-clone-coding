@@ -1,5 +1,7 @@
 package com.example.tumblbugclone.controller;
 
+import com.example.tumblbugclone.Exception.UserCantFindException;
+import com.example.tumblbugclone.Exception.UserCantModifyIdException;
 import com.example.tumblbugclone.Exception.UserEmailDuplicatedException;
 import com.example.tumblbugclone.Exception.UserIdDuplicatedException;
 import com.example.tumblbugclone.managedconst.HttpConst;
@@ -10,10 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @Controller
@@ -26,7 +25,7 @@ public class UserController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @PostMapping(HttpConst.USER_SIGNUP_URI)
+    @PostMapping
     public ResponseEntity signUp(@RequestBody User newUser){
         try {
             userRepository.save(newUser);
@@ -49,4 +48,32 @@ public class UserController {
     }
 
 
+    @PatchMapping("/{userIdx}")
+    public ResponseEntity update(@PathVariable String userIdx, @RequestBody User modifiedUser){
+
+        long modifyUserIdx = Long.parseLong(userIdx);
+
+        try {
+            User originalUser = userRepository.findUserByIdx(modifyUserIdx);
+            userRepository.modify(modifiedUser);
+        }catch(UserCantFindException e){
+            HttpHeaders responseHeader = new HttpHeaders();
+            responseHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.NO_USER_FIND_MESSAGE);
+
+            return ResponseEntity.badRequest()
+                    .headers(responseHeader)
+                    .body("");
+        }catch (UserCantModifyIdException e){
+            HttpHeaders responseHeader = new HttpHeaders();
+            responseHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.CANT_MODIFY_USER_ID_MESSAGE);
+
+            return ResponseEntity.badRequest()
+                    .headers(responseHeader)
+                    .body("");
+        }
+
+        return ResponseEntity.ok("")
+                ;
+
+    }
 }

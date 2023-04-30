@@ -12,4 +12,6 @@ public class HttpConst {
     //== 헤더 값 ==//
     public static final String DUPLICATED_USER_ID_MESSAGE = "중복된 사용자 아이디 입니다.";
     public static final String DUPLICATED_USER_EMAIL_MESSAGE = "이미 가입되어 있는 이메일 입니다.";
+    public static final String NO_USER_FIND_MESSAGE = "존재하지 않는 유저 인덱스 입니다.";
+    public static final String CANT_MODIFY_USER_ID_MESSAGE = "유저의 Id는 변경할 수 없습니다.";
 }

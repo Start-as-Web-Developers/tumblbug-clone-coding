@@ -68,7 +68,7 @@ public class UserRepository {
         return userDB.get(idx);
     }
 
-    public long modify(User user) throws Exception {
+    public long modify(User user) throws UserCantFindException,UserCantModifyIdException {
 
         Long userIdx = user.getUserIdx();
         if(userIdx == null)
