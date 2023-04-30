@@ -21,12 +21,18 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	//implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	//새로 추가한 내용//JUnit4 추가
+	testImplementation("org.junit.vintage:junit-vintage-engine") {
+	exclude group: "org.hamcrest", module: "hamcrest-core"
+	}
 }
 
-tasks.named('test') {
+test{
 	useJUnitPlatform()
 }
