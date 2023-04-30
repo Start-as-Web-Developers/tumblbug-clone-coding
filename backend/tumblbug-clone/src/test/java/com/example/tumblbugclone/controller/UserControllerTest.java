@@ -48,7 +48,7 @@ public class UserControllerTest {
     @Test
     public void mockMvc_동작_테스트() throws Exception{
         //given
-        this.mockMvc.perform(get("/user")).andExpect(status().isOk());
+        this.mockMvc.perform(get(HttpConst.USER_URI)).andExpect(status().isOk());
     }
 
     @Test
@@ -107,7 +107,7 @@ public class UserControllerTest {
         modifiedUser.setUserPassword("변경된 비밀번호");
 
         //then
-        mockMvc.perform(patch("/user/1")
+        mockMvc.perform(patch(HttpConst.USER_URI + "/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(modifiedUser)))
                 .andExpect(status().isOk());
@@ -123,7 +123,7 @@ public class UserControllerTest {
         modifyIdUser.setUserId("newUserId");
 
         //then
-        mockMvc.perform(patch("/user/1")
+        mockMvc.perform(patch(HttpConst.USER_URI + "/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(modifyIdUser)))
                 .andExpect(status().isBadRequest())
@@ -139,7 +139,7 @@ public class UserControllerTest {
         //when
 
         //then
-        mockMvc.perform(patch("/user/2")
+        mockMvc.perform(patch(HttpConst.USER_URI + "/2")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(modifyIdUser)))
                 .andExpect(status().isBadRequest())

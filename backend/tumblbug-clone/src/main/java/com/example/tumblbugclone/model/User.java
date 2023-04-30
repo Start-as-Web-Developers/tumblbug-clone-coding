@@ -2,6 +2,7 @@ package com.example.tumblbugclone.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
@@ -40,6 +41,11 @@ public class User{
         if(this.userIdx == null || user.userIdx == null)
             return this.userId.equals(user.getUserId());
         return this.userIdx == user.getUserIdx();
+
+    }
+
+    public int hashCode(){
+        return super.hashCode();
     }
 
 
