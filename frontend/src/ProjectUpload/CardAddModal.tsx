@@ -1,12 +1,20 @@
 import React from "react";
-import ReactDOM from "react-dom";
-import { $, changeCSS } from "../utils/commonFunction";
+import { $, changeCSS, createMultiElements, formatKoreanCurrency } from "../utils/commonFunction";
+import { CARD_ADD_MODAL } from "../utils/commonVariable";
 import "./cardAddModal.scss";
 
-function getCardView(sponsorMoney:string, sponsorExplain:string) {
-  const $cardContainer = document.createElement("div");
-  const $moneyTag = document.createElement("h2");
-  const $explainTag = document.createElement("h3");
+/**
+ * 후원 정보를 담은 카드 객체를 생성합니다.
+ * @param sponsorMoney 후원 금액
+ * @param sponsorExplain 후원 설명
+ * @returns 카드 객체 (HTMLElement)
+ */
+const createCardElement = (sponsorMoney:string, sponsorExplain:string) => {
+  const [$cardContainer, $moneyTag, $explainTag] = createMultiElements([
+    "div",
+    "h2",
+    "h3",
+  ]);
 
   $cardContainer.classList.add("sponsorCardArea__card");
   $moneyTag.innerHTML = `${sponsorMoney}원`;
@@ -18,35 +26,73 @@ function getCardView(sponsorMoney:string, sponsorExplain:string) {
   return $cardContainer;
 }
 
-function CardAddModal() {
-  function closeCardAddModal(event: React.MouseEvent<HTMLElement, MouseEvent>) {
-    const $self = event.target as Element;
-    const $cardAddModal = $self.closest(".cardAddModal") as HTMLElement;
-    const $moneyInput = $cardAddModal.querySelector(
-      ".cardAddForm__moneyForm > input"
-    ) as HTMLInputElement;
-    const $explainInput = $cardAddModal.querySelector(
-      ".cardAddForm__descriptionForm > input"
-    ) as HTMLInputElement;
+/**
+ * $input value를 초기화합니다.
+ * @param $input HTMLInputElement
+ */
+// eslint-disable-next-line no-param-reassign
+const initializeInputValue = ($input: HTMLInputElement) => { $input.value = ""; };
 
-    let inputMoneyValue = "";
-    let inputExplainValue = "";
+/**
+ * shortcut for closest()
+ * @param $self 탐색 시작 Element
+ * @param cssDeclaration css 선택자
+ * @returns 조건에 부합하는 조상 Element
+ */
+const getAncestorElement = (
+  $self: Element,
+  cssDeclaration: string
+): HTMLElement => $self.closest(cssDeclaration) as HTMLElement;
 
-    if ($moneyInput && $explainInput) {
-      inputMoneyValue = $moneyInput.value;
-      inputExplainValue = $explainInput.value;
+/**
+ * 후원 정보를 담은 카드를 생성하여 카드 영역에 추가합니다.
+ * @param moneyValue 후원 금액
+ * @param explainValue 후원 설명
+ */
+const insertCardIntoCardArea = (moneyValue:string, explainValue:string) => {
+  const $card = createCardElement(moneyValue, explainValue);
+  const $cardArea = $(".sponsorCardArea");
+  $cardArea?.appendChild($card);
+}
 
-      $moneyInput.value = "";
-      $explainInput.value = "";
+/**
+ * 카드 추가와 관련된 modal을 닫습니다.
+ * @param event click 이벤트 객체
+ */
+const closeCardAddModal = (
+  event: React.MouseEvent<HTMLElement, MouseEvent>
+): void => {
+  const $eventTarget = event.target as Element;
+  const $cardAddModal = getAncestorElement($eventTarget, ".cardAddModal");
+  const $moneyInput = $(".moneyInput", $cardAddModal) as HTMLInputElement;
+  const $explainInput = $(
+    ".descriptionInput",
+    $cardAddModal
+  ) as HTMLInputElement;
 
-      const $card = getCardView(inputMoneyValue, inputExplainValue);
-      const $cardArea = $(".sponsorCardArea");
-      $cardArea?.appendChild($card);
-    }
+  insertCardIntoCardArea($moneyInput.value, $explainInput.value);
+  initializeInputValue($moneyInput);
+  initializeInputValue($explainInput);
 
-    changeCSS($cardAddModal, "top", "-100vh");
+  changeCSS($cardAddModal, "top", CARD_ADD_MODAL.ORIGINAL);
+}
+
+const updateMoneyInfoElement = (inputValue:string):void => {
+  if (Number.isNaN(parseInt(inputValue, 10))) {
+    return;
   }
+  
+  const $moneyInfoElement = $(".cardAddForm__moneyForm > span") as HTMLElement;
+  if (inputValue.length >= 9) {
+    $moneyInfoElement.innerHTML = "숫자가 너무 큽니다";
+  }
+  else {
+    const koreaMoneyString = formatKoreanCurrency(inputValue);
+    $moneyInfoElement.innerHTML = `${koreaMoneyString}원`;
+  }
+}
 
+function CardAddModal() {
   return (
     <section className="cardAddModal">
       <section className="cardAddFormContainer">
@@ -55,11 +101,20 @@ function CardAddModal() {
           <div className="cardAddForm__moneyForm">
             <h2>후원 금액</h2>
             <span>1,000원</span>
-            <input type="number" placeholder="후원 금액 입력" />
+            <input
+              className="moneyInput"
+              type="number"
+              placeholder="후원 금액 입력"
+              onChange={(event) => updateMoneyInfoElement(event.target.value)}
+            />
           </div>
           <div className="cardAddForm__descriptionForm">
             <h2>후원 설명</h2>
-            <input type="text" placeholder="후원 설명 입력" />
+            <input
+              className="descriptionInput"
+              type="text"
+              placeholder="후원 설명 입력"
+            />
           </div>
           <button
             type="button"
@@ -72,6 +127,7 @@ function CardAddModal() {
       </section>
     </section>
   );
-}
+};
 
 export default CardAddModal;
+export { getAncestorElement };

@@ -71,5 +71,42 @@ function $(cssSelector: string, root = document.body): HTMLElement | null {
   return null;
 }
 
-export { changeCSS, changeMultiCSS, eventTo, $ };
+const createElement = (tagName:string):HTMLElement => document.createElement(tagName);
+
+const createMultiElements = (tagNames: string[]):HTMLElement[] => {
+  const $elements:HTMLElement[] = [];
+  tagNames.forEach((tagName) => {
+    $elements.push(createElement(tagName));
+  })
+  return $elements;
+}
+
+const formatKoreanCurrency = (num:number | string): string => {
+  const money = num.toString();
+
+  if (money.length <= 4) {
+    return money;
+  }
+
+  const moneyArray = [];
+  for (let i = money.length; i > 0; i -= 3) {
+    const start = Math.max(i - 3, 0);
+    const end = i;
+    const slicedNumber = money.slice(start, end);
+    moneyArray.unshift(slicedNumber);
+  }
+
+  const koreaMoney = moneyArray.join(",");
+  return koreaMoney;
+}
+
+export {
+  changeCSS,
+  changeMultiCSS,
+  eventTo,
+  $,
+  createElement,
+  createMultiElements,
+  formatKoreanCurrency,
+};
 export type { cssObj };

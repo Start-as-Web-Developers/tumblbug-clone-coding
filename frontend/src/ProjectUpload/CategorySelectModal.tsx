@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
   Logo02, Logo03, Logo04, Logo05, Logo06,
   Logo07, Logo08, Logo09, Logo10, Logo11,
@@ -6,12 +6,26 @@ import {
   Logo17, Logo18, Logo19, Logo20, Logo21,
   Logo22 } from '../Navbar/categoryBox/Logo';
 import { $, changeCSS } from '../utils/commonFunction';
+import { CATEGORY_SELECT_MODAL } from '../utils/commonVariable';
+import { getAncestorElement } from './CardAddModal';
 import "./categorySelectModal.scss";
 
 type logoObj = {
   component: typeof Logo02,
   logoName: string;
 };
+
+const closeModal = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const $self = event.target as Element;
+  const $categorySelectModal = getAncestorElement(
+    $self,
+    ".categorySelectModal"
+  );
+  const $modalCategoryName = $("h3", $self as HTMLElement) as HTMLElement;
+  const $infoCategoryText = $(".categoryRow__categoryName") as HTMLElement;
+  $infoCategoryText.innerHTML = $modalCategoryName.innerHTML;
+  changeCSS($categorySelectModal, "top", CATEGORY_SELECT_MODAL.original);
+}
 
 function CategorySelectModal() {
   const logoObjArray: logoObj[] = [
@@ -100,18 +114,6 @@ function CategorySelectModal() {
       logoName: "음악",
     },
   ];
-
-  function closeModal(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-    const $self = event.target as Element;
-    const $categorySelectModal = $self.closest(
-      ".categorySelectModal"
-    ) as HTMLElement;
-    const $modalCategoryName = $self.querySelector("h3") as HTMLElement;
-    const $infoCategoryText = $(".categoryRow__categoryName") as HTMLElement;
-    
-    $infoCategoryText.textContent = $modalCategoryName.textContent as string;
-    changeCSS($categorySelectModal, "top", "-100vh");
-  }
 
   return (
     <section className="categorySelectModal">
