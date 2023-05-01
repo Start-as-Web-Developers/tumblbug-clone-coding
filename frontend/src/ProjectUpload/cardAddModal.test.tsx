@@ -3,6 +3,7 @@ import {
   createCardElement,
   initializeInputValue,
   getAncestorElement,
+  insertCardIntoCardArea,
 } from "./CardAddModal";
 
 describe("createCardElement()", () => {
@@ -23,7 +24,7 @@ describe("createCardElement()", () => {
   });
 
   test("<abnormal> can't parse moneyString", () => {
-    const moneyString = "후원 금액";  // 부적절한 input
+    const moneyString = "후원 금액"; // 부적절한 input
     const explainString = "후원 설명";
     expect(() => createCardElement(moneyString, explainString)).toThrow();
   });
@@ -43,7 +44,7 @@ describe("getAncestorElement()", () => {
   $parent.appendChild($child);
   $parent.classList.add("parent");
 
-  test("<normal>", () => {    
+  test("<normal>", () => {
     const cssInput = ".parent";
     const $ancestor = getAncestorElement($child, cssInput);
     expect($ancestor).toBe($parent);
@@ -52,5 +53,18 @@ describe("getAncestorElement()", () => {
   test("<abnormal> weird cssDeclaration", () => {
     const weirdCssInput = ".child";
     expect(() => getAncestorElement($child, weirdCssInput)).toThrow();
+  });
+});
+
+describe("insertCardIntoCardArea()", () => {
+  const $cardArea = document.createElement("section");
+  $cardArea.classList.add("sponsorCardArea");
+
+  test("<normal>", () => {
+    const moneyString = "1000";
+    const explainString = "후원 설명";
+
+    insertCardIntoCardArea($cardArea, moneyString, explainString);
+    expect($cardArea.childElementCount).toBe(1);
   });
 });
