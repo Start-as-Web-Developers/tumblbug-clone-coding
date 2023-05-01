@@ -17,6 +17,11 @@ const createCardElement = (sponsorMoney:string, sponsorExplain:string) => {
   ]);
 
   $cardContainer.classList.add("sponsorCardArea__card");
+
+  if (Number.isNaN(parseInt(sponsorMoney, 10))) {
+    throw(new Error("[Error] : 부적절한 input - sponsorMoney"));
+  }
+
   $moneyTag.innerHTML = `${sponsorMoney}원`;
   $explainTag.innerHTML = sponsorExplain;
 
@@ -42,7 +47,13 @@ const initializeInputValue = ($input: HTMLInputElement) => { $input.value = ""; 
 const getAncestorElement = (
   $self: Element,
   cssDeclaration: string
-): HTMLElement => $self.closest(cssDeclaration) as HTMLElement;
+): HTMLElement => {
+  const $ancestor = $self.closest(cssDeclaration);
+  if ($ancestor == null) {
+    throw new Error(`[Error] : can't find node whose cssDeclaration is ${cssDeclaration}`);
+  } 
+  return $ancestor as HTMLElement;
+};
 
 /**
  * 후원 정보를 담은 카드를 생성하여 카드 영역에 추가합니다.
@@ -129,4 +140,8 @@ function CardAddModal() {
 };
 
 export default CardAddModal;
-export { getAncestorElement };
+export {
+  createCardElement,
+  initializeInputValue,
+  getAncestorElement,
+};
