@@ -96,7 +96,7 @@ const insertCardIntoCardArea = (
  * @param event click 이벤트 객체
  */
 const closeCardAddModal = (
-  event: React.MouseEvent<HTMLElement, MouseEvent>
+  event: React.MouseEvent<HTMLElement, MouseEvent> | Event
 ): void => {
   const $eventTarget = event.target as Element;
   const $cardAddModal = getAncestorElement($eventTarget, ".cardAddModal");
@@ -110,7 +110,6 @@ const closeCardAddModal = (
   insertCardIntoCardArea($cardArea, $moneyInput.value, $explainInput.value);
   initializeInputValue($moneyInput);
   initializeInputValue($explainInput);
-
   changeCSS($cardAddModal, "top", CARD_ADD_MODAL.ORIGINAL);
 }
 
@@ -171,4 +170,6 @@ export {
   initializeInputValue,
   getAncestorElement,
   insertCardIntoCardArea,
+  closeCardAddModal,
+  updateMoneyInfoElement,
 };
