@@ -1,6 +1,6 @@
 import React from 'react';
 import { $, changeCSS, formatKoreanCurrency } from '../utils/commonFunction';
-import { CARD_ADD_MODAL, CATEGORY_SELECT_MODAL, KOREA_MONEY_MAX_LENGTH } from '../utils/commonVariable';
+import { CARD_ADD_MODAL, CATEGORY_MODAL_OPEN_BTN_VISITED_TEXT, CATEGORY_SELECT_MODAL, KOREA_MONEY_MAX_LENGTH, TOO_BIG_NUMBER_TEXT } from '../utils/commonVariable';
 import "./ProjectRegisterColumn.scss";
 
 interface secondRowInfo {
@@ -8,77 +8,77 @@ interface secondRowInfo {
   headerName: string
 };
 
+const secondRowInfos: secondRowInfo[] = [
+  {
+    className: "introduceRow",
+    headerName: "상세 소개",
+  },
+  {
+    className: "budgeRow",
+    headerName: "예산 계획",
+  },
+  {
+    className: "scheduleRow",
+    headerName: "일정 계획",
+  },
+  {
+    className: "teamExplainRow",
+    headerName: "팀 소개",
+  },
+  {
+    className: "sponsorExplainRow",
+    headerName: "선물 설명",
+  },
+  {
+    className: "notifyRow",
+    headerName: "신뢰와 안전",
+  },
+];
+
+/**
+ * 카테고리 탐색 버튼의 텍스트를 변경하여
+ * 사용자에게 카테고리 탐색 이력이 있음을 알려줍니다.
+ */
+const markBtnAsVisited = (): void => {
+  const $modalOpenBtn = $(".categoryRow__openBtn") as HTMLElement;
+  $modalOpenBtn.innerHTML = CATEGORY_MODAL_OPEN_BTN_VISITED_TEXT;
+};
+
+/**
+ * 카테고리 선택 modal을 팝업합니다.
+ */
+const openModal = (): void => {
+  const $modal = $(".categorySelectModal") as HTMLElement;
+  changeCSS($modal, "top", CATEGORY_SELECT_MODAL.POPUP);
+  markBtnAsVisited();
+};
+
+/**
+ * 후원 카드 생성 modal을 팝업합니다.
+ */
+const openCardAddModal = (): void => {
+  const $cardOpenModal = $(".cardAddModal") as HTMLElement;
+  changeCSS($cardOpenModal, "top", CARD_ADD_MODAL.POPUP);
+};
+
+const setGoalMoneyInfoToKoreaMoney = () => {
+  const $goalMoneyInput = $(".dueRow__goalMoneyInput") as HTMLInputElement;
+  const inputValue: string = $goalMoneyInput.value;
+
+  if (Number.isNaN(parseInt(inputValue, 10))) {
+    return;
+  }
+
+  const $moneyInfo = $(".dueRow__moneyInfo") as HTMLElement;
+
+  if (inputValue.length >= KOREA_MONEY_MAX_LENGTH) {
+    $moneyInfo.innerHTML = TOO_BIG_NUMBER_TEXT;
+  } else {
+    $moneyInfo.innerHTML = `${formatKoreanCurrency(inputValue)}원`;
+  }
+};
+
 function ProjectRegisterColumn() {
-  const secondRowInfos: secondRowInfo[] = [
-    {
-      className: "introduceRow",
-      headerName: "상세 소개",
-    },
-    {
-      className: "budgeRow",
-      headerName: "예산 계획",
-    },
-    {
-      className: "scheduleRow",
-      headerName: "일정 계획",
-    },
-    {
-      className: "teamExplainRow",
-      headerName: "팀 소개",
-    },
-    {
-      className: "sponsorExplainRow",
-      headerName: "선물 설명",
-    },
-    {
-      className: "notifyRow",
-      headerName: "신뢰와 안전",
-    },
-  ];
-
-  /**
-   * 카테고리 탐색 버튼의 텍스트를 변경하여
-   * 사용자에게 카테고리 탐색 이력이 있음을 알려줍니다.
-   */
-  const markBtnAsVisited = ():void => {
-    const $modalOpenBtn = $(".categoryRow__openBtn") as HTMLElement;
-    $modalOpenBtn.innerHTML = "카테고리 재탐색";
-  }
-
-  /**
-   * 카테고리 선택 modal을 팝업합니다.
-   */
-  const openModal = ():void => {
-    const $modal = $(".categorySelectModal") as HTMLElement;
-    changeCSS($modal, "top", CATEGORY_SELECT_MODAL.POPUP);
-    markBtnAsVisited();
-  }
-
-  /**
-   * 후원 카드 생성 modal을 팝업합니다.
-   */
-  const openCardAddModal = ():void => {
-    const $cardOpenModal = $(".cardAddModal") as HTMLElement;
-    changeCSS($cardOpenModal, "top", CARD_ADD_MODAL.POPUP);
-  }
-
-  const setGoalMoneyInfoToKoreaMoney = () => {
-    const $goalMoneyInput = $(".dueRow__goalMoneyInput") as HTMLInputElement;
-    const inputValue:string = $goalMoneyInput.value;
-    
-    if(Number.isNaN(parseInt(inputValue, 10))) {
-      return;
-    }
-    
-    const $moneyInfo = $(".dueRow__moneyInfo") as HTMLElement;
-
-    if (inputValue.length >= KOREA_MONEY_MAX_LENGTH) {
-      $moneyInfo.innerHTML = `너무 큰 숫자`;
-    } else {
-      $moneyInfo.innerHTML = `${formatKoreanCurrency(inputValue)}원`;
-    }
-  }
-
   return (
     <section className="projectRegisterColumn">
       <h1 className="projectRegisterColumn__title">Register Project</h1>
@@ -147,3 +147,9 @@ function ProjectRegisterColumn() {
 }
 
 export default ProjectRegisterColumn;
+export {
+  markBtnAsVisited,
+  openModal,
+  openCardAddModal,
+  setGoalMoneyInfoToKoreaMoney,
+};
