@@ -1,6 +1,12 @@
 import React from 'react';
-import { $, changeCSS, formatKoreanCurrency } from '../utils/commonFunction';
-import { CARD_ADD_MODAL, CATEGORY_MODAL_OPEN_BTN_VISITED_TEXT, CATEGORY_SELECT_MODAL, KOREA_MONEY_MAX_LENGTH, TOO_BIG_NUMBER_TEXT } from '../utils/commonVariable';
+import { $, changeCSS, formatKoreanCurrency } from '../../utils/commonFunction';
+import {
+  CARD_ADD_MODAL,
+  CATEGORY_MODAL_OPEN_BTN_VISITED_TEXT,
+  CATEGORY_SELECT_MODAL,
+  KOREA_MONEY_MAX_LENGTH,
+  TOO_BIG_NUMBER_TEXT,
+} from "../../utils/commonVariable";
 import "./ProjectRegisterColumn.scss";
 
 interface secondRowInfo {

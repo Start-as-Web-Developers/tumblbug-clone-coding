@@ -1,5 +1,8 @@
-import { $, formatKoreanCurrency } from "../utils/commonFunction";
-import { CARD_ADD_MODAL, KOREA_MONEY_MAX_LENGTH } from "../utils/commonVariable";
+import { $, formatKoreanCurrency } from "../../utils/commonFunction";
+import {
+  CARD_ADD_MODAL,
+  KOREA_MONEY_MAX_LENGTH,
+} from "../../utils/commonVariable";
 import {
   createCardElement,
   initializeInputValue,

@@ -1,7 +1,12 @@
 import React from "react";
-import { makeCustomErrorMessage } from "../utils/commonErrorFunction";
-import { $, changeCSS, createMultiElements, formatKoreanCurrency } from "../utils/commonFunction";
-import { CARD_ADD_MODAL, KOREA_MONEY_MAX_LENGTH } from "../utils/commonVariable";
+import { makeCustomErrorMessage } from "../../utils/commonErrorFunction";
+import {
+  $,
+  changeCSS,
+  createMultiElements,
+  formatKoreanCurrency,
+} from "../../utils/commonFunction";
+import { CARD_ADD_MODAL, KOREA_MONEY_MAX_LENGTH } from "../../utils/commonVariable";
 import "./cardAddModal.scss";
 
 // global variables
