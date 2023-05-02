@@ -22,7 +22,7 @@ public class Project {
 
     String planIntro;
     String planBudget;
-    String PlanSchedule;
+    String planSchedule;
     String planTeam;
     String planExplain;
     String planGuide;
@@ -42,7 +42,7 @@ public class Project {
 
         this.planIntro = planIntro;
         this.planBudget = planBudget;
-        PlanSchedule = planSchedule;
+        this.planSchedule = planSchedule;
         this.planTeam = planTeam;
         this.planExplain = planExplain;
         this.planGuide = planGuide;
