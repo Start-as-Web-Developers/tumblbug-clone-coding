@@ -140,3 +140,4 @@ function CategorySelectModal() {
 }
 
 export default CategorySelectModal;
+export { closeModal };

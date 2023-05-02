@@ -1,7 +1,11 @@
 import React from "react";
+import { makeCustomErrorMessage } from "../utils/commonErrorFunction";
 import { $, changeCSS, createMultiElements, formatKoreanCurrency } from "../utils/commonFunction";
-import { CARD_ADD_MODAL } from "../utils/commonVariable";
+import { CARD_ADD_MODAL, KOREA_MONEY_MAX_LENGTH } from "../utils/commonVariable";
 import "./cardAddModal.scss";
+
+// global variables
+const currentPath = "/frontend/src/ProjectUpload/CardAddModal.tsx";
 
 /**
  * 후원 정보를 담은 카드 객체를 생성합니다.
@@ -17,6 +21,16 @@ const createCardElement = (sponsorMoney:string, sponsorExplain:string) => {
   ]);
 
   $cardContainer.classList.add("sponsorCardArea__card");
+
+  if (Number.isNaN(parseInt(sponsorMoney, 10))) {
+    const customErrorMessage = makeCustomErrorMessage(
+      currentPath,
+      "createCardElement()",
+      `weird input - can't parse ${sponsorMoney} into number`
+    );
+    throw(new Error(customErrorMessage));
+  }
+
   $moneyTag.innerHTML = `${sponsorMoney}원`;
   $explainTag.innerHTML = sponsorExplain;
 
@@ -42,38 +56,60 @@ const initializeInputValue = ($input: HTMLInputElement) => { $input.value = ""; 
 const getAncestorElement = (
   $self: Element,
   cssDeclaration: string
-): HTMLElement => $self.closest(cssDeclaration) as HTMLElement;
+): HTMLElement => {
+  const $ancestor = $self.closest(cssDeclaration);
+  if ($ancestor == null) {
+    const customErrorMessage = makeCustomErrorMessage(
+      currentPath,
+      'getAncestorElement',
+      `can"t find node whose cssDeclaration is ${cssDeclaration}`
+    )
+    throw new Error(customErrorMessage);
+  } 
+  return $ancestor as HTMLElement;
+};
 
 /**
  * 후원 정보를 담은 카드를 생성하여 카드 영역에 추가합니다.
  * @param moneyValue 후원 금액
  * @param explainValue 후원 설명
  */
-const insertCardIntoCardArea = (moneyValue:string, explainValue:string) => {
+const insertCardIntoCardArea = (
+  $cardArea:HTMLElement,
+  moneyValue: string,
+  explainValue: string
+) => {
+  if (Number.isNaN(parseInt(moneyValue, 10))) {
+    const customErrorMessage = makeCustomErrorMessage(
+      currentPath,
+      `insertCardIntoCardArea()`,
+      `werid input, ${moneyValue} can"t be parsed as Number`
+    );
+    throw(new Error(customErrorMessage));
+  }
   const $card = createCardElement(moneyValue, explainValue);
-  const $cardArea = $(".sponsorCardArea");
-  $cardArea?.appendChild($card);
-}
+  $cardArea.appendChild($card);
+};
 
 /**
  * 카드 추가와 관련된 modal을 닫습니다.
  * @param event click 이벤트 객체
  */
 const closeCardAddModal = (
-  event: React.MouseEvent<HTMLElement, MouseEvent>
+  event: React.MouseEvent<HTMLElement, MouseEvent> | Event
 ): void => {
   const $eventTarget = event.target as Element;
   const $cardAddModal = getAncestorElement($eventTarget, ".cardAddModal");
+  const $cardArea = $(".sponsorCardArea") as HTMLElement;
   const $moneyInput = $(".moneyInput", $cardAddModal) as HTMLInputElement;
   const $explainInput = $(
     ".descriptionInput",
     $cardAddModal
   ) as HTMLInputElement;
 
-  insertCardIntoCardArea($moneyInput.value, $explainInput.value);
+  insertCardIntoCardArea($cardArea, $moneyInput.value, $explainInput.value);
   initializeInputValue($moneyInput);
   initializeInputValue($explainInput);
-
   changeCSS($cardAddModal, "top", CARD_ADD_MODAL.ORIGINAL);
 }
 
@@ -83,10 +119,9 @@ const updateMoneyInfoElement = (inputValue:string):void => {
   }
   
   const $moneyInfoElement = $(".cardAddForm__moneyForm > span") as HTMLElement;
-  if (inputValue.length >= 9) {
+  if (inputValue.length >= KOREA_MONEY_MAX_LENGTH) {
     $moneyInfoElement.innerHTML = "숫자가 너무 큽니다";
-  }
-  else {
+  } else {
     const koreaMoneyString = formatKoreanCurrency(inputValue);
     $moneyInfoElement.innerHTML = `${koreaMoneyString}원`;
   }
@@ -130,4 +165,11 @@ function CardAddModal() {
 };
 
 export default CardAddModal;
-export { getAncestorElement };
+export {
+  createCardElement,
+  initializeInputValue,
+  getAncestorElement,
+  insertCardIntoCardArea,
+  closeCardAddModal,
+  updateMoneyInfoElement,
+};

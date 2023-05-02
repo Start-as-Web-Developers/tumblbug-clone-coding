@@ -82,21 +82,8 @@ const createMultiElements = (tagNames: string[]):HTMLElement[] => {
 }
 
 const formatKoreanCurrency = (num:number | string): string => {
-  const money = num.toString();
-
-  if (money.length <= 4) {
-    return money;
-  }
-
-  const moneyArray = [];
-  for (let i = money.length; i > 0; i -= 3) {
-    const start = Math.max(i - 3, 0);
-    const end = i;
-    const slicedNumber = money.slice(start, end);
-    moneyArray.unshift(slicedNumber);
-  }
-
-  const koreaMoney = moneyArray.join(",");
+  const money = num.toLocaleString("en");
+  const koreaMoney = money.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
   return koreaMoney;
 }
 
