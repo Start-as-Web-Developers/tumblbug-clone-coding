@@ -1,4 +1,4 @@
-package com.example.tumblbugclone.Exception.userexception;
+package com.example.tumblbugclone.Exception.componentException;
 
 import com.example.tumblbugclone.model.Component;
 

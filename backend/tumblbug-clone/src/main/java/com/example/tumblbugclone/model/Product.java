@@ -7,8 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 public class Product {
 
-    long projectId;
-    long userIdx;
+    private long projectId;
+    private long userIdx;
+    private long productId;
 
     public Product(long projectId, long userIdx) {
         this.projectId = projectId;

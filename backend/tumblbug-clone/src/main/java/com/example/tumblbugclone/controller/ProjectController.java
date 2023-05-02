@@ -1,9 +1,6 @@
 package com.example.tumblbugclone.controller;
 
-import com.example.tumblbugclone.Exception.userexception.ProjectCantFindException;
-import com.example.tumblbugclone.Exception.userexception.UnregisterUserException;
-import com.example.tumblbugclone.Exception.userexception.UserCantFindException;
-import com.example.tumblbugclone.Exception.userexception.UserCantModifyIdException;
+import com.example.tumblbugclone.Exception.projectException.ProjectCantFindException;
 import com.example.tumblbugclone.managedconst.HttpConst;
 import com.example.tumblbugclone.model.Project;
 import com.example.tumblbugclone.repository.ProjectRepository;
@@ -14,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Slf4j

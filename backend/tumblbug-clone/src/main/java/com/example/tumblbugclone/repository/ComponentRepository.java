@@ -1,13 +1,10 @@
 package com.example.tumblbugclone.repository;
 
-import com.example.tumblbugclone.Exception.userexception.ComponentCantFindException;
-import com.example.tumblbugclone.Exception.userexception.ProjectCantFindException;
+import com.example.tumblbugclone.Exception.componentException.ComponentCantFindException;
 import com.example.tumblbugclone.model.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class ComponentRepository {

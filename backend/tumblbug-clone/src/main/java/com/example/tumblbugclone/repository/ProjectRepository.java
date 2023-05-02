@@ -1,6 +1,6 @@
 package com.example.tumblbugclone.repository;
 
-import com.example.tumblbugclone.Exception.userexception.ProjectCantFindException;
+import com.example.tumblbugclone.Exception.projectException.ProjectCantFindException;
 import com.example.tumblbugclone.model.Project;
 
 import java.util.ArrayList;
