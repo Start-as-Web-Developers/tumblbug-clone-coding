@@ -20,7 +20,6 @@ public class UserRepository {
         id = 0l;
         userDB.clear();
     }
-
     public long save(User user) throws Exception{
         System.out.println("try to save " + user.getUserName());
         System.out.println(id);
