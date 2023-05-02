@@ -17,17 +17,20 @@ $common-transition: 0.3s;
     font-size: 0.7rem;
     font-weight: 600;
     transition: $common-transition;
+    opacity: 0;
   }
 
   & .previewTitle__projectTitle {
     font-size: 1.3rem;
     font-weight: 700;
     transition: $common-transition;
+    opacity: 0;
   }
 
   & .previewTitle__projectExplain { 
     font-size: 0.7rem;
     font-weight: 500;
     transition: $common-transition;
+    opacity: 0;
   }
 }

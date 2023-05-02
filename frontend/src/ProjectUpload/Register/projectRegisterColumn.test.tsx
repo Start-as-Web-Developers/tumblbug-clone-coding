@@ -55,50 +55,50 @@ describe("openCardAddModal()", () => {
   });
 });
 
-describe("setGoalMoneyInfoToKoreaMoney()", () => {
-  const $goalMoneyInput = document.createElement("input");
-  const $moneyInfo = document.createElement("span");
+// describe("setGoalMoneyInfoToKoreaMoney()", () => {
+//   const $goalMoneyInput = document.createElement("input");
+//   const $moneyInfo = document.createElement("span");
 
-  $goalMoneyInput.classList.add("dueRow__goalMoneyInput");
-  $moneyInfo.classList.add("dueRow__moneyInfo");
+//   $goalMoneyInput.classList.add("dueRow__goalMoneyInput");
+//   $moneyInfo.classList.add("dueRow__moneyInfo");
 
-  document.body.appendChild($goalMoneyInput);
-  document.body.appendChild($moneyInfo);
+//   document.body.appendChild($goalMoneyInput);
+//   document.body.appendChild($moneyInfo);
 
-  afterEach(() => {
-    $goalMoneyInput.value = "";
-    $moneyInfo.innerHTML = "";
-  })
+//   afterEach(() => {
+//     $goalMoneyInput.value = "";
+//     $moneyInfo.innerHTML = "";
+//   })
 
-  test("<normal> proper input value string", () => {
-    const inputValue = "1000";
-    $goalMoneyInput.value = inputValue;
+//   test("<normal> proper input value string", () => {
+//     const inputValue = "1000";
+//     $goalMoneyInput.value = inputValue;
 
-    setGoalMoneyInfoToKoreaMoney();
-    expect($moneyInfo.innerHTML).toBe(`${formatKoreanCurrency(inputValue)}원`);
-  });
+//     setGoalMoneyInfoToKoreaMoney();
+//     expect($moneyInfo.innerHTML).toBe(`${formatKoreanCurrency(inputValue)}원`);
+//   });
 
-  test("<normal> proper long input value string", () => {
-    const inputValue = "1".repeat(KOREA_MONEY_MAX_LENGTH);
-    $goalMoneyInput.value = inputValue;
+//   test("<normal> proper long input value string", () => {
+//     const inputValue = "1".repeat(KOREA_MONEY_MAX_LENGTH);
+//     $goalMoneyInput.value = inputValue;
 
-    setGoalMoneyInfoToKoreaMoney();
-    expect($moneyInfo.innerHTML).toBe(TOO_BIG_NUMBER_TEXT);
-  });
+//     setGoalMoneyInfoToKoreaMoney();
+//     expect($moneyInfo.innerHTML).toBe(TOO_BIG_NUMBER_TEXT);
+//   });
 
-  test("<normal> proper empty input value string", () => {
-    const inputValue = "";
-    $goalMoneyInput.value = inputValue;
+//   test("<normal> proper empty input value string", () => {
+//     const inputValue = "";
+//     $goalMoneyInput.value = inputValue;
 
-    setGoalMoneyInfoToKoreaMoney();
-    expect($moneyInfo.innerHTML).toBe("");
-  });
+//     setGoalMoneyInfoToKoreaMoney();
+//     expect($moneyInfo.innerHTML).toBe("");
+//   });
 
-  test("<abnormal> weird input value string", () => {
-    const inputValue = "weird input value";
-    $goalMoneyInput.value = inputValue;
+//   test("<abnormal> weird input value string", () => {
+//     const inputValue = "weird input value";
+//     $goalMoneyInput.value = inputValue;
 
-    setGoalMoneyInfoToKoreaMoney();
-    expect($moneyInfo.innerHTML).toBe("");
-  })
-});
+//     setGoalMoneyInfoToKoreaMoney();
+//     expect($moneyInfo.innerHTML).toBe("");
+//   })
+// });

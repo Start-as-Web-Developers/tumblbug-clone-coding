@@ -7,6 +7,7 @@ import {
   Logo22 } from '../../Navbar/categoryBox/Logo';
 import { $, changeCSS } from '../../utils/commonFunction';
 import { CATEGORY_SELECT_MODAL } from '../../utils/commonVariable';
+import { updatePreviewCategory } from '../Preview/PreviewTitle';
 import { getAncestorElement } from './CardAddModal';
 import "./categorySelectModal.scss";
 
@@ -25,6 +26,7 @@ const closeModal = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
   const $infoCategoryText = $(".categoryRow__categoryName") as HTMLElement;
   $infoCategoryText.innerHTML = $modalCategoryName.innerHTML;
   changeCSS($categorySelectModal, "top", CATEGORY_SELECT_MODAL.original);
+  updatePreviewCategory($modalCategoryName.innerHTML);
 }
 
 function CategorySelectModal() {

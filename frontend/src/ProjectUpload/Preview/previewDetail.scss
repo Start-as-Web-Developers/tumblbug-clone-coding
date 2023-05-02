@@ -29,6 +29,14 @@ $common-transition: 0.3s;
       border-radius: $common-border-radius;
       transition: $common-transition;
 
+      &.textBox__introduceRow,
+      &.textBox__budgeRow,
+      &.textBox__scheduleRow,
+      &.textBox__teamExplainRow,
+      &.textBox__sponsorExplainRow {
+        opacity: 0;
+      }
+
       & h2 {
         font-size: 1rem;
         font-weight: 600;

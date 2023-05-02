@@ -7,6 +7,7 @@ import {
   formatKoreanCurrency,
 } from "../../utils/commonFunction";
 import { CARD_ADD_MODAL, KOREA_MONEY_MAX_LENGTH } from "../../utils/commonVariable";
+import { updatePreviewCardBox } from "../Preview/PreviewDetail";
 import "./cardAddModal.scss";
 
 // global variables
@@ -36,7 +37,7 @@ const createCardElement = (sponsorMoney:string, sponsorExplain:string) => {
     throw(new Error(customErrorMessage));
   }
 
-  $moneyTag.innerHTML = `${sponsorMoney}원`;
+  $moneyTag.innerHTML = `${formatKoreanCurrency(sponsorMoney)}원`;
   $explainTag.innerHTML = sponsorExplain;
 
   $cardContainer.appendChild($moneyTag);
@@ -112,10 +113,17 @@ const closeCardAddModal = (
     $cardAddModal
   ) as HTMLInputElement;
 
-  insertCardIntoCardArea($cardArea, $moneyInput.value, $explainInput.value);
+  const sponsorMoney = $moneyInput.value;
+  const sponsorExplain = $explainInput.value;
+
+  insertCardIntoCardArea($cardArea, sponsorMoney, sponsorExplain);
   initializeInputValue($moneyInput);
   initializeInputValue($explainInput);
   changeCSS($cardAddModal, "top", CARD_ADD_MODAL.ORIGINAL);
+  updatePreviewCardBox(
+    `${formatKoreanCurrency(sponsorMoney)}원`,
+    sponsorExplain
+  );
 }
 
 const updateMoneyInfoElement = (inputValue:string):void => {

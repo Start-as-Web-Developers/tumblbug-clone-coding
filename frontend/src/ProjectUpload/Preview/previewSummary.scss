@@ -13,6 +13,7 @@ $common-transition: 0.3s;
     height: 100%;
     width: 45%;
     transition: $common-transition;
+    opacity: 0;
   }
 
   & .previewSummary__textBox {
@@ -25,6 +26,13 @@ $common-transition: 0.3s;
 
     & div {
       transition: $common-transition;
+
+      &.previewSummary__dueDateRow,
+      &.previewSummary__dueMoneyRow,
+      &.previewSummary__sponsorNumber,
+      &.previewSummary__buttonBox {
+        opacity: 0;
+      }
 
       & h5 {
         font-size: 0.8rem;
