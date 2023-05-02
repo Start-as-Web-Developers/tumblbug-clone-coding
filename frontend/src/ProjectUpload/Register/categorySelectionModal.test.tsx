@@ -1,4 +1,4 @@
-import { CATEGORY_SELECT_MODAL } from "../utils/commonVariable";
+import { CATEGORY_SELECT_MODAL } from "../../utils/commonVariable";
 import { closeModal } from "./CategorySelectModal";
 
 describe("closeModal()", () => {

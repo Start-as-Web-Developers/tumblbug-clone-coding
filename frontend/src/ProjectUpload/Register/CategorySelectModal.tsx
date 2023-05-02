@@ -4,9 +4,10 @@ import {
   Logo07, Logo08, Logo09, Logo10, Logo11,
   Logo12, Logo13, Logo14, Logo15, Logo16,
   Logo17, Logo18, Logo19, Logo20, Logo21,
-  Logo22 } from '../Navbar/categoryBox/Logo';
-import { $, changeCSS } from '../utils/commonFunction';
-import { CATEGORY_SELECT_MODAL } from '../utils/commonVariable';
+  Logo22 } from '../../Navbar/categoryBox/Logo';
+import { $, changeCSS } from '../../utils/commonFunction';
+import { CATEGORY_SELECT_MODAL } from '../../utils/commonVariable';
+import { updatePreviewCategory } from '../Preview/PreviewTitle';
 import { getAncestorElement } from './CardAddModal';
 import "./categorySelectModal.scss";
 
@@ -25,6 +26,7 @@ const closeModal = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
   const $infoCategoryText = $(".categoryRow__categoryName") as HTMLElement;
   $infoCategoryText.innerHTML = $modalCategoryName.innerHTML;
   changeCSS($categorySelectModal, "top", CATEGORY_SELECT_MODAL.original);
+  updatePreviewCategory($modalCategoryName.innerHTML);
 }
 
 function CategorySelectModal() {
