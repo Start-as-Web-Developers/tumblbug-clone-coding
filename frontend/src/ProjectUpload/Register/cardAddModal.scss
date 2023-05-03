@@ -1,0 +1,103 @@
+$theme-font-color: rgb(250, 100, 98);
+$theme-background-color: rgb(250, 100, 98);
+$modal-background-color:  rgba(0, 0, 0, 0.7);
+$modal-title-font-size: 1.5rem;
+$input-background-color: rgb(233, 232, 232);
+$common-border-radius: 5px;
+$modal-transition: 0.3s;
+
+.cardAddModal {
+  position: absolute;
+  left: 0;
+  top: -100vh;
+  width: 100%;
+  height: 100%;
+  transition: $modal-transition;
+
+  & .cardAddFormContainer {
+    background-color: $modal-background-color;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    & .cardAddForm {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+      width: 40%;
+      height: 50%;
+      background-color: #fff;
+
+      & h1 {
+        font-weight: 700;
+        font-size: $modal-title-font-size;
+      }
+
+      & .cardAddForm__moneyForm,
+      & .cardAddForm__descriptionForm {
+        width: 60%;
+        height: 20%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        
+        & h2 {
+          font-size: 1rem;
+          font-weight: 700;
+        }
+
+        & span {
+          color: $theme-font-color;
+          font-size: 0.7rem;
+          font-weight: 700;
+        }
+
+        & input {
+          border: none;
+          height: 50%;
+          background-color: $input-background-color;
+          text-align: center;
+          font-size: 0.9rem;
+          border-radius: $common-border-radius;
+
+          &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+          }
+        }
+      }
+
+      & .cardAddForm__moneyForm {
+        & h2 {
+
+        }
+
+        & input {
+
+        }
+      }
+
+      & .cardAddForm__descriptionForm {
+        & h2 {
+
+        }
+
+        & input {
+          
+        }
+      }
+
+      & .cardAddForm__addBtn {
+        height: 10%;
+        width: 20%;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #fff;
+        border-radius: $common-border-radius;
+        background-color: $theme-background-color;
+      }
+    }
+  }
+}

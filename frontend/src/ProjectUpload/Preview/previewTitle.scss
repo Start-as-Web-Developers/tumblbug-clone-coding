@@ -1,0 +1,36 @@
+$category-padding: 1%;
+$common-transition: 0.3s;
+
+.previewTitle {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  height: 20%;
+  width: 100%;
+
+  & .previewTitle__category {
+    padding: $category-padding calc(2 * $category-padding);
+    color: rgb(117, 117, 117);
+    background-color: rgb(250, 250, 250);
+    border: 1px solid rgb(239, 239, 239);
+    font-size: 0.7rem;
+    font-weight: 600;
+    transition: $common-transition;
+    opacity: 0;
+  }
+
+  & .previewTitle__projectTitle {
+    font-size: 1.3rem;
+    font-weight: 700;
+    transition: $common-transition;
+    opacity: 0;
+  }
+
+  & .previewTitle__projectExplain { 
+    font-size: 0.7rem;
+    font-weight: 500;
+    transition: $common-transition;
+    opacity: 0;
+  }
+}

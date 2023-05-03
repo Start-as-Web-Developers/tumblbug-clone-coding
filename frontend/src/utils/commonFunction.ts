@@ -71,5 +71,29 @@ function $(cssSelector: string, root = document.body): HTMLElement | null {
   return null;
 }
 
-export { changeCSS, changeMultiCSS, eventTo, $ };
+const createElement = (tagName:string):HTMLElement => document.createElement(tagName);
+
+const createMultiElements = (tagNames: string[]):HTMLElement[] => {
+  const $elements:HTMLElement[] = [];
+  tagNames.forEach((tagName) => {
+    $elements.push(createElement(tagName));
+  })
+  return $elements;
+}
+
+const formatKoreanCurrency = (num:number | string): string => {
+  const money = num.toLocaleString("en");
+  const koreaMoney = money.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+  return koreaMoney;
+}
+
+export {
+  changeCSS,
+  changeMultiCSS,
+  eventTo,
+  $,
+  createElement,
+  createMultiElements,
+  formatKoreanCurrency,
+};
 export type { cssObj };
