@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -21,8 +22,8 @@ public class CommunityController {
     CommunityRepository communityRepository = CommunityRepository.getCommunityRepository();
 
     @PostMapping
-    public ResponseEntity createCommunity(@RequestBody Community community, @PathVariable("project-id") String projectId) {
-        
+    public ResponseEntity createCommunity(@RequestBody Community community, @PathVariable("project-id") String projectId) throws Exception {
+
         community.setProjectId(Long.parseLong(projectId));
         communityRepository.save(community);
         return new ResponseEntity(HttpStatus.OK);
@@ -31,13 +32,28 @@ public class CommunityController {
     @GetMapping
     public ResponseEntity<String> readCommunity(@PathVariable("project-id") String projectId) throws JsonProcessingException {
 
-        List<Community> communityList = communityRepository.findCommunityByProjectId(Long.valueOf(projectId));
+        List<Map<String, Object>> communityList = communityRepository.findCommunityByProjectId(Long.valueOf(projectId));
 
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonList = objectMapper.writeValueAsString(communityList);
 
 
         return ResponseEntity.ok(jsonList);
+    }
+
+    @PatchMapping("/{community-id}")
+    public ResponseEntity updateCommunity(@RequestBody Community community, @PathVariable("project-id") String projectId, @PathVariable("community-id") String communityId) throws Exception {
+        community.setProjectId(Long.parseLong(projectId));
+        community.setCommunityId(Long.parseLong(communityId));
+        communityRepository.updateCommunity(community);
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{community-id}")
+    public ResponseEntity updateCommunity(@PathVariable("community-id") String communityId) throws Exception {
+        communityRepository.deleteCommunity(Long.valueOf(communityId));
+        return new ResponseEntity(HttpStatus.OK);
     }
 
 
