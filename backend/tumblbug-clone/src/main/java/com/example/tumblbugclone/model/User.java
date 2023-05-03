@@ -8,15 +8,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class User{
-    Long userIdx;
-    String userName;
-    String userId;
-    String userPassword;
-    String userEmail;
-    String greeting;
-    String userImg;
-    String lastLogin;
-    boolean isActive;
+    private Long userIdx;
+    private String userName;
+    private String userId;
+    private String userPassword;
+    private String userEmail;
+    private String greeting;
+    private String userImg;
+    private String lastLogin;
+    private boolean isActive;
 
     public User(String userName, String userId, String userPassword, String userEmail){
         this.userName = userName;
