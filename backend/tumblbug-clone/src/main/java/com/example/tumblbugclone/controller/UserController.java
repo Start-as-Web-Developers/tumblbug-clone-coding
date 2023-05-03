@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @Controller
-@RequestMapping(HttpConst.USER_URI)
+@RequestMapping(value = HttpConst.USER_URI, produces = "application/json; charset=utf-8")
 public class UserController {
     UserRepository userRepository = UserRepository.getUserRepository();
 
