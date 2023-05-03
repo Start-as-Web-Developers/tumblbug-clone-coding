@@ -5,6 +5,10 @@ public class HttpConst {
     public static final String USER_URI = "/user";
     public static final String USER_SIGNUP_URI = "/signup";
     public static final String PROJECT_URI = "/project";
+    public static final String PROJECT_LIST_URI = "/projects";
+
+    public static final String ON_GOING = "/ongoing";
+    public static final String PRE_LAUNCHING = "/prelaunghing";
 
     //== 헤더 이름 ==//
     public static final String HEADER_NAME_ERROR_MESSAGE = "error-message";

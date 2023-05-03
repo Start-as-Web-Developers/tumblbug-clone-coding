@@ -55,43 +55,6 @@ public class ProjectCardService {
         return projectCards;
     }
 
-    public ArrayList<ProjectCard> findFirstEndProject() throws ParseException {
-        String today = getTodayString();
-        ArrayList<ProjectCard> projectCards = new ArrayList<>();
-        long projectId = 1l;
-
-        while(projectCards.size() < ProjectConst.PROJECT_CARDS_MAX_SIZE) {
-            try {
-                Project project = projectRepository.findProjectById(projectId);
-                String projectEndDate = project.getEndDate();
-
-                if(Callendar.after(today, projectEndDate) == false) {
-                    projectId++;
-                    continue;
-                }
-
-                log.info("add project Idx {}", projectId);
-                User creater = findCreater(project);
-                ProjectCard card = new ProjectCard(project, creater);
-
-                projectCards.add(card);
-                projectId++;
-
-            } catch (ProjectCantFindException e) {
-                return projectCards;
-            } catch (UserCantFindException e) {
-                projectId++;
-            } catch (UnregisterUserException e) {
-                projectId++;
-            } catch (ParseException e) {
-                e.printStackTrace();
-                throw e;
-            }
-        }
-
-        return projectCards;
-    }
-
     public ArrayList<ProjectCard> findOngoingFromIdx(long startIdx) throws ParseException {
         String today = getTodayString();
         ArrayList<ProjectCard> projectCards = new ArrayList<>();
@@ -104,41 +67,6 @@ public class ProjectCardService {
                 String projectEndDate = project.getEndDate();
 
                 if(Callendar.after(today, projectEndDate)) {
-                    projectId++;
-                    continue;
-                }
-                User creater = findCreater(project);
-                ProjectCard card = new ProjectCard(project, creater);
-
-                log.info("add project Idx {}", projectId);
-                projectCards.add(card);
-                projectId++;
-
-            } catch (ProjectCantFindException e) {
-                return projectCards;
-            } catch (UserCantFindException e) {
-                projectId++;
-            } catch (UnregisterUserException e) {
-                projectId++;
-            } catch (ParseException e) {
-                e.printStackTrace();
-                throw e;
-            }
-        }
-
-        return projectCards;
-    }
-    public ArrayList<ProjectCard> findEndFromIdx(long startIdx) throws ParseException {
-        String today = getTodayString();
-        ArrayList<ProjectCard> projectCards = new ArrayList<>();
-        long projectId = startIdx;
-
-        while(projectCards.size() < ProjectConst.PROJECT_CARDS_MAX_SIZE) {
-            try {
-                Project project = projectRepository.findProjectById(projectId);
-                String projectEndDate = project.getEndDate();
-
-                if(Callendar.after(today, projectEndDate) == false) {
                     projectId++;
                     continue;
                 }

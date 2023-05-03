@@ -66,21 +66,6 @@ public class ProjectCardServiceTest {
     }
 
     @Test
-    public void 종료_프로젝트_첫_조회() throws Exception{
-        //given
-        String today = Callendar.getTodayString();
-
-        //when
-        ArrayList<ProjectCard> projectCards = projectCardService.findFirstEndProject();
-
-        //then
-        Assertions.assertThat(projectCards.size()).isEqualTo(ProjectConst.PROJECT_CARDS_MAX_SIZE);
-        for (ProjectCard projectCard : projectCards) {
-            Assertions.assertThat(Callendar.after(today, projectCard.getEndDate())).isTrue();
-        }
-    }
-
-    @Test
     public void onGoing_6번부터_20개_조회() throws Exception{
         //given
         String today = Callendar.getTodayString();
@@ -95,38 +80,9 @@ public class ProjectCardServiceTest {
         }
     }
 
-    @Test
-    public void end_31번부터_20개_조회() throws Exception{
-        //given
-        String today = Callendar.getTodayString();
-
-        //when
-        ArrayList<ProjectCard> projectCards = projectCardService.findEndFromIdx(31);
-
-        //then
-        Assertions.assertThat(projectCards.size()).isEqualTo(ProjectConst.PROJECT_CARDS_MAX_SIZE);
-        for (ProjectCard projectCard : projectCards) {
-            Assertions.assertThat(Callendar.after(today, projectCard.getEndDate())).isTrue();
-        }
-    }
 
     @Test
     public void 섞여있는_상태에서_onGoing_조회() throws Exception{
-        //given
-        String today = Callendar.getTodayString();
-
-        //when
-        ArrayList<ProjectCard> projectCards = projectCardService.findOngoingFromIdx(51);
-
-        //then
-        Assertions.assertThat(projectCards.size()).isEqualTo(ProjectConst.PROJECT_CARDS_MAX_SIZE);
-        for (ProjectCard projectCard : projectCards) {
-            Assertions.assertThat(Callendar.after(today, projectCard.getEndDate())).isFalse();
-        }
-    }
-
-    @Test
-    public void 섞여있는_상태에서_end_조회() throws Exception{
         //given
         String today = Callendar.getTodayString();
 
@@ -155,18 +111,4 @@ public class ProjectCardServiceTest {
         }
     }
 
-    @Test
-    public void end_60번부터_끝까지_조회() throws Exception{
-        //given
-        String today = Callendar.getTodayString();
-
-        //when
-        ArrayList<ProjectCard> projectCards = projectCardService.findOngoingFromIdx(60);
-
-        //then
-        Assertions.assertThat(projectCards.size()).isNotEqualTo(ProjectConst.PROJECT_CARDS_MAX_SIZE);
-        for (ProjectCard projectCard : projectCards) {
-            Assertions.assertThat(Callendar.after(today, projectCard.getEndDate())).isFalse();
-        }
-    }
 }
