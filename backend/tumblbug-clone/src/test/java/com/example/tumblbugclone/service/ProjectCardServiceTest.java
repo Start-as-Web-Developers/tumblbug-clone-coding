@@ -1,5 +1,6 @@
 package com.example.tumblbugclone.service;
 
+import com.example.tumblbugclone.managedconst.ProjectConst;
 import com.example.tumblbugclone.model.Project;
 import com.example.tumblbugclone.model.ProjectCard;
 import com.example.tumblbugclone.model.User;
@@ -20,12 +21,20 @@ public class ProjectCardServiceTest {
 
     @Before
     public void 테스트용_데이터_생성() throws Exception {
-        for(int i = 0; i<25; i++) {
+        for(int i = 0; i<25; i++) { //1~25
             Project ongoingProject = new Project(1l, "", "카테고리", "코멘트", 35000000l, 240000l, "2023-04-03", "2024-05-02", "String planIntro", "String planBudget", "String planSchedule", "String planTeam", "String planExplain", "String planGuide");
             projectRepository.save(ongoingProject);
         }
 
-        for(int i = 0; i<25; i++) {
+        for(int i = 0; i<25; i++) { //26 ~ 50
+            Project endProject = new Project(1l, "", "카테고리", "코멘트", 35000000l, 240000l, "2023-04-03", "2023-0-02", "String planIntro", "String planBudget", "String planSchedule", "String planTeam", "String planExplain", "String planGuide");
+            projectRepository.save(endProject);
+        }
+
+        for(int i = 0; i<20; i++){ //51~ 홀수 : 진행중, 짝수 : 종료
+            Project ongoingProject = new Project(1l, "", "카테고리", "코멘트", 35000000l, 240000l, "2023-04-03", "2024-05-02", "String planIntro", "String planBudget", "String planSchedule", "String planTeam", "String planExplain", "String planGuide");
+            projectRepository.save(ongoingProject);
+
             Project endProject = new Project(1l, "", "카테고리", "코멘트", 35000000l, 240000l, "2023-04-03", "2023-0-02", "String planIntro", "String planBudget", "String planSchedule", "String planTeam", "String planExplain", "String planGuide");
             projectRepository.save(endProject);
         }
@@ -47,10 +56,10 @@ public class ProjectCardServiceTest {
         String today = Callendar.getTodayString();
 
         //when
-        ArrayList<ProjectCard> projectCards = projectCardService.findFirstOngoingProject();
+        ArrayList<ProjectCard> projectCards = projectCardService.findOngoingFromStart();
 
         //then
-        Assertions.assertThat(projectCards.size()).isEqualTo(20);
+        Assertions.assertThat(projectCards.size()).isEqualTo(ProjectConst.PROJECT_CARDS_MAX_SIZE);
         for (ProjectCard projectCard : projectCards) {
             Assertions.assertThat(Callendar.after(today, projectCard.getEndDate())).isFalse();
         }
@@ -65,9 +74,99 @@ public class ProjectCardServiceTest {
         ArrayList<ProjectCard> projectCards = projectCardService.findFirstEndProject();
 
         //then
-        Assertions.assertThat(projectCards.size()).isEqualTo(20);
+        Assertions.assertThat(projectCards.size()).isEqualTo(ProjectConst.PROJECT_CARDS_MAX_SIZE);
         for (ProjectCard projectCard : projectCards) {
             Assertions.assertThat(Callendar.after(today, projectCard.getEndDate())).isTrue();
+        }
+    }
+
+    @Test
+    public void onGoing_6번부터_20개_조회() throws Exception{
+        //given
+        String today = Callendar.getTodayString();
+
+        //when
+        ArrayList<ProjectCard> projectCards = projectCardService.findOngoingFromIdx(6);
+
+        //then
+        Assertions.assertThat(projectCards.size()).isEqualTo(ProjectConst.PROJECT_CARDS_MAX_SIZE);
+        for (ProjectCard projectCard : projectCards) {
+            Assertions.assertThat(Callendar.after(today, projectCard.getEndDate())).isFalse();
+        }
+    }
+
+    @Test
+    public void end_31번부터_20개_조회() throws Exception{
+        //given
+        String today = Callendar.getTodayString();
+
+        //when
+        ArrayList<ProjectCard> projectCards = projectCardService.findEndFromIdx(31);
+
+        //then
+        Assertions.assertThat(projectCards.size()).isEqualTo(ProjectConst.PROJECT_CARDS_MAX_SIZE);
+        for (ProjectCard projectCard : projectCards) {
+            Assertions.assertThat(Callendar.after(today, projectCard.getEndDate())).isTrue();
+        }
+    }
+
+    @Test
+    public void 섞여있는_상태에서_onGoing_조회() throws Exception{
+        //given
+        String today = Callendar.getTodayString();
+
+        //when
+        ArrayList<ProjectCard> projectCards = projectCardService.findOngoingFromIdx(51);
+
+        //then
+        Assertions.assertThat(projectCards.size()).isEqualTo(ProjectConst.PROJECT_CARDS_MAX_SIZE);
+        for (ProjectCard projectCard : projectCards) {
+            Assertions.assertThat(Callendar.after(today, projectCard.getEndDate())).isFalse();
+        }
+    }
+
+    @Test
+    public void 섞여있는_상태에서_end_조회() throws Exception{
+        //given
+        String today = Callendar.getTodayString();
+
+        //when
+        ArrayList<ProjectCard> projectCards = projectCardService.findOngoingFromIdx(51);
+
+        //then
+        Assertions.assertThat(projectCards.size()).isEqualTo(ProjectConst.PROJECT_CARDS_MAX_SIZE);
+        for (ProjectCard projectCard : projectCards) {
+            Assertions.assertThat(Callendar.after(today, projectCard.getEndDate())).isFalse();
+        }
+    }
+
+    @Test
+    public void onGoing_60번부터_끝까지_조회() throws Exception{
+        //given
+        String today = Callendar.getTodayString();
+
+        //when
+        ArrayList<ProjectCard> projectCards = projectCardService.findOngoingFromIdx(60);
+
+        //then
+        Assertions.assertThat(projectCards.size()).isNotEqualTo(ProjectConst.PROJECT_CARDS_MAX_SIZE);
+        for (ProjectCard projectCard : projectCards) {
+            Assertions.assertThat(Callendar.after(today, projectCard.getEndDate())).isFalse();
+        }
+    }
+
+    @Test
+    public void end_60번부터_끝까지_조회() throws Exception{
+        //given
+        String today = Callendar.getTodayString();
+
+        //when
+        ArrayList<ProjectCard> projectCards = projectCardService.findOngoingFromIdx(60);
+
+        //then
+        Assertions.assertThat(projectCards.size()).isNotEqualTo(ProjectConst.PROJECT_CARDS_MAX_SIZE);
+        for (ProjectCard projectCard : projectCards) {
+            Assertions.assertThat(Callendar.after(today, projectCard.getEndDate())).isFalse();
         }
     }
 }
