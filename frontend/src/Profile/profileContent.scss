@@ -1,0 +1,13 @@
+.ProfileBox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .userProfileImg {
+    width: 80px;
+    height: 80px;
+    background-image: url("https://tumblbug-upi.imgix.net/default_avatar.png?auto=format%2Ccompress&ch=Save-Data&facepad=2.0&fit=facearea&h=250&mask=ellipse&w=250&s=80a07af0ffbe653137dd423ed1d5651c");
+    background-size: cover;
+    margin: 10px;
+  }
+}
