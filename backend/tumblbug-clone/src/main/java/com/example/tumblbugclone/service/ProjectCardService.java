@@ -20,16 +20,23 @@ public class ProjectCardService {
     ProjectRepository projectRepository = ProjectRepository.getProjectRepository();
 
     public ArrayList<ProjectCard> findOngoingFromStart() throws ParseException {
-        String today = getTodayString();
-        ArrayList<ProjectCard> projectCards = new ArrayList<>();
-        long projectId = 1l;
 
-        while(projectCards.size() < ProjectConst.PROJECT_CARDS_MAX_SIZE) {
+/*        String today = getTodayString();
+        ArrayList<ProjectCard> projectCards = new ArrayList<>();
+        long projectId = 1l;*/
+
+        return findOngoingFromIdx(1l);
+        /*while(projectCards.size() < ProjectConst.PROJECT_CARDS_MAX_SIZE) {
             try {
                 Project project = projectRepository.findProjectById(projectId);
+                String projectStartDate = project.getStartDate();
                 String projectEndDate = project.getEndDate();
 
                 if(Callendar.after(today, projectEndDate)) {
+                    projectId++;
+                    continue;
+                }
+                if(Callendar.before(today, projectStartDate)){
                     projectId++;
                     continue;
                 }
@@ -52,7 +59,7 @@ public class ProjectCardService {
             }
         }
 
-        return projectCards;
+        return projectCards;*/
     }
 
     public ArrayList<ProjectCard> findOngoingFromIdx(long startIdx) throws ParseException {
@@ -64,9 +71,14 @@ public class ProjectCardService {
             try {
 
                 Project project = projectRepository.findProjectById(projectId);
+                String projectStartDate = project.getStartDate();
                 String projectEndDate = project.getEndDate();
 
                 if(Callendar.after(today, projectEndDate)) {
+                    projectId++;
+                    continue;
+                }
+                if(Callendar.before(today, projectStartDate)){
                     projectId++;
                     continue;
                 }
@@ -92,6 +104,46 @@ public class ProjectCardService {
         return projectCards;
     }
 
+    public ArrayList<ProjectCard> findPreLaunchingFromStart() throws ParseException {
+        return findPreLaunchingFromIdx(1l);
+    }
+
+    public ArrayList<ProjectCard> findPreLaunchingFromIdx(long startIdx) throws ParseException {
+        String today = getTodayString();
+        ArrayList<ProjectCard> projectCards = new ArrayList<>();
+        long projectId = startIdx;
+
+        while(projectCards.size() < ProjectConst.PROJECT_CARDS_MAX_SIZE) {
+            try {
+
+                Project project = projectRepository.findProjectById(projectId);
+                String projectStartDate = project.getStartDate();
+
+                if(Callendar.after(today, projectStartDate)){
+                    projectId++;
+                    continue;
+                }
+                User creater = findCreater(project);
+                ProjectCard card = new ProjectCard(project, creater);
+
+                log.info("add project Idx {}", projectId);
+                projectCards.add(card);
+                projectId++;
+
+            } catch (ProjectCantFindException e) {
+                return projectCards;
+            } catch (UserCantFindException e) {
+                projectId++;
+            } catch (UnregisterUserException e) {
+                projectId++;
+            } catch (ParseException e) {
+                e.printStackTrace();
+                throw e;
+            }
+        }
+
+        return projectCards;
+    }
     private String getTodayString() {
         return Callendar.getTodayString();
     }

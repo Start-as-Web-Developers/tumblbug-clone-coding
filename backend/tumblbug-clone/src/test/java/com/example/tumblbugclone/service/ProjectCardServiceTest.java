@@ -21,22 +21,22 @@ public class ProjectCardServiceTest {
 
     @Before
     public void 테스트용_데이터_생성() throws Exception {
-        for(int i = 0; i<25; i++) { //1~25
+        for(int i = 0; i<25; i++) { //1~25 : onGoing
             Project ongoingProject = new Project(1l, "", "카테고리", "코멘트", 35000000l, 240000l, "2023-04-03", "2024-05-02", "String planIntro", "String planBudget", "String planSchedule", "String planTeam", "String planExplain", "String planGuide");
             projectRepository.save(ongoingProject);
         }
 
-        for(int i = 0; i<25; i++) { //26 ~ 50
-            Project endProject = new Project(1l, "", "카테고리", "코멘트", 35000000l, 240000l, "2023-04-03", "2023-0-02", "String planIntro", "String planBudget", "String planSchedule", "String planTeam", "String planExplain", "String planGuide");
-            projectRepository.save(endProject);
+        for(int i = 0; i<25; i++) { //26 ~ 50 : preLaunching
+            Project preLaunchingProject = new Project(1l, "", "카테고리", "코멘트", 35000000l, 240000l, "2023-06-03", "2024-01-02", "String planIntro", "String planBudget", "String planSchedule", "String planTeam", "String planExplain", "String planGuide");
+            projectRepository.save(preLaunchingProject);
         }
 
-        for(int i = 0; i<20; i++){ //51~ 홀수 : 진행중, 짝수 : 종료
+        for(int i = 0; i<20; i++){ //51~ 홀수 : 진행중, 짝수 : 진행 예정
             Project ongoingProject = new Project(1l, "", "카테고리", "코멘트", 35000000l, 240000l, "2023-04-03", "2024-05-02", "String planIntro", "String planBudget", "String planSchedule", "String planTeam", "String planExplain", "String planGuide");
             projectRepository.save(ongoingProject);
 
-            Project endProject = new Project(1l, "", "카테고리", "코멘트", 35000000l, 240000l, "2023-04-03", "2023-0-02", "String planIntro", "String planBudget", "String planSchedule", "String planTeam", "String planExplain", "String planGuide");
-            projectRepository.save(endProject);
+            Project preLaunchingProject = new Project(1l, "", "카테고리", "코멘트", 35000000l, 240000l, "2023-06-03", "2023-01-02", "String planIntro", "String planBudget", "String planSchedule", "String planTeam", "String planExplain", "String planGuide");
+            projectRepository.save(preLaunchingProject);
         }
 
         User user1 = new User("userName1", "userId1", "userPassword1", "userEmail1");
@@ -51,7 +51,7 @@ public class ProjectCardServiceTest {
 
 
     @Test
-    public void 첫_20개_프로젝트_조회() throws Exception{
+    public void onGoing_처음부터_프로젝트_조회() throws Exception{
         //given
         String today = Callendar.getTodayString();
 
@@ -71,7 +71,7 @@ public class ProjectCardServiceTest {
         String today = Callendar.getTodayString();
 
         //when
-        ArrayList<ProjectCard> projectCards = projectCardService.findOngoingFromIdx(6);
+        ArrayList<ProjectCard> projectCards = projectCardService.findOngoingFromIdx(6l);
 
         //then
         Assertions.assertThat(projectCards.size()).isEqualTo(ProjectConst.PROJECT_CARDS_MAX_SIZE);
@@ -82,12 +82,12 @@ public class ProjectCardServiceTest {
 
 
     @Test
-    public void 섞여있는_상태에서_onGoing_조회() throws Exception{
+    public void onGoing_섞여있는_상태에서_조회() throws Exception{
         //given
         String today = Callendar.getTodayString();
 
         //when
-        ArrayList<ProjectCard> projectCards = projectCardService.findOngoingFromIdx(51);
+        ArrayList<ProjectCard> projectCards = projectCardService.findOngoingFromIdx(51l);
 
         //then
         Assertions.assertThat(projectCards.size()).isEqualTo(ProjectConst.PROJECT_CARDS_MAX_SIZE);
@@ -102,7 +102,7 @@ public class ProjectCardServiceTest {
         String today = Callendar.getTodayString();
 
         //when
-        ArrayList<ProjectCard> projectCards = projectCardService.findOngoingFromIdx(60);
+        ArrayList<ProjectCard> projectCards = projectCardService.findOngoingFromIdx(60l);
 
         //then
         Assertions.assertThat(projectCards.size()).isNotEqualTo(ProjectConst.PROJECT_CARDS_MAX_SIZE);
@@ -111,4 +111,63 @@ public class ProjectCardServiceTest {
         }
     }
 
+    @Test
+    public void preLaunching_처음부터_조회() throws Exception{
+        //given
+        String today = Callendar.getTodayString();
+
+        //when
+        ArrayList<ProjectCard> projectCards = projectCardService.findPreLaunchingFromStart();
+
+        //then
+        Assertions.assertThat(projectCards.size()).isEqualTo(ProjectConst.PROJECT_CARDS_MAX_SIZE);
+        for (ProjectCard projectCard : projectCards) {
+            Assertions.assertThat(Callendar.before(today, projectCard.getStartDate())).isTrue();
+        }
+    }
+
+    @Test
+    public void preLaunching_31번부터_조회() throws Exception{
+        //given
+        String today = Callendar.getTodayString();
+
+        //when
+        ArrayList<ProjectCard> projectCards = projectCardService.findPreLaunchingFromIdx(31l);
+
+        //then
+        Assertions.assertThat(projectCards.size()).isEqualTo(ProjectConst.PROJECT_CARDS_MAX_SIZE);
+        for (ProjectCard projectCard : projectCards) {
+            Assertions.assertThat(Callendar.before(today, projectCard.getStartDate())).isTrue();
+        }
+    }
+
+    @Test
+    public void preLaunching_섞여있는_상태에서_조회() throws Exception{
+        //given
+        String today = Callendar.getTodayString();
+
+        //when
+        ArrayList<ProjectCard> projectCards = projectCardService.findPreLaunchingFromIdx(51l);
+
+        //then
+        Assertions.assertThat(projectCards.size()).isEqualTo(ProjectConst.PROJECT_CARDS_MAX_SIZE);
+        for (ProjectCard projectCard : projectCards) {
+            Assertions.assertThat(Callendar.before(today, projectCard.getStartDate())).isTrue();
+        }
+    }
+
+    @Test
+    public void preLaunching_60번부터_끝까지_조회() throws Exception{
+        //given
+        String today = Callendar.getTodayString();
+
+        //when
+        ArrayList<ProjectCard> projectCards = projectCardService.findPreLaunchingFromIdx(60l);
+
+        //then
+        Assertions.assertThat(projectCards.size()).isNotEqualTo(ProjectConst.PROJECT_CARDS_MAX_SIZE);
+        for (ProjectCard projectCard : projectCards) {
+            Assertions.assertThat(Callendar.before(today, projectCard.getStartDate())).isTrue();
+        }
+    }
 }
