@@ -7,29 +7,31 @@ import lombok.NoArgsConstructor;
 @Data
 public class Project {
 
-    Long userIdx;
+    private Long userIdx;
 
-    Long projectId;
-    String projectImg;
-    String category;
-    String comment;
+    private Long projectId;
+    private String title;
+    private String projectImg;
+    private String category;
+    private String comment;
 
-    Long goalMoney;
-    Long totalMoney;
+    private Long goalMoney;
+    private Long totalMoney;
 
-    String startDate;
-    String endDate;
+    private String startDate;
+    private String endDate;
 
-    String planIntro;
-    String planBudget;
-    String planSchedule;
-    String planTeam;
-    String planExplain;
-    String planGuide;
+    private String planIntro;
+    private String planBudget;
+    private String planSchedule;
+    private String planTeam;
+    private String planExplain;
+    private String planGuide;
 
-    public Project(Long userIdx, String projectImg, String category, String comment, Long goalMoney, Long totalMoney, String startDate, String endDate, String planIntro, String planBudget, String planSchedule, String planTeam, String planExplain, String planGuide) {
+    public Project(Long userIdx, String title, String projectImg, String category, String comment, Long goalMoney, Long totalMoney, String startDate, String endDate, String planIntro, String planBudget, String planSchedule, String planTeam, String planExplain, String planGuide) {
         this.userIdx = userIdx;
 
+        this.title = title;
         this.projectImg = projectImg;
         this.category = category;
         this.comment = comment;

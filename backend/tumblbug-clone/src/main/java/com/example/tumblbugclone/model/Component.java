@@ -7,11 +7,11 @@ import lombok.NoArgsConstructor;
 @Data
 public class Component {
 
-    long componentId;
-    long productId;
-    long userIdx;
-    String componentName;
-    Integer amount;
+    private long componentId;
+    private long productId;
+    private long userIdx;
+    private String componentName;
+    private Integer amount;
 
     public Component(long productId, long userIdx, String componentName, Integer amount) {
         this.productId = productId;

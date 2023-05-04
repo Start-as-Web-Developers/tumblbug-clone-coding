@@ -1,6 +1,6 @@
 package com.example.tumblbugclone.service;
 
-import com.example.tumblbugclone.Exception.userexception.ProjectCantFindException;
+import com.example.tumblbugclone.Exception.projectException.ProjectCantFindException;
 import com.example.tumblbugclone.Exception.userexception.UnregisterUserException;
 import com.example.tumblbugclone.Exception.userexception.UserCantFindException;
 import com.example.tumblbugclone.managedconst.ProjectConst;

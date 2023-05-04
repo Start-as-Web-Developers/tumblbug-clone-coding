@@ -5,6 +5,7 @@ public class HttpConst {
     public static final String USER_URI = "/user";
     public static final String USER_SIGNUP_URI = "/signup";
     public static final String PROJECT_URI = "/project";
+    public static final String COMMUNITY_URI = "/project/{project-id}/community";
     public static final String PROJECT_LIST_URI = "/projects";
 
     //== method URL ==//
