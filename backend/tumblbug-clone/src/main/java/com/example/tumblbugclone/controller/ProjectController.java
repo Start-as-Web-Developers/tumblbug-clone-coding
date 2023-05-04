@@ -1,6 +1,5 @@
 package com.example.tumblbugclone.controller;
 
-import com.example.tumblbugclone.Exception.projectException.ProjectCantFindException;
 import com.example.tumblbugclone.managedconst.HttpConst;
 import com.example.tumblbugclone.model.Project;
 import com.example.tumblbugclone.repository.ProjectRepository;
@@ -28,15 +27,6 @@ public class ProjectController {
         HttpHeaders responseHeader = new HttpHeaders();
         Project project = new Project();
 
-        try {
-            project = projectRepository.findProjectById(projectIdx);
-        } catch (ProjectCantFindException e) {
-            responseHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.NO_USER_FIND_MESSAGE);
-
-            return ResponseEntity.badRequest()
-                    .headers(responseHeader)
-                    .body("");
-        }
 
         return new ResponseEntity<>(project, HttpStatus.OK);
     }

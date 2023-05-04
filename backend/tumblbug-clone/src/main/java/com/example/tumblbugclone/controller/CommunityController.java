@@ -22,10 +22,14 @@ public class CommunityController {
     CommunityRepository communityRepository = CommunityRepository.getCommunityRepository();
 
     @PostMapping
-    public ResponseEntity createCommunity(@RequestBody Community community, @PathVariable("project-id") String projectId) throws Exception {
+    public ResponseEntity createCommunity(@RequestBody Community community, @PathVariable("project-id") String projectId) {
 
         community.setProjectId(Long.parseLong(projectId));
-        communityRepository.save(community);
+        try {
+            communityRepository.save(community);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         return new ResponseEntity(HttpStatus.OK);
     }
 

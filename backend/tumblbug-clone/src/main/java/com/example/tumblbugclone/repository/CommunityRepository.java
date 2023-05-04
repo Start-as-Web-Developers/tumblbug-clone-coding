@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.example.tumblbugclone.service.Callendar.getTodayString;
+
 public class CommunityRepository {
 
     private static Long id = 0L;
@@ -40,11 +42,9 @@ public class CommunityRepository {
         id++;
         community.setCommunityId(id);
 
-        LocalDate now = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String todayTime = now.format(formatter);
-        community.setWriteDate(todayTime);
-        community.setWriteDate(todayTime);
+        String today = getTodayString();
+        community.setWriteDate(today);
+        community.setModiDate(today);
 
         communityDB.put(id, community);
         return id;
@@ -74,6 +74,9 @@ public class CommunityRepository {
         User user = new User("hi", "hi", "hi", "hi");
         userDB.save(user);
         updateCommunity.setUserIdx(1);
+
+        String today = getTodayString();
+        updateCommunity.setModiDate(today);
 
         long communityIdx = updateCommunity.getCommunityId();
         verifyCommunityIdx(communityIdx);
