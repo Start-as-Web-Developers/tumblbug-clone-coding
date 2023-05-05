@@ -49,4 +49,5 @@ public class Project {
         this.planExplain = planExplain;
         this.planGuide = planGuide;
     }
+
 }
