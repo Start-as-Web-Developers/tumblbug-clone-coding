@@ -3,6 +3,7 @@ package com.example.tumblbugclone.controller;
 import com.example.tumblbugclone.Exception.projectException.ProjectCantFindException;
 import com.example.tumblbugclone.Exception.userexception.UnregisterUserException;
 import com.example.tumblbugclone.Exception.userexception.UserCantFindException;
+import com.example.tumblbugclone.dto.ProjectDTO;
 import com.example.tumblbugclone.managedconst.HttpConst;
 import com.example.tumblbugclone.model.*;
 import com.example.tumblbugclone.repository.ProjectRepository;
@@ -10,14 +11,12 @@ import com.example.tumblbugclone.service.projectService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Controller

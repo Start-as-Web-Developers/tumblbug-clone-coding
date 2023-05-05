@@ -1,5 +1,9 @@
-package com.example.tumblbugclone.model;
+package com.example.tumblbugclone.dto;
 
+import com.example.tumblbugclone.model.Component;
+import com.example.tumblbugclone.model.Product;
+import com.example.tumblbugclone.model.Project;
+import com.example.tumblbugclone.model.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
