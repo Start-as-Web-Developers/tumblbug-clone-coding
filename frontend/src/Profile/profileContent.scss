@@ -1,0 +1,53 @@
+.ProfileBox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .userProfileImg {
+    width: 80px;
+    height: 80px;
+    background-image: url("https://tumblbug-upi.imgix.net/default_avatar.png?auto=format%2Ccompress&ch=Save-Data&facepad=2.0&fit=facearea&h=250&mask=ellipse&w=250&s=80a07af0ffbe653137dd423ed1d5651c");
+    background-size: cover;
+    margin: 2rem;
+  }
+
+  .ProfileUserName {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+
+    .ProfileSettingImg {
+      cursor: pointer;
+    }
+  }
+  .ProfileSinceRegister {
+    color: gray;
+    font-size: 0.75rem;
+  }
+}
+
+.ProfileTabs {
+  display: flex;
+  flex-direction: row;
+
+  .ProfileTab {
+    padding: 1em;
+    margin-right: 2em;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .ChosenTab {
+    background: linear-gradient(#fff 0% 95%, tomato 95% 100%);
+  }
+
+  a {
+    text-decoration: none;
+    color: #000;
+  }
+}
+
+hr {
+  height: 1px;
+  margin: 0;
+}
