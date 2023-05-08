@@ -8,8 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class TumblbugCloneApplication {
 
 	public static void main(String[] args) {
-		//SpringApplication.run(TumblbugCloneApplication.class, args);
-		DBConnectClass.logic();
+		SpringApplication.run(TumblbugCloneApplication.class, args);
+		//DBConnectClass.logic();
 	}
 
 }
