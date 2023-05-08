@@ -8,7 +8,7 @@ import jakarta.persistence.Persistence;
 
 public class DBConnectClass {
     //DB 연결 이후 사용법 예시 입니다.
-    public void logic() {
+    static public void logic() {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("tumblbug");
 
         EntityManager em = emf.createEntityManager();
@@ -23,8 +23,8 @@ public class DBConnectClass {
             tempData.setName("장혁수");
             em.persist(tempData);
 
-            TempDBData tempDBData = em.find(TempDBData.class, 3);
-            System.out.println(tempDBData.getName());
+            //TempDBData tempDBData = em.find(TempDBData.class, 3);
+            //System.out.println(tempDBData.getName());
 
 
             transaction.commit();
