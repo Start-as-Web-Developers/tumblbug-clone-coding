@@ -1,5 +1,5 @@
 import React from 'react';
-import { $, changeCSS } from '../../utils/commonFunction';
+import { $, createMultiElements, setElementVisible } from "../../utils/commonFunction";
 import { SPONSOR_CARD_MAXIMUM } from '../../utils/commonVariable';
 import "./previewDetail.scss";
 
@@ -7,40 +7,38 @@ const updatePreviewIntroduce = (introduce:string) => {
   const $introduceRow = $(".textBox__introduceRow") as HTMLElement;
   const $introduceText = $("h3", $introduceRow) as HTMLElement;
   $introduceText.innerHTML = introduce;
-  changeCSS($introduceRow, "opacity", "1");
+  setElementVisible($introduceRow);
 }
 
 const updatePreviewBudget = (budget:string) => {
   const $budgetRow = $(".textBox__budgeRow") as HTMLElement;
   const $budgetText = $("h3", $budgetRow) as HTMLElement;
   $budgetText.innerHTML = budget;
-  changeCSS($budgetRow, "opacity", "1");
+  setElementVisible($budgetRow);
 }
 
 const updatePreviewSchedule = (schedule: string) => {
   const $scheduleRow = $(".textBox__scheduleRow") as HTMLElement;
   const $scheduleText = $("h3", $scheduleRow) as HTMLElement;
   $scheduleText.innerHTML = schedule;
-  changeCSS($scheduleRow, "opacity", "1");
+  setElementVisible($scheduleRow);
 }
 
 const updatePreviewTeamExplain = (teamExplain: string) => {
   const $teamExplainRow = $(".textBox__teamExplainRow") as HTMLElement;
   const $teamExplainText = $("h3", $teamExplainRow) as HTMLElement;
   $teamExplainText.innerHTML = teamExplain;
-  changeCSS($teamExplainRow, "opacity", "1");
+  setElementVisible($teamExplainRow);
 }
 const updatePreviewSponsor = (sponsor: string) => {
   const $sponsorRow = $(".textBox__sponsorExplainRow") as HTMLElement;
   const $sponsorText = $("h3", $sponsorRow) as HTMLElement;
   $sponsorText.innerHTML = sponsor;
-  changeCSS($sponsorRow, "opacity", "1");
+  setElementVisible($sponsorRow);
 }
 
 const getCardNode = (sponsorMoney:string, sponsorExplain:string) => {
-  const $card = document.createElement("div");
-  const $sponsorMoney = document.createElement("h1");
-  const $sponsorExplain = document.createElement("h2");
+  const [$card, $sponsorMoney, $sponsorExplain] = createMultiElements(["div", "h1", "h2"]);
   
   $card.classList.add("card");
   $sponsorMoney.innerHTML = sponsorMoney;
