@@ -1,5 +1,5 @@
 import React from "react";
-import { makeCustomErrorMessage } from "../../utils/commonErrorFunction";
+import { throwCustomError } from "../../utils/commonErrorFunction";
 import {
   $,
   changeCSS,
@@ -11,7 +11,7 @@ import { updatePreviewCardBox } from "../Preview/PreviewDetail";
 import "./cardAddModal.scss";
 
 // global variables
-const currentPath = "/frontend/src/ProjectUpload/CardAddModal.tsx";
+const currentFilePath = "/frontend/src/ProjectUpload/CardAddModal.tsx";
 
 /**
  * 후원 정보를 담은 카드 객체를 생성합니다.
@@ -29,12 +29,11 @@ const createCardElement = (sponsorMoney:string, sponsorExplain:string) => {
   $cardContainer.classList.add("sponsorCardArea__card");
 
   if (Number.isNaN(parseInt(sponsorMoney, 10))) {
-    const customErrorMessage = makeCustomErrorMessage(
-      currentPath,
+    throwCustomError(
+      currentFilePath,
       "createCardElement()",
       `weird input - can't parse ${sponsorMoney} into number`
     );
-    throw(new Error(customErrorMessage));
   }
 
   $moneyTag.innerHTML = `${formatKoreanCurrency(sponsorMoney)}원`;
@@ -65,12 +64,11 @@ const getAncestorElement = (
 ): HTMLElement => {
   const $ancestor = $self.closest(cssDeclaration);
   if ($ancestor == null) {
-    const customErrorMessage = makeCustomErrorMessage(
-      currentPath,
-      'getAncestorElement',
+    throwCustomError(
+      currentFilePath,
+      "getAncestorElement",
       `can"t find node whose cssDeclaration is ${cssDeclaration}`
-    )
-    throw new Error(customErrorMessage);
+    );
   } 
   return $ancestor as HTMLElement;
 };
@@ -86,12 +84,11 @@ const insertCardIntoCardArea = (
   explainValue: string
 ) => {
   if (Number.isNaN(parseInt(moneyValue, 10))) {
-    const customErrorMessage = makeCustomErrorMessage(
-      currentPath,
+    throwCustomError(
+      currentFilePath,
       `insertCardIntoCardArea()`,
       `werid input, ${moneyValue} can"t be parsed as Number`
     );
-    throw(new Error(customErrorMessage));
   }
   const $card = createCardElement(moneyValue, explainValue);
   $cardArea.appendChild($card);
@@ -132,12 +129,10 @@ const updateMoneyInfoElement = (inputValue:string):void => {
   }
   
   const $moneyInfoElement = $(".cardAddForm__moneyForm > span") as HTMLElement;
-  if (inputValue.length >= KOREA_MONEY_MAX_LENGTH) {
-    $moneyInfoElement.innerHTML = "숫자가 너무 큽니다";
-  } else {
-    const koreaMoneyString = formatKoreanCurrency(inputValue);
-    $moneyInfoElement.innerHTML = `${koreaMoneyString}원`;
-  }
+  $moneyInfoElement.innerHTML =
+    inputValue.length >= KOREA_MONEY_MAX_LENGTH
+      ? "숫자가 너무 큽니다"
+      : `${formatKoreanCurrency(inputValue)}원`;
 }
 
 function CardAddModal() {
