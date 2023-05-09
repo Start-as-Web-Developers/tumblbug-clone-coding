@@ -50,7 +50,7 @@ const eventTo = (
   eventHandler: (() => void) | ((event:Event) => void),
   eventType = "click"
 ) => {
-  const validateEventTypes = ["click"];
+  const validateEventTypes = ["click", "change"];
 
   if (!validateEventTypes.includes(eventType)) {
     throw new Error(`[Error] Invalid event type: ${eventType}`);
@@ -87,6 +87,10 @@ const formatKoreanCurrency = (num:number | string): string => {
   return koreaMoney;
 }
 
+const setElementVisible = ($target:HTMLElement) => {
+  changeCSS($target, "opacity", "1");
+}
+
 export {
   changeCSS,
   changeMultiCSS,
@@ -95,5 +99,6 @@ export {
   createElement,
   createMultiElements,
   formatKoreanCurrency,
+  setElementVisible,
 };
 export type { cssObj };
