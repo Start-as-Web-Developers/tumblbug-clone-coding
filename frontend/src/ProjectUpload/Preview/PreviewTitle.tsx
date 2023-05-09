@@ -1,23 +1,23 @@
 import React from 'react';
-import { $, changeCSS } from '../../utils/commonFunction';
+import { $, setElementVisible } from '../../utils/commonFunction';
 import './previewTitle.scss';
 
 const updatePreviewCategory = (categoryName:string) => {
   const $category = $(".previewTitle__category") as HTMLElement;
   $category.innerHTML = categoryName;
-  changeCSS($category, "opacity", "1");
+  setElementVisible($category);
 }
 
 const updatePreviewTitle = (previewTitle:string) => {
   const $previewTitle = $(".previewTitle__projectTitle") as HTMLElement;
   $previewTitle.innerHTML = previewTitle;
-  changeCSS($previewTitle, "opacity", "1");
+  setElementVisible($previewTitle);
 }
 
 const updatePreviewExplain = (previewExplain:string) => {
   const $previewExplain = $(".previewTitle__projectExplain") as HTMLElement;
   $previewExplain.innerHTML = previewExplain;
-  changeCSS($previewExplain, "opacity", "1");
+  setElementVisible($previewExplain);
 }
 
 function PreviewTitle() {

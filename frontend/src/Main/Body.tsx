@@ -1,8 +1,8 @@
 import React from 'react';
-import './body.scss';
 import BodyFilterBtnArea from './BodyFilterBtnArea';
 import BodyTitle from './BodyTitle';
 import CardArea from './CardArea';
+import "./body.scss";
 
 function Body() {
   return (
