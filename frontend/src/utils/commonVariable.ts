@@ -49,6 +49,11 @@ const EDITOR_RECOMMEND_BOX = {
   CLOSE: false,
 }
 
+const CATEGORY_BOX = {
+  OPEN: true,
+  CLOSE: false,
+}
+
 export {
   EDITOR_FILTER_BTN,
   ACHIEVEMENT_BTN,
@@ -62,4 +67,5 @@ export {
   SPONSOR_CARD_MAXIMUM,
   FILTER_BOX,
   EDITOR_RECOMMEND_BOX,
+  CATEGORY_BOX,
 };
