@@ -1,7 +1,8 @@
 package com.example.tumblbugclone.model.dao;
 
+
+
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.checkerframework.checker.units.qual.C;
@@ -20,20 +21,20 @@ public class UserDAO {
     @Column(name = "USER_IDX")
     private Long userIdx;
 
-    @NotNull
-    @Column(name = "USER_NAME")
+    //@NotNull
+    @Column(name = "USER_NAME", nullable = false)
     private String userName;
 
-    @NotNull
-    @Column(name = "USER_ID",length = 16, unique = true)
+    //@NotNull
+    @Column(name = "USER_ID",length = 16, unique = true, nullable = false)
     private String userId;
 
-    @NotNull
-    @Column(name = "USER_PASSWORD", length = 16)
+    //@NotNull
+    @Column(name = "USER_PASSWORD", length = 16,nullable = false)
     private String userPassword;
 
-    @NotNull
-    @Column(name = "USER_EMAIL", length = 32, unique = true)
+    //@NotNull
+    @Column(name = "USER_EMAIL", length = 32, unique = true,nullable = false)
     private String userEmail;
 
     @Column(name = "GREETING")

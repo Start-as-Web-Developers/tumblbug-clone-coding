@@ -1,10 +1,8 @@
 package com.example.tumblbugclone.repository;
 
-import com.example.tumblbugclone.Exception.userexception.*;
 import com.example.tumblbugclone.model.dao.UserDAO;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
+import jakarta.persistence.*;
 
 @Repository
 public class UserRepository {
@@ -24,6 +22,7 @@ public class UserRepository {
 
     @PersistenceContext
     EntityManager em;
+
 
     public long save(UserDAO user) throws Exception{
         em.persist(user);

@@ -39,8 +39,16 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.mariadb.jdbc:mariadb-java-client:3.1.2'
 
+	//DB 커넥션 풀
+	implementation 'org.apache.tomcat:tomcat-jdbc:10.1.8'
+
+	//스프링 ORM
+	implementation 'org.springframework:spring-orm:6.0.8'
+
+	//하이버네이트
+	implementation 'org.hibernate:hibernate-core:6.1.7.Final'
 	//검증 설정
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	//implementation 'org.springframework.boot:spring-boot-starter-validation'
 }
 
 test{
