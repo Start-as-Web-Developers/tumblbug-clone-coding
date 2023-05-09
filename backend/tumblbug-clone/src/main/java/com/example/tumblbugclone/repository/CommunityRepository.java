@@ -1,3 +1,4 @@
+/*
 package com.example.tumblbugclone.repository;
 
 import com.example.tumblbugclone.Exception.communityException.CommunityCantFindException;
@@ -124,3 +125,4 @@ public class CommunityRepository {
     }
 
 }
+*/
