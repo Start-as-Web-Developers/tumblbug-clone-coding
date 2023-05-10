@@ -19,6 +19,7 @@
             <property name="hibernate.use_sql_comment" value="true"/>
             <property name="hibernate.id.new_generator_mappings" value="true"/>
 
+
             <!--DDL 자동 생성 : 개발 단계가 마무리 되면 update로 바꿔주기-->
             <property name="hibernate.hbm2ddl.auto" value = "create" />
         </properties>
