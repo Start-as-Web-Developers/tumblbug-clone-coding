@@ -5,6 +5,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -80,7 +81,7 @@ public class UserRepositoryTest {
 
     @Test
     @Transactional
-    public void 회원_조회_테스트() throws Exception{
+    public void 회원_index로_조회_테스트() throws Exception{
         //given
         User user = new User();
         user.setUserId("UserId");
@@ -90,8 +91,7 @@ public class UserRepositoryTest {
 
         //when
         long userIdx = userRepository.save(user);
-        System.out.println(user.getUserIdx());
-        User savedUser = userRepository.findUserByIdx(userIdx);
+        User savedUser = userRepository.findUserByIndex(userIdx);
 
         //then
         Assertions.assertThat(userIdx).isEqualTo(savedUser.getUserIdx());
@@ -100,11 +100,43 @@ public class UserRepositoryTest {
 
     @Test
     @Transactional
-    public void 없는_회원_조회_테스트() throws Exception{
+    public void 회원_id로_조회_테스트() throws Exception{
+        //given
+        User user = new User();
+        user.setUserId("UserId");
+        user.setUserName("userName");
+        user.setUserEmail("userEmail");
+        user.setUserPassword("userPassword");
+
+        //when
+        long savedUserIndex = userRepository.save(user);
+        User findedByIndex = userRepository.findUserByIndex(savedUserIndex);
+        User findedById = userRepository.findUserById(user.getUserId());
+
+        //then
+        Assertions.assertThat(findedByIndex.getUserIdx()).isEqualTo(findedById.getUserIdx());
+
+    }
+    @Test(expected = EmptyResultDataAccessException.class)
+    @Transactional
+    public void 없는_회원_Index로_조회_테스트() throws Exception{
         //given
 
         //when
-        User findUser = userRepository.findUserByIdx(1000);
+        User findUser = userRepository.findUserByIndex(1000);
+
+        //then
+        //Assertions.assertThat(findUser).isEqualTo(null);
+
+    }
+
+    @Test(expected = EmptyResultDataAccessException.class)
+    @Transactional
+    public void 없는_회원_Id로_조회_테스트() throws Exception{
+        //given
+
+        //when
+        User findUser = userRepository.findUserById("none");
 
         //then
         Assertions.assertThat(findUser).isEqualTo(null);
@@ -122,11 +154,11 @@ public class UserRepositoryTest {
         user.setUserPassword("userPassword");
 
         //when
-        long userIdx = userRepository.save(user);
-
+        userRepository.save(user);
         user.setUserId("newUserId");
 
-        User savedUser = userRepository.findUserByIdx(userIdx);
+        long userIdx = userRepository.modify(user);
+        User savedUser = userRepository.findUserByIndex(userIdx);
 
         //then
         Assertions.assertThat(user.getUserId()).isEqualTo(savedUser.getUserId());
