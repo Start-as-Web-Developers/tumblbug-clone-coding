@@ -1,53 +1,68 @@
 package com.example.tumblbugclone.model;
 
+
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
+@Entity
+@Table(name = "PROJECT")
 @NoArgsConstructor
 @Data
 public class Project {
 
-    private Long userIdx;
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "PROJECT_ID")
     private Long projectId;
+
+    @ManyToOne
+    @JoinColumn(name = "USER_IDX")
+    private User user;
+
+    @Column(name = "TITLE", length = 30, nullable = false)
     private String title;
+
+    @Column(name = "PROJECT_IMG", length = 100, nullable = false)
     private String projectImg;
+
+    @Column(name = "CATEGORY", nullable = false)
     private String category;
+
+    @Column(name = "COMMENT", length = 256, nullable = false)
     private String comment;
 
+    @Column(name = "GOAL_MONEY", nullable = false)
     private Long goalMoney;
+
+    @Column(name = "TOTAL_MONEY")
     private Long totalMoney;
 
-    private String startDate;
-    private String endDate;
+    @Column(name = "START_DATE", nullable = false)
+    private Date startDate;
 
+    @Column(name = "END_DATE", nullable = false)
+    private Date endDate;
+
+    @Column(name = "PLAN_INTRO", nullable = false)
     private String planIntro;
+
+    @Column(name = "PLAN_BUDGET", nullable = false)
     private String planBudget;
+
+    @Column(name = "PLAN_SCHEDULE", nullable = false)
     private String planSchedule;
+
+    @Column(name = "PLAN_TEAM", nullable = false)
     private String planTeam;
+
+    @Column(name = "PLAN_EXPLAIN", nullable = false)
     private String planExplain;
+
+    @Column(name = "PLAN_GUIDE", nullable = false)
     private String planGuide;
 
-    public Project(Long userIdx, String title, String projectImg, String category, String comment, Long goalMoney, Long totalMoney, String startDate, String endDate, String planIntro, String planBudget, String planSchedule, String planTeam, String planExplain, String planGuide) {
-        this.userIdx = userIdx;
-
-        this.title = title;
-        this.projectImg = projectImg;
-        this.category = category;
-        this.comment = comment;
-
-        this.goalMoney = goalMoney;
-        this.totalMoney = totalMoney;
-
-        this.startDate = startDate;
-        this.endDate = endDate;
-
-        this.planIntro = planIntro;
-        this.planBudget = planBudget;
-        this.planSchedule = planSchedule;
-        this.planTeam = planTeam;
-        this.planExplain = planExplain;
-        this.planGuide = planGuide;
-    }
 
 }
