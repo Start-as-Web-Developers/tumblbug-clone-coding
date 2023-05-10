@@ -2,6 +2,9 @@
 package com.example.tumblbugclone.service;
 
 import com.example.tumblbugclone.Exception.userexception.UserCantModifyIdException;
+import com.example.tumblbugclone.Exception.userexception.UserEmailDuplicatedException;
+import com.example.tumblbugclone.Exception.userexception.UserIdDuplicatedException;
+
 import com.example.tumblbugclone.model.User;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -37,9 +40,10 @@ public class UserServiceTest {
         Assertions.assertThat(user.getUserIdx()).isNotEqualTo(0);
     }
 
-    @Test(expected = DataIntegrityViolationException.class)
+
+    @Test(expected = UserIdDuplicatedException.class)
     @Transactional
-    public void Id가_중복되면_Exception() throws Exception{
+    public void Id가_중복되면_Exception() throws UserEmailDuplicatedException, UserIdDuplicatedException {
         //given
         User user = new User();
         user.setUserId("sameId");
@@ -240,3 +244,5 @@ public class UserServiceTest {
         return user;
     }
 
+
+}

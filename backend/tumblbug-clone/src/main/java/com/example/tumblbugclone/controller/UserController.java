@@ -1,20 +1,28 @@
-/*
 package com.example.tumblbugclone.controller;
 
 import com.example.tumblbugclone.Exception.userexception.*;
+import com.example.tumblbugclone.dto.UserDTO;
 import com.example.tumblbugclone.managedconst.HttpConst;
 import com.example.tumblbugclone.model.User;
 import com.example.tumblbugclone.repository.UserRepository;
+import com.example.tumblbugclone.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @Controller
 @RequestMapping(value = HttpConst.USER_URI, produces = "application/json; charset=utf-8")
 public class UserController {
-    UserRepository userRepository = UserRepository.getUserRepository();
+
+    private final UserService userService;
+
+    @Autowired
+    public UserController(UserService userService){this.userService = userService;}
 
     @GetMapping()
     public ResponseEntity test(){
@@ -22,19 +30,30 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity signUp(@RequestBody User newUser){
-        try {
-            userRepository.save(newUser);
-        }catch (Exception e){
-            HttpHeaders errorHeader = new HttpHeaders();
-            if(e.getClass() == UserIdDuplicatedException.class){
-                log.debug(HttpConst.DUPLICATED_USER_ID_MESSAGE);
-                errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.DUPLICATED_USER_ID_MESSAGE);
-            }
-            else if(e.getClass() == UserEmailDuplicatedException.class){
-                log.debug(HttpConst.DUPLICATED_USER_EMAIL_MESSAGE);
-                errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.DUPLICATED_USER_EMAIL_MESSAGE);
-            }
+    @Transactional
+    public ResponseEntity signUp(@RequestBody UserDTO newUserDTO){
+
+        User user = null;
+        HttpHeaders errorHeader = new HttpHeaders();
+
+        try{
+            user = convertUserDTO2User(newUserDTO);
+        } catch (UserDTOConvertException e) {
+            errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, e.getMessage());
+            return ResponseEntity.badRequest()
+                    .headers(errorHeader)
+                    .body("");
+        }
+
+        try{
+            userService.join(user);
+        }catch (UserIdDuplicatedException e){
+            errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.DUPLICATED_USER_ID_MESSAGE);
+            return ResponseEntity.badRequest()
+                    .headers(errorHeader)
+                    .body("");
+        }catch (UserEmailDuplicatedException e){
+            errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.DUPLICATED_USER_EMAIL_MESSAGE);
             return ResponseEntity.badRequest()
                     .headers(errorHeader)
                     .body("");
@@ -44,57 +63,82 @@ public class UserController {
     }
 
 
+
     @PatchMapping("/{userIdx}")
-    public ResponseEntity update(@PathVariable String userIdx, @RequestBody User modifiedUser){
+    public ResponseEntity update(@PathVariable String userIdx, @RequestBody UserDTO modifiedUserDTO){
 
-        long modifyUserIdx = Long.parseLong(userIdx);
-        HttpHeaders responseHeader = new HttpHeaders();
+        User modifiedUser;
+        HttpHeaders errorHeader = new HttpHeaders();
         try {
-            userRepository.findUserByIdx(modifyUserIdx);
-            userRepository.modify(modifiedUser);
-        }catch(UserCantFindException e){
-            responseHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.NO_USER_FIND_MESSAGE);
-
+            modifiedUser = convertUserDTO2User(modifiedUserDTO);
+        } catch (UserDTOConvertException e) {
+            errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, e.getMessage());
             return ResponseEntity.badRequest()
-                    .headers(responseHeader)
+                    .headers(errorHeader)
                     .body("");
-        }catch (UserCantModifyIdException e){
-            responseHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.CANT_MODIFY_USER_ID_MESSAGE);
+        }
 
+        try {
+            userService.modify(modifiedUser);
+        } catch (UserCantModifyIdException e) {
+            errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.CANT_MODIFY_USER_ID_MESSAGE);
             return ResponseEntity.badRequest()
-                    .headers(responseHeader)
-                    .body("");
-        }catch (UnregisterUserException e){
-            responseHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.UNREGISTER_USER_MESSAGE);
-
-            return ResponseEntity.badRequest()
-                    .headers(responseHeader)
+                    .headers(errorHeader)
                     .body("");
         }
 
         return ResponseEntity.ok("");
-
     }
+
 
     @DeleteMapping
-    public ResponseEntity unregister(@RequestBody User deleteUser){
+    public ResponseEntity unregister(@RequestBody UserDTO deleteUser){
 
-        HttpHeaders responseHeader = new HttpHeaders();
+        HttpHeaders httpHeaders = new HttpHeaders();
+        User user;
         try {
-            userRepository.unregister(deleteUser.getUserIdx());
-        }catch (UserCantFindException e){
-            responseHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.NO_USER_FIND_MESSAGE);
+            user = convertUserDTO2User(deleteUser);
+        } catch (UserDTOConvertException e) {
+            httpHeaders.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, e.getMessage());
             return ResponseEntity.badRequest()
-                    .headers(responseHeader)
-                    .body("");
-        } catch (UnregisterUserException e) {
-            responseHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.UNREGISTER_USER_MESSAGE);
-            return ResponseEntity.badRequest()
-                    .headers(responseHeader)
-                    .body("");
+                    .headers(httpHeaders)
+                    .build();
         }
 
-        return ResponseEntity.ok("");
+        userService.unregiste(user);
+
+        return ResponseEntity.ok().build();
     }
+
+
+    private User convertUserDTO2User(UserDTO newUserDTO) throws UserDTOConvertException {
+        User user = new User();
+        user.setUserIdx(newUserDTO.getUserIdx());
+        if(newUserDTO.getUserName() == null){
+            throw new UserDTOConvertException(HttpConst.USERNAME_IS_NULL);
+        }
+        user.setUserName(newUserDTO.getUserName());
+
+        if(newUserDTO.getUserId() == null){
+            throw new UserDTOConvertException(HttpConst.USERID_IS_NULL);
+        }
+        user.setUserId(newUserDTO.getUserId());
+
+        if(newUserDTO.getUserPassword() == null){
+            throw new UserDTOConvertException(HttpConst.USERPASSWORD_IS_NULL);
+        }
+        user.setUserPassword(newUserDTO.getUserPassword());
+
+        if(newUserDTO.getUserPassword() == null){
+            throw new UserDTOConvertException(HttpConst.USEREMAIL_IS_NULL);
+        }
+        user.setUserEmail(newUserDTO.getUserEmail());
+
+        //추가 정보 변환
+
+        return user;
+    }
+
+
+    //== 리팩토링 완료 ==//
 }
-*/

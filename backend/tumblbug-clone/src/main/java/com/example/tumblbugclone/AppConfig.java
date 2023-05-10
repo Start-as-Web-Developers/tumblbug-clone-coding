@@ -7,4 +7,6 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan(basePackages = {"com.example.tumblbugclone.repository"})
 @Configuration
 public class AppConfig {
+
+
 }
