@@ -1,31 +1,26 @@
 package com.example.tumblbugclone.model.dao;
 
-import com.example.tumblbugclone.AppConfig;
 
-
+import com.example.tumblbugclone.model.User;
 import org.assertj.core.api.Assertions;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.EntityManager;
 
-import static org.junit.Assert.*;
-
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:appConfig.xml")
 //@SpringBootTest
 //@Transactional
-public class UserDAOTest {
+public class UserTest {
     @Autowired
     EntityManager em;
-    UserDAO existingUser = new UserDAO();
+    User existingUser = new User();
 
 
     @Before
@@ -48,7 +43,7 @@ public class UserDAOTest {
         //UserDAO existingUser = null;
 
         //when
-        UserDAO newUser = em.find(UserDAO.class, existingUser.getUserIdx());
+        User newUser = em.find(User.class, existingUser.getUserIdx());
 
         //then
         Assertions.assertThat(newUser.getUserId()).isEqualTo(existingUser.getUserId());
@@ -58,30 +53,30 @@ public class UserDAOTest {
     @Transactional
     public void 새로운_UserDAO_저장() throws Exception{
         //given
-        UserDAO newUserDAO = new UserDAO();
-        newUserDAO.setUserName("newUser");
-        newUserDAO.setUserId("newUserId");
-        newUserDAO.setUserPassword("newUserPassword");
-        newUserDAO.setUserEmail("newUserEmail");
+        User newUser = new User();
+        newUser.setUserName("newUser");
+        newUser.setUserId("newUserId");
+        newUser.setUserPassword("newUserPassword");
+        newUser.setUserEmail("newUserEmail");
 
-        em.persist(newUserDAO);
+        em.persist(newUser);
 
         //then
-        Assertions.assertThat(newUserDAO.getUserIdx()).isGreaterThan(1);
+        Assertions.assertThat(newUser.getUserIdx()).isGreaterThan(1);
     }
 
     @Test(expected = Exception.class)
     @Transactional
     public void 회원_이름은_필수() throws Exception{
         //given
-        UserDAO newUserDAO = new UserDAO();
+        User newUser = new User();
         //newUserDAO.setUserName("newUserName");
-        newUserDAO.setUserId("newUserId");
-        newUserDAO.setUserPassword("newUserPassword");
-        newUserDAO.setUserEmail("newUserEmail");
+        newUser.setUserId("newUserId");
+        newUser.setUserPassword("newUserPassword");
+        newUser.setUserEmail("newUserEmail");
 
 
-        em.persist(newUserDAO);
+        em.persist(newUser);
     }
 
 
@@ -89,42 +84,42 @@ public class UserDAOTest {
     @Transactional
     public void 회원_Id는_필수() throws Exception{
         //given
-        UserDAO newUserDAO = new UserDAO();
-        newUserDAO.setUserName("newUserName");
+        User newUser = new User();
+        newUser.setUserName("newUserName");
         //newUserDAO.setUserId("newUserId");
-        newUserDAO.setUserPassword("newUserPassword");
-        newUserDAO.setUserEmail("newUserEmail");
+        newUser.setUserPassword("newUserPassword");
+        newUser.setUserEmail("newUserEmail");
 
 
-        em.persist(newUserDAO);
+        em.persist(newUser);
     }
 
     @Test(expected = Exception.class)
     @Transactional
     public void 회원_비밀번호는_필수() throws Exception{
         //given
-        UserDAO newUserDAO = new UserDAO();
-        newUserDAO.setUserName("newUserName");
-        newUserDAO.setUserId("newUserId");
+        User newUser = new User();
+        newUser.setUserName("newUserName");
+        newUser.setUserId("newUserId");
         //newUserDAO.setUserPassword("newUserPassword");
-        newUserDAO.setUserEmail("newUserEmail");
+        newUser.setUserEmail("newUserEmail");
 
 
-        em.persist(newUserDAO);
+        em.persist(newUser);
     }
 
     @Test(expected = Exception.class)
     @Transactional
     public void 회원_Email은_필수() throws Exception{
         //given
-        UserDAO newUserDAO = new UserDAO();
-        newUserDAO.setUserName("newUserName");
-        newUserDAO.setUserId("newUserId");
-        newUserDAO.setUserPassword("newUserPassword");
+        User newUser = new User();
+        newUser.setUserName("newUserName");
+        newUser.setUserId("newUserId");
+        newUser.setUserPassword("newUserPassword");
         //newUserDAO.setUserEmail("newUserEmail");
 
         //when
-        em.persist(newUserDAO);
+        em.persist(newUser);
 
     }
 }

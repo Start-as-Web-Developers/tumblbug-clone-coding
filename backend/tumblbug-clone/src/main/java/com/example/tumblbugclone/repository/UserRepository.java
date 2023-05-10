@@ -1,6 +1,6 @@
 package com.example.tumblbugclone.repository;
 
-import com.example.tumblbugclone.model.dao.UserDAO;
+import com.example.tumblbugclone.model.User;
 import org.springframework.stereotype.Repository;
 import jakarta.persistence.*;
 
@@ -24,20 +24,20 @@ public class UserRepository {
     EntityManager em;
 
 
-    public long save(UserDAO user) throws Exception{
+    public long save(User user) throws Exception{
         em.persist(user);
         return user.getUserIdx();
     }
 
-    public UserDAO findUserByIdx(long idx) throws Exception{
+    public User findUserByIdx(long idx) throws Exception{
 
-        UserDAO findUser = em.find(UserDAO.class, idx);
+        User findUser = em.find(User.class, idx);
         return findUser;
     }
 
-    public long modify(UserDAO modifiedUser) throws Exception {
+    public long modify(User modifiedUser) throws Exception {
 
-        UserDAO resultUser = em.merge(modifiedUser);
+        User resultUser = em.merge(modifiedUser);
         return resultUser.getUserIdx();
     }
 
