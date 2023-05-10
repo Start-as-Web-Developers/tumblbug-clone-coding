@@ -1,11 +1,13 @@
-/*
 package com.example.tumblbugclone.controller;
 
 import com.example.tumblbugclone.Exception.userexception.*;
+import com.example.tumblbugclone.dto.UserDTO;
 import com.example.tumblbugclone.managedconst.HttpConst;
 import com.example.tumblbugclone.model.User;
 import com.example.tumblbugclone.repository.UserRepository;
+import com.example.tumblbugclone.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +16,11 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping(value = HttpConst.USER_URI, produces = "application/json; charset=utf-8")
 public class UserController {
-    UserRepository userRepository = UserRepository.getUserRepository();
+
+    private final UserService userService;
+
+    @Autowired
+    public UserController(UserService userService){this.userService = userService;}
 
     @GetMapping()
     public ResponseEntity test(){
@@ -22,11 +28,34 @@ public class UserController {
     }
 
     @PostMapping
+    public ResponseEntity signUp(@RequestBody UserDTO newUser){
+
+        User user = new User();
+        HttpHeaders errorHeader = new HttpHeaders();
+        if(newUser.getUserName() == null){
+            errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.USERNAME_IS_NULL);
+        }
+        user.setUserName(newUser.getUserName());
+        user.setUserId(newUser.getUserId());
+        user.setUserPassword(newUser.getUserPassword());
+        user.setUserEmail(newUser.getUserEmail());
+
+        try{
+            userService.join(user);
+        }catch (Exception e){
+
+        }
+
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
+    //== 리팩토링 완료 ==//
+
+    /*@PostMapping
     public ResponseEntity signUp(@RequestBody User newUser){
         try {
             userRepository.save(newUser);
         }catch (Exception e){
-            HttpHeaders errorHeader = new HttpHeaders();
             if(e.getClass() == UserIdDuplicatedException.class){
                 log.debug(HttpConst.DUPLICATED_USER_ID_MESSAGE);
                 errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.DUPLICATED_USER_ID_MESSAGE);
@@ -38,13 +67,13 @@ public class UserController {
             return ResponseEntity.badRequest()
                     .headers(errorHeader)
                     .body("");
-        }
+        }*//*
 
         return new ResponseEntity(HttpStatus.OK);
-    }
+    }*/
 
 
-    @PatchMapping("/{userIdx}")
+    /*@PatchMapping("/{userIdx}")
     public ResponseEntity update(@PathVariable String userIdx, @RequestBody User modifiedUser){
 
         long modifyUserIdx = Long.parseLong(userIdx);
@@ -74,9 +103,9 @@ public class UserController {
 
         return ResponseEntity.ok("");
 
-    }
+    }*/
 
-    @DeleteMapping
+    /*@DeleteMapping
     public ResponseEntity unregister(@RequestBody User deleteUser){
 
         HttpHeaders responseHeader = new HttpHeaders();
@@ -95,6 +124,5 @@ public class UserController {
         }
 
         return ResponseEntity.ok("");
-    }
+    }*/
 }
-*/

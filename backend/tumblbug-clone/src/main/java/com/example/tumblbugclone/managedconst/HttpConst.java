@@ -16,6 +16,7 @@ public class HttpConst {
     public static final String HEADER_NAME_ERROR_MESSAGE = "error-message";
 
     //== 헤더 값 ==//
+    public static final String USERNAME_IS_NULL = "유저 이름은 필수입니다.";
     public static final String DUPLICATED_USER_ID_MESSAGE = "중복된 사용자 아이디 입니다.";
     public static final String DUPLICATED_USER_EMAIL_MESSAGE = "이미 가입되어 있는 이메일 입니다.";
     public static final String NO_USER_FIND_MESSAGE = "존재하지 않는 유저 인덱스 입니다.";

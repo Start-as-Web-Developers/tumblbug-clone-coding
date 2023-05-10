@@ -1,6 +1,7 @@
 package com.example.tumblbugclone.repository;
 
 import com.example.tumblbugclone.model.User;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 import jakarta.persistence.*;
 
@@ -24,18 +25,28 @@ public class UserRepository {
     EntityManager em;
 
 
-    public long save(User user) throws Exception{
+    public long save(User user){
         em.persist(user);
         return user.getUserIdx();
     }
 
-    public User findUserByIdx(long idx) throws Exception{
+    public User findUserByIndex(long idx) throws EmptyResultDataAccessException{
 
         User findUser = em.find(User.class, idx);
+        if(findUser == null)
+            throw new EmptyResultDataAccessException(1);
         return findUser;
     }
 
-    public long modify(User modifiedUser) throws Exception {
+    public User findUserById(String id){
+
+        User findUser = em.createQuery("select m from User m where m.userId = :id", User.class)
+                .setParameter("id", id)
+                .getSingleResult();
+        return findUser;
+    }
+
+    public long modify(User modifiedUser){
 
         User resultUser = em.merge(modifiedUser);
         return resultUser.getUserIdx();
