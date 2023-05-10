@@ -1,52 +1,57 @@
 package com.example.tumblbugclone.model;
 
-import lombok.AllArgsConstructor;
+
+
+import jakarta.persistence.*;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+
+import java.util.Date;
+
+@Entity
+@Table(name = "USER")
 @NoArgsConstructor
 @Data
-public class User{
-    Long userIdx;
-    String userName;
-    String userId;
-    String userPassword;
-    String userEmail;
-    String greeting;
-    String userImg;
-    String lastLogin;
-    boolean isActive;
+public class User {
 
-    public User(String userName, String userId, String userPassword, String userEmail){
-        this.userName = userName;
-        this.userId = userId;
-        this.userPassword = userPassword;
-        this.userEmail = userEmail;
-        this.isActive = true;
-    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "USER_IDX")
+    private Long userIdx;
 
-    public User copy(){
-        User copyUser = new User(this.userName, this.getUserId(), this.userPassword, this.getUserEmail());
-        copyUser.setUserIdx(this.userIdx);
-        copyUser.setGreeting(this.greeting);
-        copyUser.setUserImg(this.userImg);
-        copyUser.setLastLogin(this.lastLogin);
-        copyUser.setActive(this.isActive);
+    //@NotNull
+    @Column(name = "USER_NAME", nullable = false)
+    private String userName;
 
-        return copyUser;
-    }
+    //@NotNull
+    @Column(name = "USER_ID",length = 16, unique = true, nullable = false)
+    private String userId;
 
-    public boolean equals(User user){
-        if(this.userIdx == null || user.userIdx == null)
-            return this.userId.equals(user.getUserId());
-        return this.userIdx == user.getUserIdx();
+    //@NotNull
+    @Column(name = "USER_PASSWORD", length = 16,nullable = false)
+    private String userPassword;
 
-    }
+    //@NotNull
+    @Column(name = "USER_EMAIL", length = 32, unique = true,nullable = false)
+    private String userEmail;
 
-    public int hashCode(){
-        return super.hashCode();
-    }
+    @Column(name = "GREETING")
+    private String greeting;
+
+    @Column(name = "USER_IMG")
+    private String userImg;
+
+    @Column(name = "LAST_LOGIN")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastLogin;
+
+    @Column(name = "IS_ACTIVE")
+    private boolean isActive;
+
+
+    //좋아요 - 1대 다 매핑
+    //후원 - 1대 다 매핑
 
 
 }

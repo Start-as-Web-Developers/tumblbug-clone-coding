@@ -1,17 +1,22 @@
+/*
 package com.example.tumblbugclone.repository;
 
-import com.example.tumblbugclone.Exception.userexception.ProjectCantFindException;
+import com.example.tumblbugclone.Exception.projectException.ProjectCantFindException;
 import com.example.tumblbugclone.model.Project;
+import com.example.tumblbugclone.model.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 
 public class ProjectRepository {
 
     private static Long id = 0L;
     private static final ProjectRepository projectRepository = new ProjectRepository();
     private static HashMap<Long, Project> projectDB = new HashMap<>();
+    private static UserRepository userDB = UserRepository.getUserRepository();
+
 
     private ProjectRepository() {};
 
@@ -23,6 +28,12 @@ public class ProjectRepository {
     }
 
     public long save(Project project) throws Exception {
+
+        // 테스트를 위한 임시 user 삽입
+        userDB.clear();
+        User user = new User("hi", "hi", "hi", "hi");
+        userDB.save(user);
+        project.setUserIdx(1L);
 
         id++;
         project.setProjectId(id);
@@ -43,7 +54,13 @@ public class ProjectRepository {
         return new ArrayList<>(projectDB.values());
     }
 
-    public long updateProject(Project updateProject) throws ProjectCantFindException {
+    public long updateProject(Project updateProject) throws Exception {
+        // 테스트를 위한 임시 user 삽입
+        userDB.clear();
+        User user = new User("hi", "hi", "hi", "hi");
+        userDB.save(user);
+        updateProject.setUserIdx(1L);
+
         Long projectIdx = updateProject.getProjectId();
         verifyProjectIdx(projectIdx);
 
@@ -62,8 +79,5 @@ public class ProjectRepository {
         verifyProjectIdx(projectIdx);
         projectDB.remove(projectIdx);
     }
-
-
-
-
 }
+*/

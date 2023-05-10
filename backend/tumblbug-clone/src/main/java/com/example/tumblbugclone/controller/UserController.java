@@ -1,3 +1,4 @@
+/*
 package com.example.tumblbugclone.controller;
 
 import com.example.tumblbugclone.Exception.userexception.*;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @Controller
-@RequestMapping(HttpConst.USER_URI)
+@RequestMapping(value = HttpConst.USER_URI, produces = "application/json; charset=utf-8")
 public class UserController {
     UserRepository userRepository = UserRepository.getUserRepository();
 
@@ -96,3 +97,4 @@ public class UserController {
         return ResponseEntity.ok("");
     }
 }
+*/

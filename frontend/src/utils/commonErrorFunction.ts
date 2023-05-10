@@ -9,4 +9,15 @@ const makeCustomErrorMessage = (
       error message : ${errorMessage}
   `;
 
-export { makeCustomErrorMessage };
+const throwCustomError = (
+  errorLocation: string,
+  errorMethodName: string,
+  errorMessage: string
+) => {
+  const customErrorMessage = makeCustomErrorMessage(
+    errorLocation, errorMethodName, errorMessage
+  );
+  throw new Error(customErrorMessage);
+};
+
+export { throwCustomError };

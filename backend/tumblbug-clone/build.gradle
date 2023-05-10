@@ -5,6 +5,7 @@ plugins {
 	id 'io.spring.dependency-management' version '1.1.0'
 }
 
+
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
@@ -21,7 +22,8 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	//implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+
+
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
@@ -31,8 +33,30 @@ dependencies {
 	testImplementation("org.junit.vintage:junit-vintage-engine") {
 	exclude group: "org.hamcrest", module: "hamcrest-core"
 	}
+
+	// JPA 설정
+	//implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.mariadb.jdbc:mariadb-java-client:3.1.2'
+
+	//DB 커넥션 풀
+	implementation 'org.apache.tomcat:tomcat-jdbc:10.1.8'
+
+	//스프링 ORM
+	implementation 'org.springframework:spring-orm:6.0.8'
+
+	//하이버네이트
+	implementation 'org.hibernate:hibernate-core:6.1.7.Final'
+	//검증 설정
+	//implementation 'org.springframework.boot:spring-boot-starter-validation'
 }
 
 test{
 	useJUnitPlatform()
+}
+//https://www.inflearn.com/questions/17098/unknown-entity-%EC%98%A4%EB%A5%98
+sourceSets {
+	main {
+		output.resourcesDir = java.outputDir
+	}
 }
