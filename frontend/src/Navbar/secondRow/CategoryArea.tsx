@@ -1,37 +1,58 @@
 import React, {useEffect, useState} from 'react';
 import { FiMenu } from "react-icons/fi";
 import { $, changeCSS, eventTo } from '../../utils/commonFunction';
-import { CATEGORY_BOX_POSITION, NAVBAR_BOX_SHADOW } from '../../utils/commonVariable';
+import { CATEGORY_BOX, CATEGORY_BOX_POSITION, NAVBAR_BOX_SHADOW } from '../../utils/commonVariable';
 import './categoryArea.scss';
 
+const changeNavbarToClickedShadow = () => {
+  const $navBar = $(".navbar") as HTMLElement;
+  changeCSS($navBar, "box-shadow", NAVBAR_BOX_SHADOW.CATEGORY_CLICKED);
+};
+
+const changeNavbarToOriginalShadow = () => {
+  const $navBar = $(".navbar") as HTMLElement;
+  changeCSS($navBar, "box-shadow", NAVBAR_BOX_SHADOW.ORIGINAL);
+}
+
+const showCategoryBox = () => {
+  const $categoryBox = $(".categoryBox") as HTMLElement;
+  changeCSS($categoryBox, "top", CATEGORY_BOX_POSITION.CLICKED);
+}
+
+const hideCategoryBox = () => {
+  const $categoryBox = $(".categoryBox") as HTMLElement;
+  changeCSS($categoryBox, "top", CATEGORY_BOX_POSITION.ORIGINAL);
+}
+
+const openCategoryBox = (
+  clickStateHandler: React.Dispatch<React.SetStateAction<boolean>>
+) => {
+  showCategoryBox();
+  changeNavbarToClickedShadow();
+  clickStateHandler(CATEGORY_BOX.OPEN);
+};
+
+const closeCategoryBox = (
+  clickStateHandler: React.Dispatch<React.SetStateAction<boolean>>
+) => {
+  changeNavbarToOriginalShadow();
+  hideCategoryBox();
+  clickStateHandler(CATEGORY_BOX.CLOSE);
+};
+
 function CategoryArea() {
-  const [categoryOpen, setCategoryOpen] = useState(false);
+  const [categoryBoxIsOpend, setCategoryBoxIsOpend] = useState(false);
 
-  function eventToCategoryBtn() {
+  useEffect(() => {
     const $categoryBtn = $(".categoryBtn") as HTMLElement;
-    const $navbar = $(".navbar") as HTMLElement;
-    const $categoryBox = $(".categoryBox") as HTMLElement;
-
     eventTo($categoryBtn, () => {
-      if (categoryOpen) {
-        changeCSS($navbar, "box-shadow", NAVBAR_BOX_SHADOW.ORIGINAL);
-        changeCSS($categoryBox, "top", CATEGORY_BOX_POSITION.ORIGINAL);
+      if (categoryBoxIsOpend) {
+        closeCategoryBox(setCategoryBoxIsOpend);
       } else {
-        changeCSS($categoryBox, "top", CATEGORY_BOX_POSITION.CLICKED);
-        changeCSS($navbar, "box-shadow", NAVBAR_BOX_SHADOW.CATEGORY_CLICKED);
+        openCategoryBox(setCategoryBoxIsOpend);
       }
-
-      setCategoryOpen(!categoryOpen);
     });
-  }
-
-  useEffect(() => {
-    eventToCategoryBtn();
-  }, []);
-
-  useEffect(() => {
-    eventToCategoryBtn();
-  }, [categoryOpen]);
+  }, [categoryBoxIsOpend]);
 
   return (
     <ul className="categoryArea">

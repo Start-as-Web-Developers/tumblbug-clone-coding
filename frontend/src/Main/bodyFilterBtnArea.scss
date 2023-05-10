@@ -24,8 +24,7 @@ $filter-box-horizontal-padding: 3%;
 
   & .filterBtnArea__percentBtn {
     position: relative;
-    padding: $filter-btn-padding;
-    width: $filter-btn-width;
+    padding: 5%;
     height: $filter-btn-height;
     display: flex;
     justify-content: space-around;
@@ -69,34 +68,39 @@ $filter-box-horizontal-padding: 3%;
         flex-direction: column;
         justify-content: space-between;
         align-items: baseline;
-        
-        & h2 {
-          display: flex;
-          align-items: center;
-          width: calc(100% - 2 * $filter-box-horizontal-padding);
-          height: 15%;
-          padding: 2% $filter-box-horizontal-padding;
-          font-weight: 700;
-          color: $filter-box-theme-color;
-          font-size: 0.8rem;
 
-          &:hover {
-            background-color: $filter-box-hover-backgroundcolor;
-          }
-        }
-
-        & h3 {
+        & button {
           display: flex;
           align-items: center;
           width: calc(100% - 2 * $filter-box-horizontal-padding);
           height: 15%;
           padding: 2% $filter-box-horizontal-padding;
           color: #000;
+          background-color: #fff;
           font-weight: 500;
           font-size: 0.7rem;
 
           &:hover {
             background-color: $filter-box-hover-backgroundcolor;
+          }
+
+          &:focus {
+            outline: none;
+          }
+
+          &.filterBox__mainBtn {
+            display: flex;
+            align-items: center;
+            width: calc(100% - 2 * $filter-box-horizontal-padding);
+            height: 15%;
+            padding: 2% $filter-box-horizontal-padding;
+            font-weight: 700;
+            color: $filter-box-theme-color;
+            font-size: 0.8rem;
+
+            &:hover {
+              background-color: $filter-box-hover-backgroundcolor;
+            }
           }
         }
 

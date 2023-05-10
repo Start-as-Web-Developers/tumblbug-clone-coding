@@ -39,6 +39,21 @@ const CATEGORY_MODAL_OPEN_BTN_VISITED_TEXT = "카테고리 재탐색";
 const TOO_BIG_NUMBER_TEXT = "너무 큰 숫자";
 const SPONSOR_CARD_MAXIMUM = 6;
 
+const FILTER_BOX = {
+  OPEN: true,
+  CLOSE: false,
+}
+
+const EDITOR_RECOMMEND_BOX = {
+  OPEN: true,
+  CLOSE: false,
+}
+
+const CATEGORY_BOX = {
+  OPEN: true,
+  CLOSE: false,
+}
+
 export {
   EDITOR_FILTER_BTN,
   ACHIEVEMENT_BTN,
@@ -50,4 +65,7 @@ export {
   CATEGORY_MODAL_OPEN_BTN_VISITED_TEXT,
   TOO_BIG_NUMBER_TEXT,
   SPONSOR_CARD_MAXIMUM,
+  FILTER_BOX,
+  EDITOR_RECOMMEND_BOX,
+  CATEGORY_BOX,
 };
