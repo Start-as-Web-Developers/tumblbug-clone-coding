@@ -8,6 +8,7 @@ import com.example.tumblbugclone.repository.UserRepository;
 import com.example.tumblbugclone.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -32,18 +33,42 @@ public class UserController {
 
         User user = new User();
         HttpHeaders errorHeader = new HttpHeaders();
+        boolean notNullIsNull = false;
+
         if(newUser.getUserName() == null){
+            notNullIsNull = true;
             errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.USERNAME_IS_NULL);
         }
         user.setUserName(newUser.getUserName());
+
+        if(newUser.getUserId() == null){
+            notNullIsNull = true;
+            errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.USERID_IS_NULL);
+        }
         user.setUserId(newUser.getUserId());
+
+        if(newUser.getUserPassword() == null){
+            notNullIsNull = true;
+            errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.USERPASSWORD_IS_NULL);
+        }
         user.setUserPassword(newUser.getUserPassword());
+
+        if(newUser.getUserPassword() == null){
+            notNullIsNull = true;
+            errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.USEREMAIL_IS_NULL);
+        }
         user.setUserEmail(newUser.getUserEmail());
+
+        if(notNullIsNull){
+            return ResponseEntity.badRequest()
+                    .headers(errorHeader)
+                    .body("");
+        }
 
         try{
             userService.join(user);
-        }catch (Exception e){
-
+        }catch (DataIntegrityViolationException e){
+            //Email 중복과 Id 중복이 구분이 안됨
         }
 
 
