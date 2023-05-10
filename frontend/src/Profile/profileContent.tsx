@@ -46,7 +46,7 @@ function ProfileContent() {
             activeTab === "profile" ? "ProfileTab ChosenTab" : "ProfileTab"
           }
         >
-          <Link to="/">프로필</Link>
+          <Link to="/u">프로필</Link>
         </li>
         <li
           className={
@@ -55,7 +55,7 @@ function ProfileContent() {
               : "ProfileTab"
           }
         >
-          <Link to="/created">올린 프로젝트</Link>
+          <Link to="/u/created">올린 프로젝트</Link>
         </li>
         <li
           className={
@@ -64,7 +64,7 @@ function ProfileContent() {
               : "ProfileTab"
           }
         >
-          <Link to="/backed">후원한 프로젝트</Link>
+          <Link to="/u/backed">후원한 프로젝트</Link>
         </li>
       </ul>
       <hr />

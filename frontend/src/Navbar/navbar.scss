@@ -17,9 +17,17 @@ button {
 
 /* 좌우 공백 지정 */
 .navbarArea {
+  position: relative;
   margin: 0 auto;
   width: 70%;
   height: 100%;
   display: flex;
   flex-wrap: wrap;
+}
+
+.dropdownContainer {
+  position: absolute;
+  z-index: 5;
+  top: 7vh;
+  left: 58.625vw;
 }

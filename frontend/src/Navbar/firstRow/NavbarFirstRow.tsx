@@ -1,10 +1,12 @@
-import React from "react";
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import Logo from "../../TumblbugLogo/Logo";
 import NavbarProfileImage from "./NavbarProfileImage";
 import "./navbarFirstRow.scss";
 
 function NavbarFirstRow() {
+  const [Logedin, setLogedin] = useState(true);
+
   return (
     <section className="navbarFirstRow">
       <Logo />
@@ -17,7 +19,13 @@ function NavbarFirstRow() {
         <div className="navbarFirstRow__loginArea">
           <NavbarProfileImage />
           <button type="button" className="navbarFirstRow__loginBtn">
-            <Link to="/login">로그인/회원가입</Link>
+            {Logedin === true ? (
+              <div>
+                <button type="button">USERNAME</button>
+              </div>
+            ) : (
+              <Link to="/login">로그인/회원가입</Link>
+            )}
           </button>
         </div>
       </div>
