@@ -1,6 +1,6 @@
 package com.example.tumblbugclone.repository;
 
-import com.example.tumblbugclone.model.dao.UserDAO;
+import com.example.tumblbugclone.model.User;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,21 +20,21 @@ public class UserRepositoryTest {
     @Transactional
     public void 회원_저장() throws Exception{
         //given
-        UserDAO userDAO = new UserDAO();
-        userDAO.setUserId("UserId");
-        userDAO.setUserName("userName");
-        userDAO.setUserEmail("userEmail");
-        userDAO.setUserPassword("userPassword");
+        User user = new User();
+        user.setUserId("UserId");
+        user.setUserName("userName");
+        user.setUserEmail("userEmail");
+        user.setUserPassword("userPassword");
 
         //when
-        long userIdx = userRepository.save(userDAO);
+        long userIdx = userRepository.save(user);
     }
 
     @Test(expected = Exception.class)
     @Transactional
     public void 중복ID_저장_실패_테스트() throws Exception{
         //given
-        UserDAO user1 = new UserDAO();
+        User user1 = new User();
         user1.setUserName("user1Name");
         user1.setUserId("user1Id");
         user1.setUserEmail("user1Email");
@@ -43,7 +43,7 @@ public class UserRepositoryTest {
 
 
         //when
-        UserDAO user2 = new UserDAO();
+        User user2 = new User();
         user2.setUserId(user1.getUserId());
         user2.setUserEmail("user2Email");
         user2.setUserName("user2Name");
@@ -58,7 +58,7 @@ public class UserRepositoryTest {
     @Transactional
     public void 중복Email_저장_실패_테스트() throws Exception{
         //given
-        UserDAO user1 = new UserDAO();
+        User user1 = new User();
         user1.setUserName("user1Name");
         user1.setUserId("user1Id");
         user1.setUserEmail("user1Email");
@@ -67,7 +67,7 @@ public class UserRepositoryTest {
 
 
         //when
-        UserDAO user2 = new UserDAO();
+        User user2 = new User();
         user2.setUserId("user2Id");
         user2.setUserEmail(user1.getUserEmail());
         user2.setUserName("user2Name");
@@ -82,16 +82,16 @@ public class UserRepositoryTest {
     @Transactional
     public void 회원_조회_테스트() throws Exception{
         //given
-        UserDAO userDAO = new UserDAO();
-        userDAO.setUserId("UserId");
-        userDAO.setUserName("userName");
-        userDAO.setUserEmail("userEmail");
-        userDAO.setUserPassword("userPassword");
+        User user = new User();
+        user.setUserId("UserId");
+        user.setUserName("userName");
+        user.setUserEmail("userEmail");
+        user.setUserPassword("userPassword");
 
         //when
-        long userIdx = userRepository.save(userDAO);
-        System.out.println(userDAO.getUserIdx());
-        UserDAO savedUser = userRepository.findUserByIdx(userIdx);
+        long userIdx = userRepository.save(user);
+        System.out.println(user.getUserIdx());
+        User savedUser = userRepository.findUserByIdx(userIdx);
 
         //then
         Assertions.assertThat(userIdx).isEqualTo(savedUser.getUserIdx());
@@ -104,7 +104,7 @@ public class UserRepositoryTest {
         //given
 
         //when
-        UserDAO findUser = userRepository.findUserByIdx(1000);
+        User findUser = userRepository.findUserByIdx(1000);
 
         //then
         Assertions.assertThat(findUser).isEqualTo(null);
@@ -115,21 +115,21 @@ public class UserRepositoryTest {
     @Transactional
     public void 회원정보_수정_성공_테스트() throws Exception{
         ///given
-        UserDAO userDAO = new UserDAO();
-        userDAO.setUserId("UserId");
-        userDAO.setUserName("userName");
-        userDAO.setUserEmail("userEmail");
-        userDAO.setUserPassword("userPassword");
+        User user = new User();
+        user.setUserId("UserId");
+        user.setUserName("userName");
+        user.setUserEmail("userEmail");
+        user.setUserPassword("userPassword");
 
         //when
-        long userIdx = userRepository.save(userDAO);
+        long userIdx = userRepository.save(user);
 
-        userDAO.setUserId("newUserId");
+        user.setUserId("newUserId");
 
-        UserDAO savedUser = userRepository.findUserByIdx(userIdx);
+        User savedUser = userRepository.findUserByIdx(userIdx);
 
         //then
-        Assertions.assertThat(userDAO.getUserId()).isEqualTo(savedUser.getUserId());
+        Assertions.assertThat(user.getUserId()).isEqualTo(savedUser.getUserId());
     }
 
 }

@@ -1,55 +1,57 @@
 package com.example.tumblbugclone.model;
 
 
-import jakarta.persistence.Id;
+
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
+import java.util.Date;
+
+@Entity
+@Table(name = "USER")
 @NoArgsConstructor
 @Data
-public class User{
+public class User {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "USER_IDX")
     private Long userIdx;
+
+    //@NotNull
+    @Column(name = "USER_NAME", nullable = false)
     private String userName;
+
+    //@NotNull
+    @Column(name = "USER_ID",length = 16, unique = true, nullable = false)
     private String userId;
+
+    //@NotNull
+    @Column(name = "USER_PASSWORD", length = 16,nullable = false)
     private String userPassword;
+
+    //@NotNull
+    @Column(name = "USER_EMAIL", length = 32, unique = true,nullable = false)
     private String userEmail;
+
+    @Column(name = "GREETING")
     private String greeting;
+
+    @Column(name = "USER_IMG")
     private String userImg;
-    private String lastLogin;
+
+    @Column(name = "LAST_LOGIN")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastLogin;
+
+    @Column(name = "IS_ACTIVE")
     private boolean isActive;
 
-    public User(String userName, String userId, String userPassword, String userEmail){
-        this.userName = userName;
-        this.userId = userId;
-        this.userPassword = userPassword;
-        this.userEmail = userEmail;
-        this.isActive = true;
-    }
 
-    public User copy(){
-        User copyUser = new User(this.userName, this.getUserId(), this.userPassword, this.getUserEmail());
-        copyUser.setUserIdx(this.userIdx);
-        copyUser.setGreeting(this.greeting);
-        copyUser.setUserImg(this.userImg);
-        copyUser.setLastLogin(this.lastLogin);
-        copyUser.setActive(this.isActive);
-
-        return copyUser;
-    }
-
-    public boolean equals(User user){
-        if(this.userIdx == null || user.userIdx == null)
-            return this.userId.equals(user.getUserId());
-        return this.userIdx == user.getUserIdx();
-
-    }
-
-    public int hashCode(){
-        return super.hashCode();
-    }
+    //좋아요 - 1대 다 매핑
+    //후원 - 1대 다 매핑
 
 
 }
