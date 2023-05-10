@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -29,37 +30,16 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity signUp(@RequestBody UserDTO newUser){
+    @Transactional
+    public ResponseEntity signUp(@RequestBody UserDTO newUserDTO){
 
-        User user = new User();
+        User user = null;
         HttpHeaders errorHeader = new HttpHeaders();
-        boolean notNullIsNull = false;
 
-        if(newUser.getUserName() == null){
-            notNullIsNull = true;
-            errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.USERNAME_IS_NULL);
-        }
-        user.setUserName(newUser.getUserName());
-
-        if(newUser.getUserId() == null){
-            notNullIsNull = true;
-            errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.USERID_IS_NULL);
-        }
-        user.setUserId(newUser.getUserId());
-
-        if(newUser.getUserPassword() == null){
-            notNullIsNull = true;
-            errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.USERPASSWORD_IS_NULL);
-        }
-        user.setUserPassword(newUser.getUserPassword());
-
-        if(newUser.getUserPassword() == null){
-            notNullIsNull = true;
-            errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.USEREMAIL_IS_NULL);
-        }
-        user.setUserEmail(newUser.getUserEmail());
-
-        if(notNullIsNull){
+        try{
+            user = convertUserDTO2User(newUserDTO);
+        } catch (UserDTOConvertException e) {
+            errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, e.getMessage());
             return ResponseEntity.badRequest()
                     .headers(errorHeader)
                     .body("");
@@ -67,87 +47,98 @@ public class UserController {
 
         try{
             userService.join(user);
-        }catch (DataIntegrityViolationException e){
-            //Email 중복과 Id 중복이 구분이 안됨
-        }
-
-
-        return new ResponseEntity(HttpStatus.OK);
-    }
-    //== 리팩토링 완료 ==//
-
-    /*@PostMapping
-    public ResponseEntity signUp(@RequestBody User newUser){
-        try {
-            userRepository.save(newUser);
-        }catch (Exception e){
-            if(e.getClass() == UserIdDuplicatedException.class){
-                log.debug(HttpConst.DUPLICATED_USER_ID_MESSAGE);
-                errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.DUPLICATED_USER_ID_MESSAGE);
-            }
-            else if(e.getClass() == UserEmailDuplicatedException.class){
-                log.debug(HttpConst.DUPLICATED_USER_EMAIL_MESSAGE);
-                errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.DUPLICATED_USER_EMAIL_MESSAGE);
-            }
+        }catch (UserIdDuplicatedException e){
+            errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.DUPLICATED_USER_ID_MESSAGE);
             return ResponseEntity.badRequest()
                     .headers(errorHeader)
                     .body("");
-        }*//*
+        }catch (UserEmailDuplicatedException e){
+            errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.DUPLICATED_USER_EMAIL_MESSAGE);
+            return ResponseEntity.badRequest()
+                    .headers(errorHeader)
+                    .body("");
+        }
 
         return new ResponseEntity(HttpStatus.OK);
-    }*/
+    }
 
 
-    /*@PatchMapping("/{userIdx}")
-    public ResponseEntity update(@PathVariable String userIdx, @RequestBody User modifiedUser){
 
-        long modifyUserIdx = Long.parseLong(userIdx);
-        HttpHeaders responseHeader = new HttpHeaders();
+    @PatchMapping("/{userIdx}")
+    public ResponseEntity update(@PathVariable String userIdx, @RequestBody UserDTO modifiedUserDTO){
+
+        User modifiedUser;
+        HttpHeaders errorHeader = new HttpHeaders();
         try {
-            userRepository.findUserByIdx(modifyUserIdx);
-            userRepository.modify(modifiedUser);
-        }catch(UserCantFindException e){
-            responseHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.NO_USER_FIND_MESSAGE);
-
+            modifiedUser = convertUserDTO2User(modifiedUserDTO);
+        } catch (UserDTOConvertException e) {
+            errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, e.getMessage());
             return ResponseEntity.badRequest()
-                    .headers(responseHeader)
+                    .headers(errorHeader)
                     .body("");
-        }catch (UserCantModifyIdException e){
-            responseHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.CANT_MODIFY_USER_ID_MESSAGE);
+        }
 
+        try {
+            userService.modify(modifiedUser);
+        } catch (UserCantModifyIdException e) {
+            errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.CANT_MODIFY_USER_ID_MESSAGE);
             return ResponseEntity.badRequest()
-                    .headers(responseHeader)
-                    .body("");
-        }catch (UnregisterUserException e){
-            responseHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.UNREGISTER_USER_MESSAGE);
-
-            return ResponseEntity.badRequest()
-                    .headers(responseHeader)
+                    .headers(errorHeader)
                     .body("");
         }
 
         return ResponseEntity.ok("");
+    }
 
-    }*/
 
-    /*@DeleteMapping
-    public ResponseEntity unregister(@RequestBody User deleteUser){
+    @DeleteMapping
+    public ResponseEntity unregister(@RequestBody UserDTO deleteUser){
 
-        HttpHeaders responseHeader = new HttpHeaders();
+        HttpHeaders httpHeaders = new HttpHeaders();
+        User user;
         try {
-            userRepository.unregister(deleteUser.getUserIdx());
-        }catch (UserCantFindException e){
-            responseHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.NO_USER_FIND_MESSAGE);
+            user = convertUserDTO2User(deleteUser);
+        } catch (UserDTOConvertException e) {
+            httpHeaders.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, e.getMessage());
             return ResponseEntity.badRequest()
-                    .headers(responseHeader)
-                    .body("");
-        } catch (UnregisterUserException e) {
-            responseHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.UNREGISTER_USER_MESSAGE);
-            return ResponseEntity.badRequest()
-                    .headers(responseHeader)
-                    .body("");
+                    .headers(httpHeaders)
+                    .build();
         }
 
-        return ResponseEntity.ok("");
-    }*/
+        userService.unregiste(user);
+
+        return ResponseEntity.ok().build();
+    }
+
+
+    private User convertUserDTO2User(UserDTO newUserDTO) throws UserDTOConvertException {
+        User user = new User();
+        user.setUserIdx(newUserDTO.getUserIdx());
+        if(newUserDTO.getUserName() == null){
+            throw new UserDTOConvertException(HttpConst.USERNAME_IS_NULL);
+        }
+        user.setUserName(newUserDTO.getUserName());
+
+        if(newUserDTO.getUserId() == null){
+            throw new UserDTOConvertException(HttpConst.USERID_IS_NULL);
+        }
+        user.setUserId(newUserDTO.getUserId());
+
+        if(newUserDTO.getUserPassword() == null){
+            throw new UserDTOConvertException(HttpConst.USERPASSWORD_IS_NULL);
+        }
+        user.setUserPassword(newUserDTO.getUserPassword());
+
+        if(newUserDTO.getUserPassword() == null){
+            throw new UserDTOConvertException(HttpConst.USEREMAIL_IS_NULL);
+        }
+        user.setUserEmail(newUserDTO.getUserEmail());
+
+        //추가 정보 변환
+
+        return user;
+    }
+
+
+    //== 리팩토링 완료 ==//
 }

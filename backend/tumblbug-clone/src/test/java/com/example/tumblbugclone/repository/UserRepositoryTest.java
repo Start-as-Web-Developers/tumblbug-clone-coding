@@ -1,5 +1,7 @@
 package com.example.tumblbugclone.repository;
 
+import com.example.tumblbugclone.Exception.userexception.UserEmailDuplicatedException;
+import com.example.tumblbugclone.Exception.userexception.UserIdDuplicatedException;
 import com.example.tumblbugclone.model.User;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -162,6 +164,51 @@ public class UserRepositoryTest {
 
         //then
         Assertions.assertThat(user.getUserId()).isEqualTo(savedUser.getUserId());
+    }
+
+    @Test(expected = UserIdDuplicatedException.class)
+    @Transactional
+    public void UserId_중복_검증_테스트() throws Exception{
+        //given
+        User user = new User();
+        user.setUserId("UserId");
+        user.setUserName("userName");
+        user.setUserEmail("userEmail");
+        user.setUserPassword("userPassword");
+        userRepository.save(user);
+
+        //when
+        User user2 = new User();
+        user2.setUserId("UserId");
+        user2.setUserName("user1Name");
+        user2.setUserEmail("user1Email");
+        user2.setUserPassword("user1Password");
+
+        //then
+
+        userRepository.checkDuplication(user2);
+    }
+
+    @Test(expected = UserEmailDuplicatedException.class)
+    @Transactional
+    public void UserEmail_중복_검증_테스트() throws Exception{
+        //given
+        User user = new User();
+        user.setUserId("UserId");
+        user.setUserName("userName");
+        user.setUserEmail("userEmail");
+        user.setUserPassword("userPassword");
+        userRepository.save(user);
+
+        //when
+        User user2 = new User();
+        user2.setUserId("User1Id");
+        user2.setUserName("user1Name");
+        user2.setUserEmail("userEmail");
+        user2.setUserPassword("user1Password");
+
+        //then
+        userRepository.checkDuplication(user2);
     }
 
 }

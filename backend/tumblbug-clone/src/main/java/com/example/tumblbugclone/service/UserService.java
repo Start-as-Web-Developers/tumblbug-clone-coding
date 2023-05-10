@@ -2,6 +2,8 @@ package com.example.tumblbugclone.service;
 
 
 import com.example.tumblbugclone.Exception.userexception.UserCantModifyIdException;
+import com.example.tumblbugclone.Exception.userexception.UserEmailDuplicatedException;
+import com.example.tumblbugclone.Exception.userexception.UserIdDuplicatedException;
 import com.example.tumblbugclone.model.User;
 import com.example.tumblbugclone.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,12 @@ public class UserService {
     @Autowired
     public UserService(UserRepository userRepository){this.userRepository = userRepository;}
 
-    public long join(User user){
+    public long join(User user) throws UserEmailDuplicatedException, UserIdDuplicatedException {
+        try {
+            userRepository.checkDuplication(user);
+        }catch (UserEmailDuplicatedException | UserIdDuplicatedException e){
+            throw e;
+        }
         long userIdx = userRepository.save(user);
 
         return userIdx;

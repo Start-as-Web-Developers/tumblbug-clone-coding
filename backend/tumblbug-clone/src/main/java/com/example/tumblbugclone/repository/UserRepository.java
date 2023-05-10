@@ -1,6 +1,9 @@
 package com.example.tumblbugclone.repository;
 
+import com.example.tumblbugclone.Exception.userexception.UserEmailDuplicatedException;
+import com.example.tumblbugclone.Exception.userexception.UserIdDuplicatedException;
 import com.example.tumblbugclone.model.User;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 import jakarta.persistence.*;
@@ -50,6 +53,33 @@ public class UserRepository {
 
         User resultUser = em.merge(modifiedUser);
         return resultUser.getUserIdx();
+    }
+
+    public boolean checkDuplication(User user) throws UserIdDuplicatedException, UserEmailDuplicatedException {
+        User duplicatedIdUser = null;
+        User duplicatedEmailUser = null;
+        
+        try{
+            duplicatedIdUser = em.createQuery("select m from User m where m.userId = :id", User.class)
+                    .setParameter("id", user.getUserId())
+                    .getSingleResult();
+            System.out.println(user.getUserId());
+        }catch (NoResultException e){
+        }
+
+        try{
+            duplicatedEmailUser = em.createQuery("select m from User m where m.userEmail = :email", User.class)
+                    .setParameter("email", user.getUserEmail())
+                    .getSingleResult();
+        }catch (NoResultException e){
+        }
+
+        if(duplicatedIdUser != null)
+            throw new UserIdDuplicatedException();
+        if(duplicatedEmailUser != null)
+            throw new UserEmailDuplicatedException();
+
+        return true;
     }
 
 
