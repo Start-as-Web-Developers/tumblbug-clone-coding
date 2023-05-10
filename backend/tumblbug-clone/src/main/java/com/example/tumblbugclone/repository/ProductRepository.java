@@ -26,11 +26,12 @@ public class ProductRepository {
         return findProduct;
     }
 
-    public <List> Product findProductByProjectId(long projectId) throws EmptyResultDataAccessException {
+    public List <Product> findProductByProjectId(long projectId) {
         String jpql = "SELECT p FROM Product p WHERE p.project.id = :projectId";
         TypedQuery<Product> query = em.createQuery(jpql, Product.class);
         query.setParameter("projectId", projectId);
-        return (Product) query.getResultList();
+        List<Product> productList = (List<Product>) query.getResultList();
+        return productList;
     }
 
     public void delete(Long id) {
