@@ -26,11 +26,12 @@ button {
     cursor: pointer;
 
     & .navbarFirstRow__upLoadBtn {
-        font-size: 0.75rem;
-        font-weight: 700;
-      }
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
 
-    & .navbarFirstRow__loginArea{
+    & .navbarFirstRow__loginArea {
+      position: relative;
       display: flex;
       justify-content: center;
       align-items: center;
