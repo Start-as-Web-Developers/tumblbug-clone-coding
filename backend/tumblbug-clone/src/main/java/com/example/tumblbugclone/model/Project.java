@@ -22,10 +22,10 @@ public class Project {
     @JoinColumn(name = "USER_IDX")
     private User user;
 
-    @Column(name = "TITLE", length = 30, nullable = false)
+    @Column(name = "TITLE", length = 100, nullable = false)
     private String title;
 
-    @Column(name = "PROJECT_IMG", length = 100, nullable = false)
+    @Column(name = "PROJECT_IMG", nullable = false)
     private String projectImg;
 
     @Column(name = "CATEGORY", nullable = false)

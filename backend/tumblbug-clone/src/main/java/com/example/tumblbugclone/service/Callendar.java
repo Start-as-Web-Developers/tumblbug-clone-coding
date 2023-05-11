@@ -31,6 +31,12 @@ public class Callendar {
         return date;
     }
 
+    public static String convertString(Date date) {
+        String convert = Callendar.format.format(date);
+        return convert;
+
+    }
+
     public static boolean after(String dateString1, String dateString2) throws ParseException {
         try {
             Date date1 = format.parse(dateString1);
