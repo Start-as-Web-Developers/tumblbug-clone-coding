@@ -1,6 +1,6 @@
 package com.example.tumblbugclone.repository;
 
-
+import com.example.tumblbugclone.model.Component;
 import com.example.tumblbugclone.model.Product;
 import com.example.tumblbugclone.model.Project;
 import com.example.tumblbugclone.model.User;
@@ -19,11 +19,12 @@ import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:appConfig.xml")
-public class ProductRepositoryTest {
+public class ComponentRepositoryTest {
 
     @Autowired ProductRepository productRepository;
     @Autowired ProjectRepository projectRepository;
     @Autowired UserRepository userRepository;
+    @Autowired ComponentRepository componentRepository;
 
     @Test
     @Transactional
@@ -57,165 +58,19 @@ public class ProductRepositoryTest {
         product.setName("name");
         product.setPrice(100);
 
-        productRepository.save(product);
+        Component component = new Component();
+        component.setProduct(product);
+        component.setName("name");
+        component.setAmount(1);
 
+
+        //when
+        componentRepository.save(component);
     }
 
     @Test
     @Transactional
-    public void findProductById() throws Exception{
-        //given
-        User user = new User();
-        user.setUserId("UserId");
-        user.setUserName("userName");
-        user.setUserEmail("userEmail");
-        user.setUserPassword("userPassword");
-
-        Project project = new Project();
-        project.setUser(user);
-        project.setTitle("title");
-        project.setProjectImg("img");
-        project.setCategory("category");
-        project.setComment("comment");
-        project.setGoalMoney(1000L);
-        project.setStartDate(new Date());
-        project.setEndDate(new Date());
-        project.setPlanIntro("planIntro");
-        project.setPlanBudget("planBudget");
-        project.setPlanSchedule("planSchedule");
-        project.setPlanTeam("planTeam");
-        project.setPlanExplain("planExplain");
-        project.setPlanGuide("planGuide");
-
-        Product product = new Product();
-        product.setProject(project);
-        product.setName("name");
-        product.setPrice(100);
-
-        //when
-        long productId = productRepository.save(product);
-        Product savedProduct = productRepository.findProductById(productId);
-
-        //then
-        Assertions.assertThat(productId).isEqualTo(savedProduct.getProductId());
-    }
-
-    @Test(expected = EmptyResultDataAccessException.class)
-    @Transactional
-    public void findProductById_EX() throws Exception {
-        //given
-
-        //when
-        Product findProduct = productRepository.findProductById(1L);
-
-    }
-
-    @Test
-    @Transactional
-    public void findProductByProjectId() {
-        //given
-        User user = new User();
-        user.setUserId("UserId");
-        user.setUserName("userName");
-        user.setUserEmail("userEmail");
-        user.setUserPassword("userPassword");
-
-        Project project = new Project();
-        project.setUser(user);
-        project.setTitle("title");
-        project.setProjectImg("img");
-        project.setCategory("category");
-        project.setComment("comment");
-        project.setGoalMoney(1000L);
-        project.setStartDate(new Date());
-        project.setEndDate(new Date());
-        project.setPlanIntro("planIntro");
-        project.setPlanBudget("planBudget");
-        project.setPlanSchedule("planSchedule");
-        project.setPlanTeam("planTeam");
-        project.setPlanExplain("planExplain");
-        project.setPlanGuide("planGuide");
-
-        Product product1 = new Product();
-        product1.setProject(project);
-        product1.setName("name1");
-        product1.setPrice(100);
-
-        Product product2 = new Product();
-        product2.setProject(project);
-        product2.setName("name2");
-        product2.setPrice(200);
-
-        long projectId = projectRepository.save(project);
-        userRepository.save(user);
-        productRepository.save(product1);
-        productRepository.save(product2);
-
-        List<Product> savedProductList = new ArrayList<>();
-        savedProductList.add(product1);
-        savedProductList.add(product2);
-
-        //when
-        List<Product> productList = productRepository.findProductByProjectId(projectId);
-
-        //then
-        Assertions.assertThat(savedProductList).isEqualTo(productList);
-    }
-
-    @Test
-    @Transactional
-    public void findProductByProjectId_EX() {
-        //given
-        User user = new User();
-        user.setUserId("UserId");
-        user.setUserName("userName");
-        user.setUserEmail("userEmail");
-        user.setUserPassword("userPassword");
-
-        Project project = new Project();
-        project.setUser(user);
-        project.setTitle("title");
-        project.setProjectImg("img");
-        project.setCategory("category");
-        project.setComment("comment");
-        project.setGoalMoney(1000L);
-        project.setStartDate(new Date());
-        project.setEndDate(new Date());
-        project.setPlanIntro("planIntro");
-        project.setPlanBudget("planBudget");
-        project.setPlanSchedule("planSchedule");
-        project.setPlanTeam("planTeam");
-        project.setPlanExplain("planExplain");
-        project.setPlanGuide("planGuide");
-
-        Product product1 = new Product();
-        product1.setProject(project);
-        product1.setName("name1");
-        product1.setPrice(100);
-
-        Product product2 = new Product();
-        product2.setProject(project);
-        product2.setName("name2");
-        product2.setPrice(200);
-
-        long projectId = projectRepository.save(project);
-        userRepository.save(user);
-        productRepository.save(product1);
-
-        List<Product> savedProductList = new ArrayList<>();
-        savedProductList.add(product1);
-        savedProductList.add(product2);
-
-        //when
-        List<Product> productList = productRepository.findProductByProjectId(projectId);
-
-        //then
-        Assertions.assertThat(savedProductList).isNotEqualTo(productList);
-    }
-
-    @Test(expected = EmptyResultDataAccessException.class)
-    @Transactional
-    public void delete() {
+    public void findComponentById() throws Exception {
 
         //given
         User user = new User();
@@ -245,12 +100,194 @@ public class ProductRepositoryTest {
         product.setName("name");
         product.setPrice(100);
 
+        Component component = new Component();
+        component.setProduct(product);
+        component.setName("name");
+        component.setAmount(1);
+
+
         //when
-        long productId = productRepository.save(product);
+        long componentId = componentRepository.save(component);
+        Component savedComponent = componentRepository.findComponentById(componentId);
 
         //then
-        productRepository.delete(productId);
-        productRepository.findProductById(productId);
+        Assertions.assertThat(componentId).isEqualTo(savedComponent.getComponentId());
+
     }
 
+    @Test(expected = EmptyResultDataAccessException.class)
+    @Transactional
+    public void findComponentById_EX() throws Exception {
+        //given
+
+        //when
+        Component findComponent = componentRepository.findComponentById(1L);
+
+    }
+
+    @Test
+    @Transactional
+    public void findComponentByProductId() throws Exception {
+
+        //given
+        User user = new User();
+        user.setUserId("UserId");
+        user.setUserName("userName");
+        user.setUserEmail("userEmail");
+        user.setUserPassword("userPassword");
+        userRepository.save(user);
+
+        Project project = new Project();
+        project.setUser(user);
+        project.setTitle("title");
+        project.setProjectImg("img");
+        project.setCategory("category");
+        project.setComment("comment");
+        project.setGoalMoney(1000L);
+        project.setStartDate(new Date());
+        project.setEndDate(new Date());
+        project.setPlanIntro("planIntro");
+        project.setPlanBudget("planBudget");
+        project.setPlanSchedule("planSchedule");
+        project.setPlanTeam("planTeam");
+        project.setPlanExplain("planExplain");
+        project.setPlanGuide("planGuide");
+        projectRepository.save(project);
+
+        Product product = new Product();
+        product.setProject(project);
+        product.setName("name");
+        product.setPrice(100);
+        long productId = productRepository.save(product);
+
+        Component component1 = new Component();
+        component1.setProduct(product);
+        component1.setName("name1");
+        component1.setAmount(1);
+
+        Component component2 = new Component();
+        component2.setProduct(product);
+        component2.setName("name2");
+        component2.setAmount(2);
+
+        componentRepository.save(component1);
+        componentRepository.save(component2);
+
+        List<Component> savedComponentList = new ArrayList<>();
+        savedComponentList.add(component1);
+        savedComponentList.add(component2);
+
+        //When
+        List<Component> componentList = componentRepository.findComponentByProductId(productId);
+
+        //then
+        Assertions.assertThat(savedComponentList).isEqualTo(componentList);
+
+    }
+
+    @Test
+    @Transactional
+    public void findComponentByProductId_EX() throws Exception {
+
+        //given
+        User user = new User();
+        user.setUserId("UserId");
+        user.setUserName("userName");
+        user.setUserEmail("userEmail");
+        user.setUserPassword("userPassword");
+        userRepository.save(user);
+
+        Project project = new Project();
+        project.setUser(user);
+        project.setTitle("title");
+        project.setProjectImg("img");
+        project.setCategory("category");
+        project.setComment("comment");
+        project.setGoalMoney(1000L);
+        project.setStartDate(new Date());
+        project.setEndDate(new Date());
+        project.setPlanIntro("planIntro");
+        project.setPlanBudget("planBudget");
+        project.setPlanSchedule("planSchedule");
+        project.setPlanTeam("planTeam");
+        project.setPlanExplain("planExplain");
+        project.setPlanGuide("planGuide");
+        projectRepository.save(project);
+
+        Product product = new Product();
+        product.setProject(project);
+        product.setName("name");
+        product.setPrice(100);
+        long productId = productRepository.save(product);
+
+        Component component1 = new Component();
+        component1.setProduct(product);
+        component1.setName("name1");
+        component1.setAmount(1);
+
+        Component component2 = new Component();
+        component2.setProduct(product);
+        component2.setName("name2");
+        component2.setAmount(2);
+
+        componentRepository.save(component1);
+
+        List<Component> savedComponentList = new ArrayList<>();
+        savedComponentList.add(component1);
+        savedComponentList.add(component2);
+
+        //When
+        List<Component> componentList = componentRepository.findComponentByProductId(productId);
+
+        //then
+        Assertions.assertThat(savedComponentList).isNotEqualTo(componentList);
+
+    }
+
+    @Test(expected = EmptyResultDataAccessException.class)
+    @Transactional
+    public void delete() throws Exception {
+
+        //given
+        User user = new User();
+        user.setUserId("UserId");
+        user.setUserName("userName");
+        user.setUserEmail("userEmail");
+        user.setUserPassword("userPassword");
+
+        Project project = new Project();
+        project.setUser(user);
+        project.setTitle("title");
+        project.setProjectImg("img");
+        project.setCategory("category");
+        project.setComment("comment");
+        project.setGoalMoney(1000L);
+        project.setStartDate(new Date());
+        project.setEndDate(new Date());
+        project.setPlanIntro("planIntro");
+        project.setPlanBudget("planBudget");
+        project.setPlanSchedule("planSchedule");
+        project.setPlanTeam("planTeam");
+        project.setPlanExplain("planExplain");
+        project.setPlanGuide("planGuide");
+
+        Product product = new Product();
+        product.setProject(project);
+        product.setName("name");
+        product.setPrice(100);
+
+        Component component = new Component();
+        component.setProduct(product);
+        component.setName("name");
+        component.setAmount(1);
+
+
+        //when
+        long componentId = componentRepository.save(component);
+
+        //then
+        componentRepository.delete(componentId);
+        componentRepository.findComponentById(componentId);
+
+    }
 }
