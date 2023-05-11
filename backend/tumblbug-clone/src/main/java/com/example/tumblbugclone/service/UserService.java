@@ -2,14 +2,12 @@
 package com.example.tumblbugclone.service;
 
 
-import com.example.tumblbugclone.Exception.userexception.UserCantModifyIdException;
-
-import com.example.tumblbugclone.Exception.userexception.UserEmailDuplicatedException;
-import com.example.tumblbugclone.Exception.userexception.UserIdDuplicatedException;
+import com.example.tumblbugclone.Exception.userexception.*;
 
 import com.example.tumblbugclone.model.User;
 import com.example.tumblbugclone.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,9 +22,28 @@ public class UserService {
     public long join(User user) throws UserEmailDuplicatedException, UserIdDuplicatedException {
         try {
             userRepository.checkDuplication(user);
-        }catch (UserEmailDuplicatedException | UserIdDuplicatedException e){
+        } catch (UserEmailDuplicatedException | UserIdDuplicatedException e) {
             throw e;
         }
+        long savedIndex = userRepository.save(user);
+
+        return savedIndex;
+    }
+
+    public long login(String userId, String userPassword) throws UserCantFindException, WrongPasswordException {
+        User userById;
+        try {
+            userById = userRepository.findUserById(userId);
+        }catch (EmptyResultDataAccessException e){
+            throw new UserCantFindException();
+        }
+
+        if(userById.getUserPassword().equals(userPassword) == false){
+            throw new WrongPasswordException();
+        }
+
+        return userById.getUserIdx();
+    }
 
 
     public User findUserByIndex(long userIdx){

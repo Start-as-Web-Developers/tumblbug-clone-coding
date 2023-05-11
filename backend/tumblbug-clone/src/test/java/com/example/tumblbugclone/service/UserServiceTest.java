@@ -56,10 +56,10 @@ public class UserServiceTest {
 
         //then
         User newUser = new User();
-        user.setUserId("sameId");
-        user.setUserName("user1Name");
-        user.setUserPassword("user1Password");
-        user.setUserEmail("user1Email");
+        newUser.setUserId("sameId");
+        newUser.setUserName("user1Name");
+        newUser.setUserPassword("user1Password");
+        newUser.setUserEmail("user1Email");
 
         userService.join(newUser);
     }
