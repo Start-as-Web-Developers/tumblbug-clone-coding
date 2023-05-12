@@ -24,9 +24,12 @@ public class UserService {
     public long join(User user) throws UserEmailDuplicatedException, UserIdDuplicatedException {
         try {
             userRepository.checkDuplication(user);
-        }catch (UserEmailDuplicatedException | UserIdDuplicatedException e){
+        } catch (UserEmailDuplicatedException | UserIdDuplicatedException e) {
             throw e;
         }
+
+        return userRepository.save(user);
+    }
 
 
     public User findUserByIndex(long userIdx){

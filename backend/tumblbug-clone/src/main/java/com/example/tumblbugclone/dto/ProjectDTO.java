@@ -1,27 +1,40 @@
 package com.example.tumblbugclone.dto;
 
-import com.example.tumblbugclone.model.Component;
-import com.example.tumblbugclone.model.Product;
-import com.example.tumblbugclone.model.Project;
 import com.example.tumblbugclone.model.User;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Date;
 
 @NoArgsConstructor
 @Data
 public class ProjectDTO {
 
-    private Project projects;
-    private List<Product> products;
-    private List<Component> components;
-    private User creater;
+    private Long projectId;
+    private String title;
+    private String projectImg;
+    private String category;
+    private String comment;
+    private Long goalMoney;
+    private Long totalMoney;
+    private String startDate;
+    private String endDate;
+    private String planIntro;
+    private String planBudget;
+    private String planSchedule;
+    private String planTeam;
+    private String planExplain;
+    private String planGuide;
 
-    public ProjectDTO(Project projects, List<Product> products, List<Component> components, User creater) {
-        this.projects = projects;
-        this.products = products;
-        this.components = components;
-        this.creater = creater;
-    }
+    // 아직 구현 불가
+    private Long achievement;
+    private Long sponsor;
+    private Long totalLike;
+
+    //user 쿠키
+    private boolean like;
+    private boolean create;
+
+
 }

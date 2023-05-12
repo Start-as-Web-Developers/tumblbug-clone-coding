@@ -37,8 +37,8 @@ public class ProjectCard {
         Long achivementLong = (project.getGoalMoney() * 100) / this.totalMoney;
         this.achivement = achivementLong.intValue();
 
-        this.startDate = project.getStartDate();
-        this.endDate = project.getEndDate();
+        //this.startDate = project.getStartDate();
+       // this.endDate = project.getEndDate();
 
         //totalLike 구현
         //Like 구현
