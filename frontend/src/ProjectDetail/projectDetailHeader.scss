@@ -1,0 +1,50 @@
+$category-color: rgb(117, 117, 117);
+$category-background-color: rgb(250, 250, 250);
+
+.projectDetailHeader {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100vw;
+    height: 90vh;
+
+    & .titleArea {
+        width: 70%;
+        height: 25%;
+        padding-top: 1.5%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+
+        & .titleArea__category {
+            color: $category-color;
+            background-color: $category-background-color;
+            font-weight: 700;
+            font-size: 0.9rem;
+            padding: 1%;
+            width: 10%;
+            height: 6%;
+            text-align: center;
+        }
+
+        & .titleArea__title {
+            width: 100%;
+            height: 50%;
+            text-align: center;
+            font-weight: 700;
+            font-size: 2.3rem;
+        }
+    }
+
+    & .imageArea {
+        width: 40%;
+        height: 70%;
+    }   
+
+    & .infoArea {
+        width: 30%;
+        height: 70%;
+        background-color: yellow;
+    }
+}
