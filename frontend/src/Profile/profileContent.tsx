@@ -52,18 +52,14 @@ function ProfileContent() {
         </li>
         <li
           className={
-            activeTab === "uploadedProjects"
-              ? "ProfileTab ChosenTab"
-              : "ProfileTab"
+            activeTab === "created" ? "ProfileTab ChosenTab" : "ProfileTab"
           }
         >
           <Link to="/u/created">올린 프로젝트</Link>
         </li>
         <li
           className={
-            activeTab === "supportedProjects"
-              ? "ProfileTab ChosenTab"
-              : "ProfileTab"
+            activeTab === "supported" ? "ProfileTab ChosenTab" : "ProfileTab"
           }
         >
           <Link to="/u/backed">후원한 프로젝트</Link>
