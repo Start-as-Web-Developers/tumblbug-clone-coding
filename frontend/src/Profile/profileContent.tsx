@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./profileContent.scss";
 import { FaCog } from "react-icons/fa";
-import { Route, Routes, useLocation, Link } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import ProfileIntroduction from "./ProfileIntroduction/ProfileIntroduction";
 import ProfileMyProject from "./ProfileMyProject/ProfileMyProject";
 import ProfileSupported from "./ProfileSupported/ProfileSupported";
@@ -12,10 +12,10 @@ function ProfileContent() {
 
   useEffect(() => {
     const path = location.pathname;
-    if (path === "/created") {
-      setActiveTab("uploadedProjects");
-    } else if (path === "/backed") {
-      setActiveTab("supportedProjects");
+    if (path === "/u/created") {
+      setActiveTab("created");
+    } else if (path === "/u/backed") {
+      setActiveTab("supported");
     } else if (path === "/u") {
       setActiveTab("profile");
     }
@@ -27,6 +27,8 @@ function ProfileContent() {
     content = <ProfileIntroduction />;
   } else if (activeTab === "created") {
     content = <ProfileMyProject />;
+  } else if (activeTab === "supported") {
+    content = <ProfileSupported />;
   }
 
   return (
@@ -50,27 +52,21 @@ function ProfileContent() {
         </li>
         <li
           className={
-            activeTab === "uploadedProjects"
-              ? "ProfileTab ChosenTab"
-              : "ProfileTab"
+            activeTab === "created" ? "ProfileTab ChosenTab" : "ProfileTab"
           }
         >
           <Link to="/u/created">올린 프로젝트</Link>
         </li>
         <li
           className={
-            activeTab === "supportedProjects"
-              ? "ProfileTab ChosenTab"
-              : "ProfileTab"
+            activeTab === "supported" ? "ProfileTab ChosenTab" : "ProfileTab"
           }
         >
           <Link to="/u/backed">후원한 프로젝트</Link>
         </li>
       </ul>
       <hr />
-      <div>
-        <ProfileIntroduction />
-      </div>
+      {content}
     </section>
   );
 }
