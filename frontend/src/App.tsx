@@ -5,6 +5,7 @@ import Main from "./Main/Main";
 import ProjectUpload from "./ProjectUpload/ProjectUpload";
 import SignupForm from "./Login/Singup/Signup";
 import Profile from "./Profile/profile";
+import EnterPage from "./Login/LoginSignup";
 
 function App() {
   const router = createBrowserRouter([
@@ -14,15 +15,11 @@ function App() {
     },
     {
       path: "/login",
-      element: <LoginBox />,
+      element: <EnterPage />,
     },
     {
       path: "/project-upload",
       element: <ProjectUpload />,
-    },
-    {
-      path: "/register",
-      element: <SignupForm />,
     },
     {
       path: "/u/*",

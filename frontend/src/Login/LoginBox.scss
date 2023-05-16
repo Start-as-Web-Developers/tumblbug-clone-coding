@@ -46,9 +46,10 @@
     font-weight: 500;
     margin: 0.5rem 0;
 
-    a {
+    .LoginSuggestionLink {
       margin-left: 1em;
       color: turquoise;
+      text-decoration: underline;
     }
   }
 }

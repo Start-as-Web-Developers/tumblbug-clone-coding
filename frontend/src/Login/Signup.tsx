@@ -1,7 +1,7 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
-import Logo from "../../TumblbugLogo/Logo";
+import Logo from "../TumblbugLogo/Logo";
 import "./Signup.scss";
-import "../LoginForm/LoginForm.scss";
+import "./LoginForm/LoginForm.scss";
 
 interface LoginProps {
   transferBox: (singinup: string) => void;
