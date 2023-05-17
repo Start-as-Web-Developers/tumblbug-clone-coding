@@ -9,6 +9,7 @@ import java.util.Date;
 @Entity
 @Table(name = "COMMUNITY")
 @NoArgsConstructor
+@Data
 public class Community {
 
     @Id
