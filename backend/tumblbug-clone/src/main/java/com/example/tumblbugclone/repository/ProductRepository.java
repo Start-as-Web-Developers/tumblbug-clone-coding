@@ -1,6 +1,7 @@
 package com.example.tumblbugclone.repository;
 
 import com.example.tumblbugclone.model.Product;
+import com.example.tumblbugclone.model.Project;
 import jakarta.persistence.*;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
@@ -32,6 +33,11 @@ public class ProductRepository {
         query.setParameter("projectId", projectId);
         List<Product> productList = (List<Product>) query.getResultList();
         return productList;
+    }
+
+    public long modify(Product modifiedProduct) {
+        Product resultProduct= em.merge(modifiedProduct);
+        return resultProduct.getProductId();
     }
 
     public void delete(Long id) {
