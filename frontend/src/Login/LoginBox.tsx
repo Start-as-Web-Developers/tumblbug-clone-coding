@@ -9,7 +9,7 @@ interface LoginProps {
   transferBox: (singinup: string) => void;
 }
 
-function LoginBox(props: LoginProps) {
+function LoginContainer(props: LoginProps) {
   const [loginMethod, setLoginMethod] = useState<string>("kakao");
 
   const handleTransferClick = (title: string) => {
@@ -55,4 +55,4 @@ function LoginBox(props: LoginProps) {
   );
 }
 
-export default LoginBox;
+export default LoginContainer;
