@@ -16,10 +16,5 @@
     width: 100%;
     height: 100%;
     display: none;
-
-    &.show {
-      scroll-margin-top: 20px; /* 컨테이너 위쪽 여백 */
-      scroll-snap-align: start; /* 스크롤 스냅 정렬 방식 */
-    }
   }
 }
