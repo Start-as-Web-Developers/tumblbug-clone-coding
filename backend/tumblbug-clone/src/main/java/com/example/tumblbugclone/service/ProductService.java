@@ -60,6 +60,17 @@ public class ProductService {
         return productDTOList;
     }
 
+    public ProductDTO readProductById(long productId) throws Exception {
+
+        ProductDTO productDTO = new ProductDTO();
+        Product product = productRepository.findProductById(productId);
+        makeDTOFromProduct(product, productDTO);
+        List<Component> componentList = componentService.readComponent(productId);
+        productDTO.setComponent(componentList);
+
+        return productDTO;
+    }
+
     public void deleteProduct(long projectId) throws Exception {
         List<Product> productList = productRepository.findProductByProjectId(projectId);
         for(Product product : productList) {
@@ -67,6 +78,15 @@ public class ProductService {
             productRepository.delete(product.getProductId());
         }
 
+    }
+
+    public void deleteProductById(long productId) throws Exception {
+        componentService.deleteComponent(productId);
+        productRepository.delete(productId);
+    }
+
+    public long patchProduct(Product product) {
+        return productRepository.modify(product);
     }
 
     private static void makeDTOFromProduct(Product product, ProductDTO productDTO) {
