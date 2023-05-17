@@ -7,6 +7,7 @@ public class HttpConst {
     public static final String PROJECT_URI = "/project";
     public static final String COMMUNITY_URI = "/project/{project-id}/community";
     public static final String PROJECT_LIST_URI = "/projects";
+    public static final String PRODUCT_URI = "/project/{project-id}/product";
 
     //== method URL ==//
     public static final String ON_GOING = "/ongoing";
