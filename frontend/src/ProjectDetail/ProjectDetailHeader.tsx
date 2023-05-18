@@ -1,6 +1,7 @@
 import React from 'react';
 import "./projectDetailHeader.scss";
 import ImageSlider from './ImageSlider';
+import SponsorInfo from './SponsorInfo';
 
 function ProjectDetailHeader() { 
     return (
@@ -10,7 +11,7 @@ function ProjectDetailHeader() {
                 <h1 className="titleArea__title">울면 안 돼 근손실 나니까, 우리를 지켜줄 마동곰 키링</h1>
             </section>
             <ImageSlider/>
-            <section className="infoArea">info</section>
+            <SponsorInfo/>
         </section>
     )
 }
