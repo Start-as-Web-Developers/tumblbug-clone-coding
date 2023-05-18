@@ -5,6 +5,7 @@ import Main from "./Main/Main";
 import ProjectUpload from "./ProjectUpload/ProjectUpload";
 import SignupForm from "./Login/Singup/Signup";
 import Profile from "./Profile/profile";
+import ProjectDetail from "./ProjectDetail/ProjectDetail";
 
 function App() {
   const router = createBrowserRouter([
@@ -27,6 +28,10 @@ function App() {
     {
       path: "/u/*",
       element: <Profile />,
+    },
+    {
+      path: "/project-detail",
+      element: <ProjectDetail/>
     },
   ]);
 
