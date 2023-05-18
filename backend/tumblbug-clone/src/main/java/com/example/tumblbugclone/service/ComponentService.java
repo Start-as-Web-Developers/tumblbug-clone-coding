@@ -30,11 +30,19 @@ public class ComponentService {
         return componentList;
     }
 
+    public long updateComponent(Component component) {
+        return componentRepository.modify(component);
+    }
+
     public void deleteComponent(long productId) throws Exception {
         List<Component> componentList = componentRepository.findComponentByProductId(productId);
         for(Component component : componentList) {
             componentRepository.delete(component.getComponentId());
         }
 
+    }
+
+    public void deleteComponentById(long componentId) throws Exception {
+        componentRepository.delete(componentId);
     }
 }
