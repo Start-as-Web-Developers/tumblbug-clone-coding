@@ -5,7 +5,7 @@ import NavbarProfileImage from "./NavbarProfileImage";
 import "./navbarFirstRow.scss";
 
 function NavbarFirstRow() {
-  const [Logedin, setLogedin] = useState(true);
+  const [Logedin, setLogedin] = useState(false);
 
   return (
     <section className="navbarFirstRow">
