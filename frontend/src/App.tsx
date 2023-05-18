@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Main from "./Main/Main";
 import ProjectUpload from "./ProjectUpload/ProjectUpload";
 import Profile from "./Profile/profile";
+import ProjectDetail from "./ProjectDetail/ProjectDetail";
 import EnterPage from "./Login/LoginSignup";
 
 function App() {
@@ -22,6 +23,10 @@ function App() {
     {
       path: "/u/*",
       element: <Profile />,
+    },
+    {
+      path: "/project-detail",
+      element: <ProjectDetail/>
     },
   ]);
 
