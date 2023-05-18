@@ -1,6 +1,7 @@
 .SignupSection {
   display: flex;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
 }
 
 .SignupBox {
@@ -25,8 +26,9 @@
     * {
       margin: 0.5rem 0;
     }
-    a {
+    .LoginSuggestionLink {
       color: turquoise;
+      text-decoration: underline;
     }
   }
   .SignupTransferMessage {

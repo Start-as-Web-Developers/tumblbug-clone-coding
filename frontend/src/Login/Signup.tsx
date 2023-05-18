@@ -1,9 +1,13 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
-import Logo from "../../TumblbugLogo/Logo";
+import Logo from "../TumblbugLogo/Logo";
 import "./Signup.scss";
-import "../LoginForm/LoginForm.scss";
+import "./LoginForm/LoginForm.scss";
 
-function SignupBox() {
+interface LoginProps {
+  transferBox: (singinup: string) => void;
+}
+
+function SignupContainer(props: LoginProps) {
   const [allChecked, setAllChecked] = useState(false);
   const [checkboxes, setCheckboxes] = useState([
     { id: 1, checked: false, required: true },
@@ -86,6 +90,11 @@ function SignupBox() {
     setIsValidPasswordConfirm(passwordRegex.test(passwordConfirmValue));
   };
 
+  const clickTransfer = (signinup: string) => {
+    const { transferBox } = props;
+    transferBox(signinup);
+  };
+
   return (
     <section className="SignupSection">
       <div className="SignupImage" />
@@ -100,6 +109,15 @@ function SignupBox() {
               id="username"
               className="LoginInput"
               placeholder="사용하실 이름을 입력해주세요."
+            />
+          </label>
+          <label htmlFor="userid" className="SignupLabel">
+            <p className="LoginLabel">아이디</p>
+            <input
+              type="text"
+              id="userid"
+              className="LoginInput"
+              placeholder="사용하실 아이디를 입력해주세요."
             />
           </label>
           <label htmlFor="useremail" className="SignupLabel">
@@ -242,7 +260,13 @@ function SignupBox() {
         </form>
         <div className="SignuptoLogin">
           <p className="SignupSuggestion">이미 텀블벅 계정이 있으신가요?</p>
-          <a href="https://www.google.co.kr">기존 계정으로 로그인하기</a>
+          <button
+            type="button"
+            className="LoginSuggestionLink"
+            onClick={() => clickTransfer("login")}
+          >
+            기존 계정으로 로그인하기
+          </button>
         </div>
         <p className="SignupTransferMessage">또는</p>
         <button type="submit" className="LoginButtonKakao">
@@ -263,4 +287,4 @@ function SignupBox() {
   );
 }
 
-export default SignupBox;
+export default SignupContainer;
