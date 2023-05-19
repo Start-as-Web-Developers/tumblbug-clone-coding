@@ -1,7 +1,6 @@
 package com.example.tumblbugclone.controller;
 
 import com.example.tumblbugclone.Exception.userexception.UnregisterUserException;
-import com.example.tumblbugclone.dto.UserDTO;
 import com.example.tumblbugclone.managedconst.HttpConst;
 import com.example.tumblbugclone.model.User;
 import com.example.tumblbugclone.repository.UserRepository;
@@ -44,10 +43,11 @@ public class UserControllerTest {
         //given
         this.mockMvc.perform(get(HttpConst.USER_URI)).andExpect(status().isOk());
     }
+
     @Test
     @Transactional
     public void 빈_DB_회원가입_동작_테스트() throws Exception{
-        UserDTO user1 = make_Nth_User(1);
+        User user1 = make_Nth_User(1);
 
         mockMvc.perform(post(HttpConst.USER_URI)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -62,11 +62,11 @@ public class UserControllerTest {
     public void 중복_Id_테스트_inWeb() throws Exception{
 
         //given
-        UserDTO user1 = make_Nth_User(1);
+        User user1 = make_Nth_User(1);
         userService.join(user1);
 
         //when
-        UserDTO user2 = make_Nth_User(2);
+        User user2 = make_Nth_User(2);
         user2.setUserId(user1.getUserId());
 
         //then
@@ -83,11 +83,11 @@ public class UserControllerTest {
     public void 중복_Email_테스트_inWeb() throws Exception{
 
         //given
-        UserDTO user1 = make_Nth_User(1);
+        User user1 = make_Nth_User(1);
         userService.join(user1);
 
         //when
-        UserDTO user2 = make_Nth_User(2);
+        User user2 = make_Nth_User(2);
         user2.setUserEmail(user1.getUserEmail());
 
         //then
@@ -103,11 +103,11 @@ public class UserControllerTest {
     @Transactional
     public void 일반DB_회원가입_테스트() throws Exception{
         //given
-        UserDTO user1 = make_Nth_User(1);
+        User user1 = make_Nth_User(1);
         userService.join(user1);
 
         //when
-        UserDTO user2 = make_Nth_User(2);
+        User user2 = make_Nth_User(2);
 
         //then
         mockMvc.perform(post(HttpConst.USER_URI)
@@ -121,11 +121,11 @@ public class UserControllerTest {
     public void 회원정보_수정_inWeb() throws Exception{
 
         //given
-        UserDTO user = make_Nth_User(1);
+        User user = make_Nth_User(1);
         long savedIndex = userService.join(user);
 
         //when
-        UserDTO modifiedUser = make_Nth_User(1);
+        User modifiedUser = make_Nth_User(1);
         modifiedUser.setUserIdx(savedIndex);
         modifiedUser.setUserEmail("newEmail");
 
@@ -143,11 +143,11 @@ public class UserControllerTest {
     @Transactional
     public void 회원Id는_변경할수_없습니다() throws Exception{
         //given
-        UserDTO user = make_Nth_User(1);
+        User user = make_Nth_User(1);
         long savedIndex = userService.join(user);
 
         //when
-        UserDTO modifiedUser = make_Nth_User(1);
+        User modifiedUser = make_Nth_User(1);
         modifiedUser.setUserIdx(savedIndex);
         modifiedUser.setUserId("newId");
 
@@ -163,25 +163,24 @@ public class UserControllerTest {
     @Transactional
     public void 회원탈퇴_성공_테스트() throws Exception{
         //given
-        UserDTO user = make_Nth_User(1);
+        User user = make_Nth_User(1);
         long savedIdx = userService.join(user);
 
         //when
-        UserDTO deleteUser = make_Nth_User(1);
+        User deleteUser = make_Nth_User(1);
         deleteUser.setUserIdx(savedIdx);
+        deleteUser.setActive(false);
 
         //then
 
         mockMvc.perform(delete(HttpConst.USER_URI)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(deleteUser)))
+                        .content(objectMapper.writeValueAsString(user)))
                 .andExpect(status().isOk());
         Assertions.assertThat(userService.findUserByIndex(savedIdx)
                         .isActive())
                 .isFalse();
     }
-
-
    /* @Test
     public void 존재하지_않는_회원_변경() throws Exception{
         //given
@@ -220,8 +219,8 @@ public class UserControllerTest {
                 .andExpect(header().string(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.UNREGISTER_USER_MESSAGE));
     }*/
 
-    private UserDTO make_Nth_User(int N){
-        UserDTO user = new UserDTO();
+    private User make_Nth_User(int N){
+        User user = new User();
         user.setUserName("user" + N + "name");
         user.setUserId("user" + N + "Id");
         user.setUserEmail("user" + N + "Email");
