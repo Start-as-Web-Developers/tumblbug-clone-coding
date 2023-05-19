@@ -29,24 +29,15 @@ public class UserController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+
     @PostMapping
     @Transactional
     public ResponseEntity signUp(@RequestBody UserDTO newUserDTO){
 
-        User user = null;
         HttpHeaders errorHeader = new HttpHeaders();
 
         try{
-            user = convertUserDTO2User(newUserDTO);
-        } catch (UserDTOConvertException e) {
-            errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, e.getMessage());
-            return ResponseEntity.badRequest()
-                    .headers(errorHeader)
-                    .body("");
-        }
-
-        try{
-            userService.join(user);
+            userService.join(newUserDTO);
         }catch (UserIdDuplicatedException e){
             errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.DUPLICATED_USER_ID_MESSAGE);
             return ResponseEntity.badRequest()
@@ -57,31 +48,31 @@ public class UserController {
             return ResponseEntity.badRequest()
                     .headers(errorHeader)
                     .body("");
-        }
-
-        return new ResponseEntity(HttpStatus.OK);
-    }
-
-
-
-    @PatchMapping("/{userIdx}")
-    public ResponseEntity update(@PathVariable String userIdx, @RequestBody UserDTO modifiedUserDTO){
-
-        User modifiedUser;
-        HttpHeaders errorHeader = new HttpHeaders();
-        try {
-            modifiedUser = convertUserDTO2User(modifiedUserDTO);
-        } catch (UserDTOConvertException e) {
+        }catch (UserDTOConvertException e){
             errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, e.getMessage());
             return ResponseEntity.badRequest()
                     .headers(errorHeader)
                     .body("");
         }
 
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+
+    @PatchMapping("/{userIdx}")
+    public ResponseEntity update(@PathVariable String userIdx, @RequestBody UserDTO modifiedUserDTO){
+
+        HttpHeaders errorHeader = new HttpHeaders();
+
         try {
-            userService.modify(modifiedUser);
+            userService.modify(modifiedUserDTO);
         } catch (UserCantModifyIdException e) {
             errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.CANT_MODIFY_USER_ID_MESSAGE);
+            return ResponseEntity.badRequest()
+                    .headers(errorHeader)
+                    .body("");
+        }catch (UserDTOConvertException e){
+            errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, e.getMessage());
             return ResponseEntity.badRequest()
                     .headers(errorHeader)
                     .body("");
@@ -95,9 +86,8 @@ public class UserController {
     public ResponseEntity unregister(@RequestBody UserDTO deleteUser){
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        User user;
         try {
-            user = convertUserDTO2User(deleteUser);
+            userService.unregiste(deleteUser);
         } catch (UserDTOConvertException e) {
             httpHeaders.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, e.getMessage());
             return ResponseEntity.badRequest()
@@ -105,39 +95,10 @@ public class UserController {
                     .build();
         }
 
-        userService.unregiste(user);
 
         return ResponseEntity.ok().build();
     }
 
-
-    private User convertUserDTO2User(UserDTO newUserDTO) throws UserDTOConvertException {
-        User user = new User();
-        user.setUserIdx(newUserDTO.getUserIdx());
-        if(newUserDTO.getUserName() == null){
-            throw new UserDTOConvertException(HttpConst.USERNAME_IS_NULL);
-        }
-        user.setUserName(newUserDTO.getUserName());
-
-        if(newUserDTO.getUserId() == null){
-            throw new UserDTOConvertException(HttpConst.USERID_IS_NULL);
-        }
-        user.setUserId(newUserDTO.getUserId());
-
-        if(newUserDTO.getUserPassword() == null){
-            throw new UserDTOConvertException(HttpConst.USERPASSWORD_IS_NULL);
-        }
-        user.setUserPassword(newUserDTO.getUserPassword());
-
-        if(newUserDTO.getUserPassword() == null){
-            throw new UserDTOConvertException(HttpConst.USEREMAIL_IS_NULL);
-        }
-        user.setUserEmail(newUserDTO.getUserEmail());
-
-        //추가 정보 변환
-
-        return user;
-    }
 
 
     //== 리팩토링 완료 ==//
