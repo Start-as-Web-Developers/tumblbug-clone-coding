@@ -47,9 +47,10 @@ public class UserService {
 
         return userById.getUserIdx();
     }
+    /*
 
         return userRepository.save(user);
-    }
+    }*/
 
 
     public UserDTO findUserByIndex(long userIdx){
