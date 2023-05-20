@@ -1,14 +1,11 @@
 package com.example.tumblbugclone.controller;
 
 import com.example.tumblbugclone.Exception.userexception.*;
-import com.example.tumblbugclone.dto.UserDTO;
+import com.example.tumblbugclone.dto.UserReceivingDTO;
 import com.example.tumblbugclone.managedconst.HttpConst;
-import com.example.tumblbugclone.model.User;
-import com.example.tumblbugclone.repository.UserRepository;
 import com.example.tumblbugclone.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +29,7 @@ public class UserController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity signUp(@RequestBody UserDTO newUserDTO){
+    public ResponseEntity signUp(@RequestBody UserReceivingDTO newUserDTO){
 
         HttpHeaders errorHeader = new HttpHeaders();
 
@@ -60,7 +57,7 @@ public class UserController {
 
 
     @PatchMapping("/{userIdx}")
-    public ResponseEntity update(@PathVariable String userIdx, @RequestBody UserDTO modifiedUserDTO){
+    public ResponseEntity update(@PathVariable String userIdx, @RequestBody UserReceivingDTO modifiedUserDTO){
 
         HttpHeaders errorHeader = new HttpHeaders();
 
@@ -83,7 +80,7 @@ public class UserController {
 
 
     @DeleteMapping
-    public ResponseEntity unregister(@RequestBody UserDTO deleteUser){
+    public ResponseEntity unregister(@RequestBody UserReceivingDTO deleteUser){
 
         HttpHeaders httpHeaders = new HttpHeaders();
         try {

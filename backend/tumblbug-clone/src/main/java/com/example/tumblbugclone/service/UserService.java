@@ -4,7 +4,8 @@ package com.example.tumblbugclone.service;
 
 import com.example.tumblbugclone.Exception.userexception.*;
 
-import com.example.tumblbugclone.dto.UserDTO;
+import com.example.tumblbugclone.dto.UserReceivingDTO;
+import com.example.tumblbugclone.dto.UserSendingDTO;
 import com.example.tumblbugclone.managedconst.HttpConst;
 import com.example.tumblbugclone.model.User;
 import com.example.tumblbugclone.repository.UserRepository;
@@ -21,7 +22,7 @@ public class UserService {
     public UserService(UserRepository userRepository){this.userRepository = userRepository;}
 
 
-    public long join(UserDTO userDTO) throws UserEmailDuplicatedException, UserIdDuplicatedException, UserDTOConvertException {
+    public long join(UserReceivingDTO userDTO) throws UserEmailDuplicatedException, UserIdDuplicatedException, UserDTOConvertException {
         User user = convertDTO2User(userDTO);
         try {
             userRepository.checkDuplication(user);
@@ -53,27 +54,27 @@ public class UserService {
     }*/
 
 
-    public UserDTO findUserByIndex(long userIdx){
+    public UserSendingDTO findUserByIndex(long userIdx){
 
         User findUser = userRepository.findUserByIndex(userIdx);
 
         return convertUser2DTO(findUser);
     }
 
-    public UserDTO findUserById(String userId){
+    public UserSendingDTO findUserById(String userId){
         User findUser = userRepository.findUserById(userId);
 
         return convertUser2DTO(findUser);
     }
 
-    public void unregiste(UserDTO userDTO) throws UserDTOConvertException {
+    public void unregiste(UserReceivingDTO userDTO) throws UserDTOConvertException {
         User user = convertDTO2User(userDTO);
         User findUser = userRepository.findUserByIndex(user.getUserIdx());
         user.setActive(false);
         userRepository.modify(user);
     }
 
-    public void modify(UserDTO userDTO) throws UserCantModifyIdException, UserDTOConvertException {
+    public void modify(UserReceivingDTO userDTO) throws UserCantModifyIdException, UserDTOConvertException {
         User user = convertDTO2User(userDTO);
 
         User findUser = userRepository.findUserByIndex(user.getUserIdx());
@@ -85,8 +86,8 @@ public class UserService {
         userRepository.modify(user);
     }
 
-    public UserDTO convertUser2DTO(User user){
-        UserDTO userDTO = new UserDTO();
+    public UserSendingDTO convertUser2DTO(User user){
+        UserSendingDTO userDTO = new UserSendingDTO();
 
         userDTO.setUserId(user.getUserId());
 
@@ -94,20 +95,16 @@ public class UserService {
 
         userDTO.setUserEmail(user.getUserEmail());
 
-        userDTO.setUserPassword(user.getUserPassword());
-
-        //Idx는??
         userDTO.setUserIdx(user.getUserIdx());
         userDTO.setUserImg(user.getUserImg());
         userDTO.setActive(user.isActive());
         userDTO.setGreeting(user.getGreeting());
         userDTO.setLastLogin(user.getLastLogin());
-        //추가 정보 변환
 
         return userDTO;
     }
 
-    public User convertDTO2User(UserDTO newUserDTO) throws UserDTOConvertException {
+    public User convertDTO2User(UserReceivingDTO newUserDTO) throws UserDTOConvertException {
         User user = new User();
         user.setUserIdx(newUserDTO.getUserIdx());
         if(newUserDTO.getUserName() == null){
@@ -120,11 +117,9 @@ public class UserService {
         }
         user.setUserId(newUserDTO.getUserId());
 
-        /*password는 null일 수 있음
         if(newUserDTO.getUserPassword() == null){
             throw new UserDTOConvertException(HttpConst.USERPASSWORD_IS_NULL);
         }
-        */
         user.setUserPassword(newUserDTO.getUserPassword());
 
         if(newUserDTO.getUserEmail() == null){
