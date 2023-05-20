@@ -8,12 +8,17 @@ import com.example.tumblbugclone.Exception.userexception.UserEmailDuplicatedExce
 import com.example.tumblbugclone.Exception.userexception.UserIdDuplicatedException;
 
 
+import com.example.tumblbugclone.dto.UserLoginDTO;
 import com.example.tumblbugclone.dto.UserReceivingDTO;
 import com.example.tumblbugclone.dto.UserSendingDTO;
 import com.example.tumblbugclone.managedconst.HttpConst;
 import com.example.tumblbugclone.model.User;
 import com.example.tumblbugclone.repository.UserRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.boot.web.servlet.server.Session;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -35,9 +40,10 @@ public class UserService {
             throw e;
         }
 
-        return userRepository.save(user);
-    }
+        long savedIndex = userRepository.save(user);
 
+        return savedIndex;
+    }
 
 
     public UserSendingDTO findUserByIndex(long userIdx){
@@ -74,6 +80,24 @@ public class UserService {
         }
 
         userRepository.modify(user);
+    }
+
+    //== 추가 로직 ==//
+    public HttpSession login(UserLoginDTO user, HttpSession session) throws UserCantFindException, WrongPasswordException {
+        User userById;
+        try {
+            userById = userRepository.findUserById(user.getUserId());
+        }catch (EmptyResultDataAccessException e){
+            throw new UserCantFindException();
+        }
+
+        if(!userById.getUserPassword().equals(user.getUserPassword())){
+            throw new WrongPasswordException();
+        }
+
+        session.setAttribute("login session", userById.getUserIdx());
+        session.setMaxInactiveInterval(60 * 60 * 24);
+        return session;
     }
 
     public UserSendingDTO convertUser2DTO(User user){

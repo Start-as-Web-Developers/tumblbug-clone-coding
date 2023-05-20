@@ -1,19 +1,20 @@
 
 package com.example.tumblbugclone.service;
 
-import com.example.tumblbugclone.Exception.userexception.UserCantModifyIdException;
-import com.example.tumblbugclone.Exception.userexception.UserEmailDuplicatedException;
-import com.example.tumblbugclone.Exception.userexception.UserIdDuplicatedException;
 
+import com.example.tumblbugclone.Exception.userexception.*;
 
+import com.example.tumblbugclone.dto.UserLoginDTO;
 import com.example.tumblbugclone.dto.UserReceivingDTO;
 import com.example.tumblbugclone.dto.UserSendingDTO;
+import jakarta.servlet.http.HttpSession;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -268,6 +269,60 @@ public class UserServiceTest {
 
         //then
         Assertions.assertThat(userService.findUserByIndex(userIndex).isActive()).isFalse();
+    }
+
+
+    @Test
+    @Transactional
+    public void 정상_로그인() throws Exception{
+        //given
+        UserReceivingDTO savedUser = make_Nth_User(1);
+        long savedIndex = userService.join(savedUser);
+        savedUser.setUserIdx(savedIndex);
+
+        UserLoginDTO loginDTO = new UserLoginDTO();
+        loginDTO.setUserId(savedUser.getUserId());
+        loginDTO.setUserPassword(savedUser.getUserPassword());
+        HttpSession session = new MockHttpSession();
+
+        //when
+        HttpSession settingSession = userService.login(loginDTO, session);
+
+        //then
+        Assertions.assertThat(settingSession.getAttribute("login session")).isEqualTo(savedIndex);
+    }
+
+    @Test(expected = WrongPasswordException.class)
+    @Transactional
+    public void 잘못된_비밀번호_로그인() throws Exception{
+        UserReceivingDTO savedUser = make_Nth_User(1);
+        long savedIndex = userService.join(savedUser);
+        savedUser.setUserIdx(savedIndex);
+
+        UserLoginDTO loginDTO = new UserLoginDTO();
+        loginDTO.setUserId(savedUser.getUserId());
+        loginDTO.setUserPassword("WrongPassword");
+        HttpSession session = new MockHttpSession();
+
+        //when
+        HttpSession settingSession = userService.login(loginDTO, session);
+
+        //then
+    }
+
+    @Test(expected = UserCantFindException.class)
+    @Transactional
+    public void 없는_회원_로그인() throws Exception{
+        //given
+
+        //when
+        UserLoginDTO loginDTO = new UserLoginDTO();
+        loginDTO.setUserId("wrongId");
+        loginDTO.setUserPassword("WrongPassword");
+        HttpSession session = new MockHttpSession();
+
+        userService.login(loginDTO, session);
+        //then
     }
 
 
