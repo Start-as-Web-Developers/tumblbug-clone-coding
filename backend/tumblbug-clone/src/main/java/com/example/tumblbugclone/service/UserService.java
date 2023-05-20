@@ -2,7 +2,11 @@
 package com.example.tumblbugclone.service;
 
 
-import com.example.tumblbugclone.Exception.userexception.*;
+import com.example.tumblbugclone.Exception.userexception.UserCantModifyIdException;
+
+import com.example.tumblbugclone.Exception.userexception.UserEmailDuplicatedException;
+import com.example.tumblbugclone.Exception.userexception.UserIdDuplicatedException;
+
 
 import com.example.tumblbugclone.dto.UserReceivingDTO;
 import com.example.tumblbugclone.dto.UserSendingDTO;
@@ -10,7 +14,6 @@ import com.example.tumblbugclone.managedconst.HttpConst;
 import com.example.tumblbugclone.model.User;
 import com.example.tumblbugclone.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,50 +25,36 @@ public class UserService {
     public UserService(UserRepository userRepository){this.userRepository = userRepository;}
 
 
+
     public long join(UserReceivingDTO userDTO) throws UserEmailDuplicatedException, UserIdDuplicatedException, UserDTOConvertException {
         User user = convertDTO2User(userDTO);
+ 
         try {
             userRepository.checkDuplication(user);
         } catch (UserEmailDuplicatedException | UserIdDuplicatedException e) {
             throw e;
         }
-        long savedIndex = userRepository.save(user);
-
-        return savedIndex;
-    }
-
-    public long login(String userId, String userPassword) throws UserCantFindException, WrongPasswordException {
-        User userById;
-        try {
-            userById = userRepository.findUserById(userId);
-        }catch (EmptyResultDataAccessException e){
-            throw new UserCantFindException();
-        }
-
-        if(userById.getUserPassword().equals(userPassword) == false){
-            throw new WrongPasswordException();
-        }
-
-        return userById.getUserIdx();
-    }
-    /*
 
         return userRepository.save(user);
-    }*/
+    }
+
 
 
     public UserSendingDTO findUserByIndex(long userIdx){
 
         User findUser = userRepository.findUserByIndex(userIdx);
 
-        return convertUser2DTO(findUser);
+        return findUser;
     }
+
 
     public UserSendingDTO findUserById(String userId){
+
         User findUser = userRepository.findUserById(userId);
 
-        return convertUser2DTO(findUser);
+        return findUser;
     }
+
 
     public void unregiste(UserReceivingDTO userDTO) throws UserDTOConvertException {
         User user = convertDTO2User(userDTO);
@@ -73,6 +62,7 @@ public class UserService {
         user.setActive(false);
         userRepository.modify(user);
     }
+
 
     public void modify(UserReceivingDTO userDTO) throws UserCantModifyIdException, UserDTOConvertException {
         User user = convertDTO2User(userDTO);
