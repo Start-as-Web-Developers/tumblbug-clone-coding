@@ -1,6 +1,8 @@
 package com.example.tumblbugclone.controller;
 
+
 import com.example.tumblbugclone.dto.UserReceivingDTO;
+import com.example.tumblbugclone.Exception.userexception.UnregisterUserException;
 import com.example.tumblbugclone.managedconst.HttpConst;
 import com.example.tumblbugclone.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -39,9 +41,11 @@ public class UserControllerTest {
         //given
         this.mockMvc.perform(get(HttpConst.USER_URI)).andExpect(status().isOk());
     }
+
     @Test
     @Transactional
     public void 빈_DB_회원가입_동작_테스트() throws Exception{
+
         UserReceivingDTO user1 = make_Nth_User(1);
 
         mockMvc.perform(post(HttpConst.USER_URI)
@@ -57,6 +61,7 @@ public class UserControllerTest {
     public void 중복_Id_테스트_inWeb() throws Exception{
 
         //given
+
         UserReceivingDTO user1 = make_Nth_User(1);
         userService.join(user1);
 
@@ -78,6 +83,7 @@ public class UserControllerTest {
     public void 중복_Email_테스트_inWeb() throws Exception{
 
         //given
+
         UserReceivingDTO user1 = make_Nth_User(1);
         userService.join(user1);
 
@@ -98,6 +104,7 @@ public class UserControllerTest {
     @Transactional
     public void 일반DB_회원가입_테스트() throws Exception{
         //given
+
         UserReceivingDTO user1 = make_Nth_User(1);
         userService.join(user1);
 
@@ -116,11 +123,13 @@ public class UserControllerTest {
     public void 회원정보_수정_inWeb() throws Exception{
 
         //given
+
         UserReceivingDTO user = make_Nth_User(1);
         long savedIndex = userService.join(user);
 
         //when
         UserReceivingDTO modifiedUser = make_Nth_User(1);
+
         modifiedUser.setUserIdx(savedIndex);
         modifiedUser.setUserEmail("newEmail");
 
@@ -138,11 +147,13 @@ public class UserControllerTest {
     @Transactional
     public void 회원Id는_변경할수_없습니다() throws Exception{
         //given
+
         UserReceivingDTO user = make_Nth_User(1);
         long savedIndex = userService.join(user);
 
         //when
         UserReceivingDTO modifiedUser = make_Nth_User(1);
+
         modifiedUser.setUserIdx(savedIndex);
         modifiedUser.setUserId("newId");
 
@@ -158,25 +169,26 @@ public class UserControllerTest {
     @Transactional
     public void 회원탈퇴_성공_테스트() throws Exception{
         //given
+
         UserReceivingDTO user = make_Nth_User(1);
         long savedIdx = userService.join(user);
 
         //when
         UserReceivingDTO deleteUser = make_Nth_User(1);
+
         deleteUser.setUserIdx(savedIdx);
+        deleteUser.setActive(false);
 
         //then
 
         mockMvc.perform(delete(HttpConst.USER_URI)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(deleteUser)))
+                        .content(objectMapper.writeValueAsString(user)))
                 .andExpect(status().isOk());
         Assertions.assertThat(userService.findUserByIndex(savedIdx)
                         .isActive())
                 .isFalse();
     }
-
-
    /* @Test
     public void 존재하지_않는_회원_변경() throws Exception{
         //given
@@ -217,6 +229,7 @@ public class UserControllerTest {
 
     private UserReceivingDTO make_Nth_User(int N){
         UserReceivingDTO user = new UserReceivingDTO();
+
         user.setUserName("user" + N + "name");
         user.setUserId("user" + N + "Id");
         user.setUserEmail("user" + N + "Email");
