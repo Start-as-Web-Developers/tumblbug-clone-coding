@@ -1,9 +1,11 @@
 package com.example.tumblbugclone.controller;
 
 import com.example.tumblbugclone.Exception.userexception.*;
+import com.example.tumblbugclone.dto.UserLoginDTO;
 import com.example.tumblbugclone.dto.UserReceivingDTO;
 import com.example.tumblbugclone.managedconst.HttpConst;
 import com.example.tumblbugclone.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -96,6 +98,12 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/login")
+    public ResponseEntity login(@RequestBody UserLoginDTO loginDTO, HttpSession session){
+        /*
+        * Controller에서 Session 확인 후 Service에 요청*/
+        return ResponseEntity.ok().build();
+    }
 
 
     //== 리팩토링 완료 ==//
