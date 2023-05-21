@@ -12,6 +12,7 @@ import com.example.tumblbugclone.dto.UserLoginDTO;
 import com.example.tumblbugclone.dto.UserReceivingDTO;
 import com.example.tumblbugclone.dto.UserSendingDTO;
 import com.example.tumblbugclone.managedconst.HttpConst;
+import com.example.tumblbugclone.managedconst.UserConst;
 import com.example.tumblbugclone.model.User;
 import com.example.tumblbugclone.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
@@ -88,11 +89,11 @@ public class UserService {
         try {
             userById = userRepository.findUserById(user.getUserId());
         }catch (EmptyResultDataAccessException e){
-            throw new UserCantFindException();
+            throw new UserCantFindException(UserConst.NO_USER_FOUNDED_MESSAGE);
         }
 
         if(!userById.getUserPassword().equals(user.getUserPassword())){
-            throw new WrongPasswordException();
+            throw new WrongPasswordException(UserConst.WRONG_PASSWORD);
         }
 
         session.setAttribute("login session", userById.getUserIdx());

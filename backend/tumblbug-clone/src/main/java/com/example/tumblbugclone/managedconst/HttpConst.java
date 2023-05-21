@@ -4,6 +4,7 @@ public class HttpConst {
     //==MAIN URL ==//
     public static final String USER_URI = "/user";
     public static final String USER_SIGNUP_URI = "/signup";
+    public static final String USER_LOGIN_URL = "/login";
     public static final String PROJECT_URI = "/project";
     public static final String COMMUNITY_URI = "/project/{project-id}/community";
     public static final String PROJECT_LIST_URI = "/projects";
@@ -15,8 +16,10 @@ public class HttpConst {
 
     //== 헤더 이름 ==//
     public static final String HEADER_NAME_ERROR_MESSAGE = "error-message";
+    public static final String HEADER_NAME_SET_COOKIE = "set-cookie";
 
     //== 헤더 값 ==//
+    public static final String SESSION_ID = "session-id";
     public static final String USERNAME_IS_NULL = "유저 이름은 필수입니다.";
     public static final String USERID_IS_NULL = "유저 Id는 필수입니다.";
     public static final String USERPASSWORD_IS_NULL = "유저 비밀번호는 필수입니다.";

@@ -1,9 +1,9 @@
 package com.example.tumblbugclone.controller;
-
-
+import com.example.tumblbugclone.dto.UserLoginDTO;
 import com.example.tumblbugclone.dto.UserReceivingDTO;
 import com.example.tumblbugclone.Exception.userexception.UnregisterUserException;
 import com.example.tumblbugclone.managedconst.HttpConst;
+import com.example.tumblbugclone.managedconst.UserConst;
 import com.example.tumblbugclone.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
@@ -13,12 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
+
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -189,6 +191,65 @@ public class UserControllerTest {
                         .isActive())
                 .isFalse();
     }
+    @Test
+    @Transactional
+    public void 정상_로그인() throws Exception{
+        //given
+        UserReceivingDTO user = make_Nth_User(1);
+        long savedIdx = userService.join(user);
+
+        //when
+        UserLoginDTO loginDTO = new UserLoginDTO();
+        loginDTO.setUserId(user.getUserId());
+        loginDTO.setUserPassword(user.getUserPassword());
+
+        //then
+        mockMvc.perform(get(HttpConst.USER_URI + HttpConst.USER_LOGIN_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(loginDTO)))
+                .andExpect(status().isOk());
+        // mock mvc 라서 그런지, 로그인 성공 상황에서 세션을 새로 생성해 주어도, 세션 관련 set-cookie를 확인 하지 못한다.
+            // 해당 기능 PostMan으로 확인 완료
+    }
+
+    @Test
+    public void 없는_회원_로그인() throws Exception{
+        //given
+        UserReceivingDTO user = make_Nth_User(1);
+
+        //when
+        UserLoginDTO loginDTO = new UserLoginDTO();
+        loginDTO.setUserId(user.getUserId());
+        loginDTO.setUserPassword(user.getUserPassword());
+
+        //then
+        mockMvc.perform(get(HttpConst.USER_URI + HttpConst.USER_LOGIN_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(loginDTO)))
+                .andExpect(status().isBadRequest())
+                .andExpect(header().string(HttpConst.HEADER_NAME_ERROR_MESSAGE, UserConst.NO_USER_FOUNDED_MESSAGE));
+    }
+
+    @Test
+    @Transactional
+    public void 잘못된_비밀번호() throws Exception{
+        //given
+        UserReceivingDTO user = make_Nth_User(1);
+        userService.join(user);
+
+        //when
+        UserLoginDTO loginDTO = new UserLoginDTO();
+        loginDTO.setUserId(user.getUserId());
+        loginDTO.setUserPassword("WrongPassword");
+
+        //then
+        mockMvc.perform(get(HttpConst.USER_URI + HttpConst.USER_LOGIN_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(loginDTO)))
+                .andExpect(status().isBadRequest())
+                .andExpect(header().string(HttpConst.HEADER_NAME_ERROR_MESSAGE, UserConst.WRONG_PASSWORD));
+    }
+
    /* @Test
     public void 존재하지_않는_회원_변경() throws Exception{
         //given
