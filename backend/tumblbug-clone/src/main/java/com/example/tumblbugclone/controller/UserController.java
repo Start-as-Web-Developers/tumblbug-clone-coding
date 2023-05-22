@@ -5,6 +5,8 @@ import com.example.tumblbugclone.dto.UserLoginDTO;
 import com.example.tumblbugclone.dto.UserReceivingDTO;
 import com.example.tumblbugclone.managedconst.HttpConst;
 import com.example.tumblbugclone.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,13 +100,21 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/login")
-    public ResponseEntity login(@RequestBody UserLoginDTO loginDTO, HttpSession session){
-        /*
-        * Controller에서 Session 확인 후 Service에 요청*/
+    //==검증 필요 ==//
+    @GetMapping(HttpConst.USER_LOGIN_URL)
+    public ResponseEntity login(@RequestBody UserLoginDTO loginDTO, HttpSession session, HttpServletRequest request, HttpServletResponse response){
+        response.setCharacterEncoding("UTF-8");
+        try {
+            session = userService.login(loginDTO, session);
+        } catch (UserCantFindException | WrongPasswordException e) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, e.getMessage());
+            return ResponseEntity.badRequest()
+                    .headers(headers)
+                    .build();
+        }
         return ResponseEntity.ok().build();
     }
-
 
     //== 리팩토링 완료 ==//
 }
