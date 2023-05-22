@@ -1,7 +1,7 @@
 package com.example.tumblbugclone.controller;
-
 import com.example.tumblbugclone.dto.UserLoginDTO;
 import com.example.tumblbugclone.dto.UserReceivingDTO;
+import com.example.tumblbugclone.Exception.userexception.UnregisterUserException;
 import com.example.tumblbugclone.managedconst.HttpConst;
 import com.example.tumblbugclone.managedconst.UserConst;
 import com.example.tumblbugclone.service.UserService;
@@ -13,12 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
+
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -41,9 +43,11 @@ public class UserControllerTest {
         //given
         this.mockMvc.perform(get(HttpConst.USER_URI)).andExpect(status().isOk());
     }
+
     @Test
     @Transactional
     public void 빈_DB_회원가입_동작_테스트() throws Exception{
+
         UserReceivingDTO user1 = make_Nth_User(1);
 
         mockMvc.perform(post(HttpConst.USER_URI)
@@ -59,6 +63,7 @@ public class UserControllerTest {
     public void 중복_Id_테스트_inWeb() throws Exception{
 
         //given
+
         UserReceivingDTO user1 = make_Nth_User(1);
         userService.join(user1);
 
@@ -80,6 +85,7 @@ public class UserControllerTest {
     public void 중복_Email_테스트_inWeb() throws Exception{
 
         //given
+
         UserReceivingDTO user1 = make_Nth_User(1);
         userService.join(user1);
 
@@ -100,6 +106,7 @@ public class UserControllerTest {
     @Transactional
     public void 일반DB_회원가입_테스트() throws Exception{
         //given
+
         UserReceivingDTO user1 = make_Nth_User(1);
         userService.join(user1);
 
@@ -118,11 +125,13 @@ public class UserControllerTest {
     public void 회원정보_수정_inWeb() throws Exception{
 
         //given
+
         UserReceivingDTO user = make_Nth_User(1);
         long savedIndex = userService.join(user);
 
         //when
         UserReceivingDTO modifiedUser = make_Nth_User(1);
+
         modifiedUser.setUserIdx(savedIndex);
         modifiedUser.setUserEmail("newEmail");
 
@@ -140,11 +149,13 @@ public class UserControllerTest {
     @Transactional
     public void 회원Id는_변경할수_없습니다() throws Exception{
         //given
+
         UserReceivingDTO user = make_Nth_User(1);
         long savedIndex = userService.join(user);
 
         //when
         UserReceivingDTO modifiedUser = make_Nth_User(1);
+
         modifiedUser.setUserIdx(savedIndex);
         modifiedUser.setUserId("newId");
 
@@ -160,11 +171,13 @@ public class UserControllerTest {
     @Transactional
     public void 회원탈퇴_성공_테스트() throws Exception{
         //given
+
         UserReceivingDTO user = make_Nth_User(1);
         long savedIdx = userService.join(user);
 
         //when
         UserReceivingDTO deleteUser = make_Nth_User(1);
+
         deleteUser.setUserIdx(savedIdx);
         deleteUser.setActive(false);
 
@@ -178,7 +191,6 @@ public class UserControllerTest {
                         .isActive())
                 .isFalse();
     }
-
 
     @Test
     @Transactional
@@ -241,6 +253,7 @@ public class UserControllerTest {
 
     private UserReceivingDTO make_Nth_User(int N){
         UserReceivingDTO user = new UserReceivingDTO();
+
         user.setUserName("user" + N + "name");
         user.setUserId("user" + N + "Id");
         user.setUserEmail("user" + N + "Email");

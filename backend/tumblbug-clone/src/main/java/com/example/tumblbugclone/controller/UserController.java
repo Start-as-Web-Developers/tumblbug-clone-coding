@@ -30,7 +30,6 @@ public class UserController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-
     @PostMapping
     @Transactional
     public ResponseEntity signUp(@RequestBody UserReceivingDTO newUserDTO){
@@ -49,7 +48,7 @@ public class UserController {
             return ResponseEntity.badRequest()
                     .headers(errorHeader)
                     .body("");
-        }catch (UserDTOConvertException e){
+        } catch (UserDTOConvertException e){
             errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, e.getMessage());
             return ResponseEntity.badRequest()
                     .headers(errorHeader)
@@ -60,11 +59,11 @@ public class UserController {
     }
 
 
+
     @PatchMapping("/{userIdx}")
     public ResponseEntity update(@PathVariable String userIdx, @RequestBody UserReceivingDTO modifiedUserDTO){
 
         HttpHeaders errorHeader = new HttpHeaders();
-
         try {
             userService.modify(modifiedUserDTO);
         } catch (UserCantModifyIdException e) {
@@ -72,11 +71,12 @@ public class UserController {
             return ResponseEntity.badRequest()
                     .headers(errorHeader)
                     .body("");
-        }catch (UserDTOConvertException e){
-            errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, e.getMessage());
-            return ResponseEntity.badRequest()
-                    .headers(errorHeader)
-                    .body("");
+        }catch (UserDTOConvertException e) {
+        errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, e.getMessage());
+
+        return ResponseEntity.badRequest()
+                .headers(errorHeader)
+                .body("");
         }
 
         return ResponseEntity.ok("");
@@ -95,7 +95,6 @@ public class UserController {
                     .headers(httpHeaders)
                     .build();
         }
-
 
         return ResponseEntity.ok().build();
     }
