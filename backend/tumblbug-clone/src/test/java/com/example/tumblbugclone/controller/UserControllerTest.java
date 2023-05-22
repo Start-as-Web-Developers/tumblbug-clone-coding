@@ -185,12 +185,13 @@ public class UserControllerTest {
 
         mockMvc.perform(delete(HttpConst.USER_URI)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(user)))
+                        .content(objectMapper.writeValueAsString(deleteUser)))
                 .andExpect(status().isOk());
         Assertions.assertThat(userService.findUserByIndex(savedIdx)
                         .isActive())
                 .isFalse();
     }
+
     @Test
     @Transactional
     public void 정상_로그인() throws Exception{
@@ -209,7 +210,7 @@ public class UserControllerTest {
                         .content(objectMapper.writeValueAsString(loginDTO)))
                 .andExpect(status().isOk());
         // mock mvc 라서 그런지, 로그인 성공 상황에서 세션을 새로 생성해 주어도, 세션 관련 set-cookie를 확인 하지 못한다.
-            // 해당 기능 PostMan으로 확인 완료
+        // 해당 기능 PostMan으로 확인 완료
     }
 
     @Test
@@ -249,44 +250,6 @@ public class UserControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(header().string(HttpConst.HEADER_NAME_ERROR_MESSAGE, UserConst.WRONG_PASSWORD));
     }
-
-   /* @Test
-    public void 존재하지_않는_회원_변경() throws Exception{
-        //given
-        User modifyIdUser = new User("userName1", "userId1", "userPassword1", "userEmail");
-        modifyIdUser.setUserIdx(2l);
-
-        //when
-
-        //then
-        mockMvc.perform(patch(HttpConst.USER_URI + "/2")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(modifyIdUser)))
-                .andExpect(status().isBadRequest())
-                .andExpect(header().string(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.NO_USER_FIND_MESSAGE));
-    }*/
-
-
-    
-    /*@Test
-    public void 이미_탈퇴한_회원_탈퇴_inWeb() throws Exception{
-        //given
-        User deleteUser = new User("userName1", "userId1", "userPassword1", "userEmail1");
-        deleteUser.setUserIdx(1l);
-
-        //when
-        mockMvc.perform(delete(HttpConst.USER_URI)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(deleteUser)))
-                .andExpect(status().isOk());
-
-        //then
-        mockMvc.perform(delete(HttpConst.USER_URI)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(deleteUser)))
-                .andExpect(status().isBadRequest())
-                .andExpect(header().string(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.UNREGISTER_USER_MESSAGE));
-    }*/
 
     private UserReceivingDTO make_Nth_User(int N){
         UserReceivingDTO user = new UserReceivingDTO();

@@ -1,6 +1,5 @@
 package com.example.tumblbugclone.service;
 
-import com.example.tumblbugclone.model.Like;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -29,9 +28,9 @@ public class LikeService {
         return 0;
     }
 
-    public List<Like> getUserLikes(){
+    /*public List<Like> getUserLikes(){
         return new ArrayList<>();
-    }
+    }*/
 
  
 }

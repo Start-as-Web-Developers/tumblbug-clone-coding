@@ -43,16 +43,16 @@ public class UserServiceTest {
         user.setUserEmail("userEmail");
 
         //when
-        userService.join(user);
+        long userIdx = userService.join(user);
 
         //then
-        Assertions.assertThat(user.getUserIdx()).isNotEqualTo(0);
+        Assertions.assertThat(userService.findUserByIndex(userIdx).getUserIdx()).isNotEqualTo(0);
     }
 
 
     @Test(expected = UserIdDuplicatedException.class)
     @Transactional
-    public void Id가_중복되면_Exception() throws UserEmailDuplicatedException, UserIdDuplicatedException {
+    public void Id가_중복되면_Exception() throws UserEmailDuplicatedException, UserIdDuplicatedException, UserDTOConvertException {
         //given
 
         UserReceivingDTO user = new UserReceivingDTO();
@@ -76,7 +76,7 @@ public class UserServiceTest {
         userService.join(newUser);
     }
 
-    @Test(expected = DataIntegrityViolationException.class)
+    @Test(expected = UserEmailDuplicatedException.class)
     @Transactional
     public void Emial이_중복되면_Exception() throws Exception{
         //given
@@ -103,7 +103,7 @@ public class UserServiceTest {
         userService.join(newUser);
     }
 
-    @Test(expected = DataIntegrityViolationException.class)
+    @Test(expected = UserDTOConvertException.class)
     @Transactional
     public void 회원_이름은_필수() throws Exception{
         //given
@@ -117,7 +117,7 @@ public class UserServiceTest {
         //then
     }
 
-    @Test(expected = DataIntegrityViolationException.class)
+    @Test(expected = UserDTOConvertException.class)
     @Transactional
     public void 회원_Id는_필수() throws Exception{
         //given
@@ -145,7 +145,7 @@ public class UserServiceTest {
         //then
     }
 
-    @Test(expected = DataIntegrityViolationException.class)
+    @Test(expected = UserDTOConvertException.class)
     @Transactional
     public void 회원_Email은_필수() throws Exception{
         //given
@@ -263,6 +263,7 @@ public class UserServiceTest {
         UserReceivingDTO user = make_Nth_User(1);
 
         long userIndex = userService.join(user);
+        user.setUserIdx(userIndex);
 
         //when
         userService.unregiste(user);
