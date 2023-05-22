@@ -15,7 +15,6 @@ import com.example.tumblbugclone.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
@@ -80,7 +79,6 @@ public class UserService {
         userRepository.modify(user);
     }
 
-    //== 추가 로직 ==//
     public HttpSession login(UserLoginDTO user, HttpSession session) throws UserCantFindException, WrongPasswordException {
         User userById;
         try {
@@ -93,7 +91,7 @@ public class UserService {
             throw new WrongPasswordException(UserConst.WRONG_PASSWORD);
         }
 
-        session.setAttribute("login session", userById.getUserIdx());
+        session.setAttribute(HttpConst.SESSION_USER_INDEX, userById.getUserIdx());
         session.setMaxInactiveInterval(60 * 60 * 24);
         return session;
     }
