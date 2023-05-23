@@ -32,6 +32,7 @@ public class ProjectCardService {
         this.projectRepository = projectRepository;
     }
 
+    /*
     public ArrayList<ProjectCardDTO> findOngoingFromIdx(long startIdx){
         return findOngoingFromIdx(startIdx, new Date());
     }
@@ -110,6 +111,8 @@ public class ProjectCardService {
         //dto.setLike();
         return dto;
     }
+
+     */
 
 
 }
