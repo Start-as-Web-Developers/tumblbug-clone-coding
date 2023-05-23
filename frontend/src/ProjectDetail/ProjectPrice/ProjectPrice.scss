@@ -1,0 +1,45 @@
+.ProjectPrice {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: sticky;
+  top: 10vh;
+
+  h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  .ProjectPriceCard {
+    background-color: #fff;
+    width: 90%;
+    padding: 1.5rem 1rem;
+    margin: 0.5rem 0;
+    border-radius: 5px;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    line-height: 2rem;
+    transition: outline 0.5s ease-in-out;
+    -webkit-transition: outline 0.5s ease-in-out;
+    -moz-transition: outline 0.5s ease-in-out;
+    -o-transition: outline 0.5s ease-in-out;
+    outline: solid 0 rgba(0, 0, 0, 0);
+
+    &:hover,
+    &:focus {
+      outline: solid 1px #000;
+    }
+    h5 {
+      font-size: 1.5rem;
+      font-weight: 700;
+
+      svg {
+        font-size: 1rem;
+      }
+    }
+    h6 {
+      font-size: 0.9rem;
+    }
+  }
+}

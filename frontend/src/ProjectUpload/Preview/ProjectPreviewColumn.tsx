@@ -1,6 +1,6 @@
 import React from "react";
 import PreviewContainer from "./PreviewContainer";
-import "./projectPreviewColumn.scss";
+import "./ProjectPreviewColumn.scss";
 
 function ProjectPreviewColumn() {
   return (
