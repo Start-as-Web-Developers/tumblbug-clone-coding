@@ -1,5 +1,6 @@
 package com.example.tumblbugclone.service;
 
+import com.example.tumblbugclone.dto.PlanDTO;
 import com.example.tumblbugclone.dto.ProjectAllDTO;
 import com.example.tumblbugclone.dto.ProductDTO;
 import com.example.tumblbugclone.dto.ProjectDTO;
@@ -81,6 +82,21 @@ public class ProjectService {
         projectAll.setCreater(userRepository.findUserById("id"));
 
         return projectAll;
+    }
+
+    public PlanDTO readProjectPlan(long projectId) {
+        Project project = projectRepository.findProjectById(projectId);
+
+        PlanDTO planDTO = new PlanDTO();
+
+        planDTO.setPlanBudget(project.getPlanBudget());
+        planDTO.setPlanExplain(project.getPlanExplain());
+        planDTO.setPlanSchedule(project.getPlanSchedule());
+        planDTO.setPlanTeam(project.getPlanTeam());
+        planDTO.setPlanIntro(project.getPlanIntro());
+        planDTO.setPlanGuide(project.getPlanGuide());
+
+        return planDTO;
     }
 
     public long updateProject(Project project) throws ParseException {
