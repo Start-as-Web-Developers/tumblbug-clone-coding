@@ -7,6 +7,7 @@ import com.example.tumblbugclone.Exception.userexception.*;
 import com.example.tumblbugclone.dto.UserLoginDTO;
 import com.example.tumblbugclone.dto.UserReceivingDTO;
 import com.example.tumblbugclone.dto.UserSendingDTO;
+import com.example.tumblbugclone.managedconst.HttpConst;
 import jakarta.servlet.http.HttpSession;
 
 import org.assertj.core.api.Assertions;
@@ -183,6 +184,7 @@ public class UserServiceTest {
 
         UserReceivingDTO user = make_Nth_User(1);
         long userIndex = userService.join(user);
+        System.out.println(userIndex);
 
         //when
         UserSendingDTO findUserBuIndex = userService.findUserByIndex(userIndex);
@@ -290,7 +292,7 @@ public class UserServiceTest {
         HttpSession settingSession = userService.login(loginDTO, session);
 
         //then
-        Assertions.assertThat(settingSession.getAttribute("login session")).isEqualTo(savedIndex);
+        Assertions.assertThat(settingSession.getAttribute(HttpConst.SESSION_USER_INDEX)).isEqualTo(savedIndex);
     }
 
     @Test(expected = WrongPasswordException.class)

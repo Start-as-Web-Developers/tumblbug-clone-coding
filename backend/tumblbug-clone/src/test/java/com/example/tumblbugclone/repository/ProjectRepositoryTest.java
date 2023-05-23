@@ -1,6 +1,8 @@
 package com.example.tumblbugclone.repository;
 
 
+import com.example.tumblbugclone.dto.ProjectCardDTO;
+import com.example.tumblbugclone.dto.UserReceivingDTO;
 import com.example.tumblbugclone.model.Project;
 import com.example.tumblbugclone.model.User;
 import org.assertj.core.api.Assertions;
@@ -12,13 +14,18 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:appConfig.xml")
 public class ProjectRepositoryTest {
 
     @Autowired ProjectRepository projectRepository;
+    @Autowired UserRepository userRepository;
+
+    User tempUser;
 
     @Test
     @Transactional
@@ -172,6 +179,7 @@ public class ProjectRepositoryTest {
         projectRepository.findProjectById(projectId);
 
     }
+
 
 
 }

@@ -1,174 +1,234 @@
-/*
 package com.example.tumblbugclone.service;
 
-import com.example.tumblbugclone.managedconst.ProjectConst;
+import com.example.tumblbugclone.dto.ProjectCardDTO;
 import com.example.tumblbugclone.model.Project;
-import com.example.tumblbugclone.model.ProjectCard;
 import com.example.tumblbugclone.model.User;
 import com.example.tumblbugclone.repository.ProjectRepository;
-import com.example.tumblbugclone.repository.UserRepository;
 import org.assertj.core.api.Assertions;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = "classpath:appConfig.xml")
 public class ProjectCardServiceTest {
 
-    private UserRepository userRepository = UserRepository.getUserRepository();
-    private ProjectRepository projectRepository = ProjectRepository.getProjectRepository();
-    private ProjectCardService projectCardService = new ProjectCardService();
+    @Autowired
+    private ProjectCardService projectCardService;
 
-    @Before
-    public void 테스트용_데이터_생성() throws Exception {
-        for(int i = 0; i<25; i++) { //1~25 : onGoing
-            Project ongoingProject = new Project(1l, "", "Imgsource","카테고리", "코멘트", 35000000l, 240000l, "2023-04-03", "2024-05-02", "String planIntro", "String planBudget", "String planSchedule", "String planTeam", "String planExplain", "String planGuide");
-            projectRepository.save(ongoingProject);
+    @Autowired
+    private ProjectRepository projectRepository;
+
+
+    Date today = new Date(2023, 5, 23);
+
+    public long makeBasicProject() throws Exception {
+
+        long startIdx = 0l;
+
+        for(int i = 0; i<25; i++){
+            Project project = makeOngoingProject(i);
+            long savedId = projectRepository.save(project);
+            Date date = project.getStartDate();
+            if(i == 0)
+                startIdx = savedId;
+        }
+        for(int i = 25; i<50; i++){
+            Project project = makePrelaunchingProject(i);
+            projectRepository.save(project);
+        }
+        for(int i = 50; i<100; i++){
+            Project project;
+            if(i%2 == 0)
+                project = makeOngoingProject(i);
+            else
+                project = makePrelaunchingProject(i);
+
+            projectRepository.save(project);
         }
 
-        for(int i = 0; i<25; i++) { //26 ~ 50 : preLaunching
-            Project preLaunchingProject = new Project(1l, "", "Imgsource","카테고리", "코멘트", 35000000l, 240000l, "2023-06-03", "2024-01-02", "String planIntro", "String planBudget", "String planSchedule", "String planTeam", "String planExplain", "String planGuide");
-            projectRepository.save(preLaunchingProject);
-        }
-
-        for(int i = 0; i<20; i++){ //51~ 홀수 : 진행중, 짝수 : 진행 예정
-            Project ongoingProject = new Project(1l, "", "Imgsource","카테고리", "코멘트", 35000000l, 240000l, "2023-04-03", "2024-05-02", "String planIntro", "String planBudget", "String planSchedule", "String planTeam", "String planExplain", "String planGuide");
-            projectRepository.save(ongoingProject);
-
-            Project preLaunchingProject = new Project(1l, "", "Imgsource","카테고리", "코멘트", 35000000l, 240000l, "2023-06-03", "2023-01-02", "String planIntro", "String planBudget", "String planSchedule", "String planTeam", "String planExplain", "String planGuide");
-            projectRepository.save(preLaunchingProject);
-        }
-
-        User user1 = new User("userName1", "userId1", "userPassword1", "userEmail1");
-        userRepository.save(user1);
-    }
-
-    @After
-    public void 테스트용_프로젝트_삭제(){
-        projectRepository.clear();
-        userRepository.clear();
+        return startIdx;
     }
 
 
     @Test
+    @Transactional
     public void onGoing_처음부터_프로젝트_조회() throws Exception{
         //given
-        String today = Callendar.getTodayString();
+        long startIndex = makeBasicProject();
 
         //when
-        ArrayList<ProjectCard> projectCards = projectCardService.findOngoingFromStart();
+        ArrayList<ProjectCardDTO> ongoingFromStart = projectCardService.findOngoingFromIdx(startIndex, today);
 
         //then
-        Assertions.assertThat(projectCards.size()).isEqualTo(ProjectConst.PROJECT_CARDS_MAX_SIZE);
-        for (ProjectCard projectCard : projectCards) {
-            Assertions.assertThat(Callendar.after(today, projectCard.getEndDate())).isFalse();
+        Assertions.assertThat(ongoingFromStart.size()).isEqualTo(20);
+        for (ProjectCardDTO projectCardDTO : ongoingFromStart) {
+            Long projectId = projectCardDTO.getProjectId();
+            Assertions.assertThat(projectRepository.findProjectById(projectId).getStartDate()).isBeforeOrEqualTo(today);
+            Assertions.assertThat(projectRepository.findProjectById(projectId).getEndDate()).isAfter(today);
         }
     }
 
     @Test
+    @Transactional
     public void onGoing_6번부터_20개_조회() throws Exception{
         //given
-        String today = Callendar.getTodayString();
+        long startIndex = makeBasicProject();
 
         //when
-        ArrayList<ProjectCard> projectCards = projectCardService.findOngoingFromIdx(6l);
+        ArrayList<ProjectCardDTO> ongoingFromStart = projectCardService.findOngoingFromIdx(startIndex + 6, today);
 
         //then
-        Assertions.assertThat(projectCards.size()).isEqualTo(ProjectConst.PROJECT_CARDS_MAX_SIZE);
-        for (ProjectCard projectCard : projectCards) {
-            Assertions.assertThat(Callendar.after(today, projectCard.getEndDate())).isFalse();
+        Assertions.assertThat(ongoingFromStart.size()).isEqualTo(20);
+        for (ProjectCardDTO projectCardDTO : ongoingFromStart) {
+            Long projectId = projectCardDTO.getProjectId();
+            Assertions.assertThat(projectRepository.findProjectById(projectId).getStartDate()).isBeforeOrEqualTo(today);
+            Assertions.assertThat(projectRepository.findProjectById(projectId).getEndDate()).isAfter(today);
         }
     }
 
 
     @Test
+    @Transactional
+    public void preLaunching_처음부터_프로젝트_조회() throws Exception{
+        //given
+        long startIndex = makeBasicProject();
+
+        //when
+        ArrayList<ProjectCardDTO> preLaunchingFromIdx = projectCardService.findPreLaunchingFromIdx(startIndex, today);
+
+        //then
+        Assertions.assertThat(preLaunchingFromIdx.size()).isEqualTo(20);
+        for (ProjectCardDTO projectCardDTO : preLaunchingFromIdx) {
+            Long projectId = projectCardDTO.getProjectId();
+            Assertions.assertThat(projectRepository.findProjectById(projectId).getStartDate()).isAfter(today);
+        }
+    }
+
+    @Test
+    @Transactional
+    public void preLaunching_중간부터_조회() throws Exception{
+        //given
+        long startIndex = makeBasicProject();
+
+        //when
+        ArrayList<ProjectCardDTO> preLaunchingFromIdx = projectCardService.findPreLaunchingFromIdx(startIndex + 30, today);
+
+        //then
+        Assertions.assertThat(preLaunchingFromIdx.size()).isEqualTo(20);
+        for (ProjectCardDTO projectCardDTO : preLaunchingFromIdx) {
+            Long projectId = projectCardDTO.getProjectId();
+            Assertions.assertThat(projectRepository.findProjectById(projectId).getStartDate()).isAfter(today);
+        }
+    }
+
+    @Test
+    @Transactional
     public void onGoing_섞여있는_상태에서_조회() throws Exception{
-        //given
-        String today = Callendar.getTodayString();
-
+        ///given
+        long startIndex = makeBasicProject();
         //when
-        ArrayList<ProjectCard> projectCards = projectCardService.findOngoingFromIdx(51l);
+        ArrayList<ProjectCardDTO> ongoingFromStart = projectCardService.findOngoingFromIdx(startIndex + 50, today);
 
         //then
-        Assertions.assertThat(projectCards.size()).isEqualTo(ProjectConst.PROJECT_CARDS_MAX_SIZE);
-        for (ProjectCard projectCard : projectCards) {
-            Assertions.assertThat(Callendar.after(today, projectCard.getEndDate())).isFalse();
+        Assertions.assertThat(ongoingFromStart.size()).isEqualTo(20);
+        for (ProjectCardDTO projectCardDTO : ongoingFromStart) {
+            Long projectId = projectCardDTO.getProjectId();
+            Assertions.assertThat(projectRepository.findProjectById(projectId).getStartDate()).isBeforeOrEqualTo(today);
+            Assertions.assertThat(projectRepository.findProjectById(projectId).getEndDate()).isAfter(today);
         }
     }
 
     @Test
-    public void onGoing_60번부터_끝까지_조회() throws Exception{
-        //given
-        String today = Callendar.getTodayString();
-
-        //when
-        ArrayList<ProjectCard> projectCards = projectCardService.findOngoingFromIdx(60l);
-
-        //then
-        Assertions.assertThat(projectCards.size()).isNotEqualTo(ProjectConst.PROJECT_CARDS_MAX_SIZE);
-        for (ProjectCard projectCard : projectCards) {
-            Assertions.assertThat(Callendar.after(today, projectCard.getEndDate())).isFalse();
-        }
-    }
-
-    @Test
-    public void preLaunching_처음부터_조회() throws Exception{
-        //given
-        String today = Callendar.getTodayString();
-
-        //when
-        ArrayList<ProjectCard> projectCards = projectCardService.findPreLaunchingFromStart();
-
-        //then
-        Assertions.assertThat(projectCards.size()).isEqualTo(ProjectConst.PROJECT_CARDS_MAX_SIZE);
-        for (ProjectCard projectCard : projectCards) {
-            Assertions.assertThat(Callendar.before(today, projectCard.getStartDate())).isTrue();
-        }
-    }
-
-    @Test
-    public void preLaunching_31번부터_조회() throws Exception{
-        //given
-        String today = Callendar.getTodayString();
-
-        //when
-        ArrayList<ProjectCard> projectCards = projectCardService.findPreLaunchingFromIdx(31l);
-
-        //then
-        Assertions.assertThat(projectCards.size()).isEqualTo(ProjectConst.PROJECT_CARDS_MAX_SIZE);
-        for (ProjectCard projectCard : projectCards) {
-            Assertions.assertThat(Callendar.before(today, projectCard.getStartDate())).isTrue();
-        }
-    }
-
-    @Test
+    @Transactional
     public void preLaunching_섞여있는_상태에서_조회() throws Exception{
         //given
-        String today = Callendar.getTodayString();
+        long startIndex = makeBasicProject();
 
         //when
-        ArrayList<ProjectCard> projectCards = projectCardService.findPreLaunchingFromIdx(51l);
+        ArrayList<ProjectCardDTO> preLaunchingFromIdx = projectCardService.findPreLaunchingFromIdx(startIndex + 50, today);
 
         //then
-        Assertions.assertThat(projectCards.size()).isEqualTo(ProjectConst.PROJECT_CARDS_MAX_SIZE);
-        for (ProjectCard projectCard : projectCards) {
-            Assertions.assertThat(Callendar.before(today, projectCard.getStartDate())).isTrue();
+        Assertions.assertThat(preLaunchingFromIdx.size()).isEqualTo(20);
+        for (ProjectCardDTO projectCardDTO : preLaunchingFromIdx) {
+            Long projectId = projectCardDTO.getProjectId();
+            Assertions.assertThat(projectRepository.findProjectById(projectId).getStartDate()).isAfter(today);
         }
     }
 
     @Test
-    public void preLaunching_60번부터_끝까지_조회() throws Exception{
+    @Transactional
+    public void onGoing_끝까지_조회() throws Exception{
         //given
-        String today = Callendar.getTodayString();
+        long startIndex = makeBasicProject();
 
         //when
-        ArrayList<ProjectCard> projectCards = projectCardService.findPreLaunchingFromIdx(60l);
+        ArrayList<ProjectCardDTO> ongoingFromStart = projectCardService.findOngoingFromIdx(startIndex + 80, today);
 
         //then
-        Assertions.assertThat(projectCards.size()).isNotEqualTo(ProjectConst.PROJECT_CARDS_MAX_SIZE);
-        for (ProjectCard projectCard : projectCards) {
-            Assertions.assertThat(Callendar.before(today, projectCard.getStartDate())).isTrue();
+        Assertions.assertThat(ongoingFromStart.size()).isLessThan(20);
+        for (ProjectCardDTO projectCardDTO : ongoingFromStart) {
+            Long projectId = projectCardDTO.getProjectId();
+            Assertions.assertThat(projectRepository.findProjectById(projectId).getStartDate()).isBeforeOrEqualTo(today);
+            Assertions.assertThat(projectRepository.findProjectById(projectId).getEndDate()).isAfter(today);
         }
     }
-}*/
+
+
+    @Test
+    @Transactional
+    public void preLaunching_끝까지_조회() throws Exception{
+        //given
+        long startIndex = makeBasicProject();
+
+        //when
+        ArrayList<ProjectCardDTO> preLaunchingFromIdx = projectCardService.findPreLaunchingFromIdx(startIndex + 80, today);
+
+        //then
+        Assertions.assertThat(preLaunchingFromIdx.size()).isLessThan(20);
+        for (ProjectCardDTO projectCardDTO : preLaunchingFromIdx) {
+            Long projectId = projectCardDTO.getProjectId();
+            Assertions.assertThat(projectRepository.findProjectById(projectId).getStartDate()).isAfter(today);
+        }
+    }
+
+    public Project makeOngoingProject(int i){
+        User user = new User();
+        user.setUserId("UserId");
+        user.setUserName("userName");
+        user.setUserEmail("userEmail");
+        user.setUserPassword("userPassword");
+
+        Project project = new Project();
+        project.setUser(user);
+        project.setTitle("title" + Integer.toString(i));
+        project.setProjectImg("img");
+        project.setCategory("category");
+        project.setComment("comment");
+        project.setGoalMoney(1000L);
+        project.setStartDate(new Date(2023, 2, 5));
+        project.setEndDate(new Date(2032, 3, 5));
+        project.setPlanIntro("planIntro");
+        project.setPlanBudget("planBudget");
+        project.setPlanSchedule("planSchedule");
+        project.setPlanTeam("planTeam");
+        project.setPlanExplain("planExplain");
+        project.setPlanGuide("planGuide");
+
+        return project;
+    }
+
+    public Project  makePrelaunchingProject(int i){
+        Project project = makeOngoingProject(i);
+        project.setStartDate(new Date(2025, 2, 5));
+
+        return project;
+    }
+}
