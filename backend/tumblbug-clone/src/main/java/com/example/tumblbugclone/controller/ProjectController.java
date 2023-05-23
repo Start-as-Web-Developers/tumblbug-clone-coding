@@ -1,6 +1,7 @@
 package com.example.tumblbugclone.controller;
 
 ;
+import com.example.tumblbugclone.dto.PlanDTO;
 import com.example.tumblbugclone.dto.ProjectAllDTO;
 import com.example.tumblbugclone.dto.ProjectDTO;
 import com.example.tumblbugclone.managedconst.HttpConst;
@@ -56,6 +57,15 @@ public class ProjectController {
     public ResponseEntity deleteProject(@PathVariable("project-id") Long projectId) throws Exception {
         projectService.deleteProject(projectId);
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @GetMapping("{project-id}/plan")
+    public ResponseEntity<String> readProjectPlan(@PathVariable("project-id") Long projectId) throws JsonProcessingException {
+        PlanDTO planDTO = projectService.readProjectPlan(projectId);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String plan = objectMapper.writeValueAsString(planDTO);
+
+        return ResponseEntity.ok(plan);
     }
 
 }
