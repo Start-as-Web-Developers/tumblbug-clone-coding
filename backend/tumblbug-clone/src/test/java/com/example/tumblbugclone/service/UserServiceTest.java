@@ -183,6 +183,7 @@ public class UserServiceTest {
 
         UserReceivingDTO user = make_Nth_User(1);
         long userIndex = userService.join(user);
+        System.out.println(userIndex);
 
         //when
         UserSendingDTO findUserBuIndex = userService.findUserByIndex(userIndex);

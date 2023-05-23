@@ -1,9 +1,10 @@
-/*
+
 package com.example.tumblbugclone.service;
 
 import com.example.tumblbugclone.Exception.projectException.ProjectCantFindException;
 import com.example.tumblbugclone.Exception.userexception.UnregisterUserException;
 import com.example.tumblbugclone.Exception.userexception.UserCantFindException;
+import com.example.tumblbugclone.dto.ProjectCardDTO;
 import com.example.tumblbugclone.managedconst.ProjectConst;
 import com.example.tumblbugclone.model.Project;
 import com.example.tumblbugclone.model.ProjectCard;
@@ -11,109 +12,105 @@ import com.example.tumblbugclone.model.User;
 import com.example.tumblbugclone.repository.ProjectRepository;
 import com.example.tumblbugclone.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 
 @Slf4j
+@Service
 public class ProjectCardService {
-    UserRepository userRepository = UserRepository.getUserRepository();
-    ProjectRepository projectRepository = ProjectRepository.getProjectRepository();
+    //private final UserRepository userRepository;
+    private final ProjectRepository projectRepository;
 
-    public ArrayList<ProjectCard> findOngoingFromStart() throws ParseException {
-        return findOngoingFromIdx(1l);
+    @Autowired
+    public ProjectCardService(ProjectRepository projectRepository){
+        this.projectRepository = projectRepository;
     }
 
-    public ArrayList<ProjectCard> findOngoingFromIdx(long startIdx) throws ParseException {
-        String today = getTodayString();
-        ArrayList<ProjectCard> projectCards = new ArrayList<>();
-        long projectId = startIdx;
+    public ArrayList<ProjectCardDTO> findOngoingFromIdx(long startIdx){
+        return findOngoingFromIdx(startIdx, new Date());
+    }
 
-        while(projectCards.size() < ProjectConst.PROJECT_CARDS_MAX_SIZE) {
-            try {
+    public ArrayList<ProjectCardDTO> findOngoingFromIdx(long startIdx, Date today){
+        ArrayList<ProjectCardDTO> projectList = new ArrayList<>();
+        long findIndex = startIdx;
 
-                Project project = projectRepository.findProjectById(projectId);
-                String projectStartDate = project.getStartDate();
-                String projectEndDate = project.getEndDate();
-
-                if(Callendar.after(today, projectEndDate)) {
-                    projectId++;
-                    continue;
-                }
-                if(Callendar.before(today, projectStartDate)){
-                    projectId++;
-                    continue;
-                }
-                User creater = findCreater(project);
-                ProjectCard card = new ProjectCard(project, creater);
-
-                log.info("add project Idx {}", projectId);
-                projectCards.add(card);
-                projectId++;
-
-            } catch (ProjectCantFindException e) {
-                return projectCards;
-            } catch (UserCantFindException e) {
-                projectId++;
-            } catch (UnregisterUserException e) {
-                projectId++;
-            } catch (ParseException e) {
-                e.printStackTrace();
-                throw e;
+        while(projectList.size() < ProjectConst.PROJECT_CARDS_MAX_SIZE){
+            Project findProject;
+            try{
+                findProject = projectRepository.findProjectById(findIndex);
+            }catch (EmptyResultDataAccessException e){
+                break;
             }
+
+            if(!findProject.getStartDate().after(today)){
+                if(findProject.getEndDate().before(today)){
+                    findIndex++;
+                    continue;
+                }
+                System.out.println();
+                ProjectCardDTO projectCardDTO = makeCardDTO(findProject);
+                projectList.add(projectCardDTO);
+            }
+            findIndex++;
         }
 
-        return projectCards;
+        return projectList;
     }
 
-    public ArrayList<ProjectCard> findPreLaunchingFromStart() throws ParseException {
-        return findPreLaunchingFromIdx(1l);
+
+    public ArrayList<ProjectCardDTO> findPreLaunchingFromIdx(long startIdx){
+        Date today = new Date();
+
+        return findPreLaunchingFromIdx(1l, today);
     }
 
-    public ArrayList<ProjectCard> findPreLaunchingFromIdx(long startIdx) throws ParseException {
-        String today = getTodayString();
-        ArrayList<ProjectCard> projectCards = new ArrayList<>();
-        long projectId = startIdx;
+    public ArrayList<ProjectCardDTO> findPreLaunchingFromIdx(long startIdx, Date today){
+        ArrayList<ProjectCardDTO> projectList = new ArrayList<>();
+        long findIndex = startIdx;
 
-        while(projectCards.size() < ProjectConst.PROJECT_CARDS_MAX_SIZE) {
-            try {
-
-                Project project = projectRepository.findProjectById(projectId);
-                String projectStartDate = project.getStartDate();
-
-                if(Callendar.after(today, projectStartDate)){
-                    projectId++;
-                    continue;
-                }
-                User creater = findCreater(project);
-                ProjectCard card = new ProjectCard(project, creater);
-
-                log.info("add project Idx {}", projectId);
-                projectCards.add(card);
-                projectId++;
-
-            } catch (ProjectCantFindException e) {
-                return projectCards;
-            } catch (UserCantFindException e) {
-                projectId++;
-            } catch (UnregisterUserException e) {
-                projectId++;
-            } catch (ParseException e) {
-                e.printStackTrace();
-                throw e;
+        while(projectList.size() < ProjectConst.PROJECT_CARDS_MAX_SIZE){
+            System.out.println(findIndex);
+            Project findProject;
+            try{
+                findProject= projectRepository.findProjectById(findIndex);
+            } catch (EmptyResultDataAccessException e){
+                break;
             }
+
+            if(findProject.getStartDate().after(today)){
+                ProjectCardDTO projectCardDTO = makeCardDTO(findProject);
+                projectList.add(projectCardDTO);
+            }
+            findIndex++;
         }
 
-        return projectCards;
+        return projectList;
     }
-    private String getTodayString() {
-        return Callendar.getTodayString();
+    public ProjectCardDTO makeCardDTO(Project project){
+        ProjectCardDTO dto = new ProjectCardDTO();
+        dto.setProjectId(project.getProjectId());
+        dto.setTitle(project.getTitle());
+        dto.setProjectImg(project.getProjectImg());
+        dto.setCategory(project.getCategory());
+        dto.setComment(project.getComment());
+
+        dto.setCreaterName(project.getUser().getUserName());
+        dto.setCreaterIdx(project.getUser().getUserIdx());
+
+        dto.setTotalMoney(project.getTotalMoney());
+        dto.setEndDate(Callendar.convertString(project.getEndDate()));
+
+        //user 쿠키
+        //dto.setLike();
+        return dto;
     }
 
-    private User findCreater(Project project) throws UserCantFindException, UnregisterUserException {
-        Long userIdx = project.getUserIdx();
-        User creater = userRepository.findUserByIdx(userIdx);
-        return creater;
-    }
+
 }
-*/
+
