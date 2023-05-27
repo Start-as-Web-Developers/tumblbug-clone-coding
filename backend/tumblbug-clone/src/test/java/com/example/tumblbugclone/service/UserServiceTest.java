@@ -1,20 +1,28 @@
 
 package com.example.tumblbugclone.service;
 
-import com.example.tumblbugclone.Exception.userexception.UserCantModifyIdException;
-import com.example.tumblbugclone.Exception.userexception.UserEmailDuplicatedException;
-import com.example.tumblbugclone.Exception.userexception.UserIdDuplicatedException;
 
-import com.example.tumblbugclone.model.User;
+import com.example.tumblbugclone.Exception.userexception.*;
+
+import com.example.tumblbugclone.dto.UserLoginDTO;
+import com.example.tumblbugclone.dto.UserReceivingDTO;
+import com.example.tumblbugclone.dto.UserSendingDTO;
+import com.example.tumblbugclone.managedconst.HttpConst;
+import jakarta.servlet.http.HttpSession;
+
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.orm.jpa.JpaSystemException;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -27,25 +35,29 @@ public class UserServiceTest {
     @Transactional
     public void 회원가입() throws Exception{
         //given
-        User user = new User();
+
+        UserReceivingDTO user = new UserReceivingDTO();
+
         user.setUserId("userId");
         user.setUserName("userName");
         user.setUserPassword("userPassword");
         user.setUserEmail("userEmail");
 
         //when
-        userService.join(user);
+        long userIdx = userService.join(user);
 
         //then
-        Assertions.assertThat(user.getUserIdx()).isNotEqualTo(0);
+        Assertions.assertThat(userService.findUserByIndex(userIdx).getUserIdx()).isNotEqualTo(0);
     }
 
 
     @Test(expected = UserIdDuplicatedException.class)
     @Transactional
-    public void Id가_중복되면_Exception() throws UserEmailDuplicatedException, UserIdDuplicatedException {
+    public void Id가_중복되면_Exception() throws UserEmailDuplicatedException, UserIdDuplicatedException, UserDTOConvertException {
         //given
-        User user = new User();
+
+        UserReceivingDTO user = new UserReceivingDTO();
+
         user.setUserId("sameId");
         user.setUserName("userName");
         user.setUserPassword("userPassword");
@@ -55,20 +67,23 @@ public class UserServiceTest {
         userService.join(user);
 
         //then
-        User newUser = new User();
-        user.setUserId("sameId");
-        user.setUserName("user1Name");
-        user.setUserPassword("user1Password");
-        user.setUserEmail("user1Email");
+
+        UserReceivingDTO newUser = new UserReceivingDTO();
+        newUser.setUserId("sameId");
+        newUser.setUserName("user1Name");
+        newUser.setUserPassword("user1Password");
+        newUser.setUserEmail("user1Email");
 
         userService.join(newUser);
     }
 
-    @Test(expected = DataIntegrityViolationException.class)
+    @Test(expected = UserEmailDuplicatedException.class)
     @Transactional
     public void Emial이_중복되면_Exception() throws Exception{
         //given
-        User user = new User();
+
+        UserReceivingDTO user = new UserReceivingDTO();
+
         user.setUserId("userId");
         user.setUserName("userName");
         user.setUserPassword("userPassword");
@@ -78,20 +93,23 @@ public class UserServiceTest {
         userService.join(user);
 
         //then
-        User newUser = new User();
-        user.setUserId("user1Id");
-        user.setUserName("user1Name");
-        user.setUserPassword("user1Password");
-        user.setUserEmail("sameEmail");
+
+        UserReceivingDTO newUser = new UserReceivingDTO();
+        newUser.setUserId("user1Id");
+        newUser.setUserName("user1Name");
+        newUser.setUserPassword("user1Password");
+        newUser.setUserEmail("sameEmail");
+
 
         userService.join(newUser);
     }
 
-    @Test(expected = DataIntegrityViolationException.class)
+    @Test(expected = UserDTOConvertException.class)
     @Transactional
     public void 회원_이름은_필수() throws Exception{
         //given
-        User user = make_Nth_User(1);
+        UserReceivingDTO user = make_Nth_User(1);
+
         user.setUserName(null);
 
         //when
@@ -100,11 +118,12 @@ public class UserServiceTest {
         //then
     }
 
-    @Test(expected = DataIntegrityViolationException.class)
+    @Test(expected = UserDTOConvertException.class)
     @Transactional
     public void 회원_Id는_필수() throws Exception{
         //given
-        User user = make_Nth_User(1);
+        UserReceivingDTO user = make_Nth_User(1);
+
         user.setUserId(null);
 
         //when
@@ -113,11 +132,12 @@ public class UserServiceTest {
         //then
     }
 
-    @Test(expected = DataIntegrityViolationException.class)
+    @Test(expected = UserDTOConvertException.class)
     @Transactional
     public void 회원_비밀번호는_필수() throws Exception{
         //given
-        User user = make_Nth_User(1);
+        UserReceivingDTO user = make_Nth_User(1);
+
         user.setUserPassword(null);
 
         //when
@@ -126,11 +146,12 @@ public class UserServiceTest {
         //then
     }
 
-    @Test(expected = DataIntegrityViolationException.class)
+    @Test(expected = UserDTOConvertException.class)
     @Transactional
     public void 회원_Email은_필수() throws Exception{
         //given
-        User user = make_Nth_User(1);
+        UserReceivingDTO user = make_Nth_User(1);
+
         user.setUserEmail(null);
 
         //when
@@ -143,11 +164,13 @@ public class UserServiceTest {
     @Transactional
     public void Id로_회원_조회() throws Exception{
         //given
-        User user = make_Nth_User(1);
+
+        UserReceivingDTO user = make_Nth_User(1);
         userService.join(user);
 
         //when
-        User findByUserId = userService.findUserById(user.getUserId());
+        UserSendingDTO findByUserId = userService.findUserById(user.getUserId());
+
 
         //then
         Assertions.assertThat(findByUserId.getUserEmail()).isEqualTo(user.getUserEmail());
@@ -158,11 +181,14 @@ public class UserServiceTest {
     @Transactional
     public void Index로_회원_조회() throws Exception{
         //given
-        User user = make_Nth_User(1);
+
+        UserReceivingDTO user = make_Nth_User(1);
         long userIndex = userService.join(user);
+        System.out.println(userIndex);
 
         //when
-        User findUserBuIndex = userService.findUserByIndex(userIndex);
+        UserSendingDTO findUserBuIndex = userService.findUserByIndex(userIndex);
+
 
         //then
         Assertions.assertThat(user.getUserId()).isEqualTo(findUserBuIndex.getUserId());
@@ -173,12 +199,14 @@ public class UserServiceTest {
     @Transactional
     public void 같은_회원_두번_조회() throws Exception{
         //given
-        User user = make_Nth_User(1);
+
+        UserReceivingDTO user = make_Nth_User(1);
         long savedIndex = userService.join(user);
 
         //when
-        User findByIndex = userService.findUserByIndex(savedIndex);
-        User findById = userService.findUserById(user.getUserId());
+        UserSendingDTO findByIndex = userService.findUserByIndex(savedIndex);
+        UserSendingDTO findById = userService.findUserById(user.getUserId());
+
 
         //then
         Assertions.assertThat(findById).isEqualTo(findByIndex);
@@ -188,11 +216,14 @@ public class UserServiceTest {
     @Transactional
     public void 회원_id는_수정불가() throws Exception{
         //given
-        User user = make_Nth_User(1);
-        userService.join(user);
+
+        UserReceivingDTO user = make_Nth_User(1);
+        long userIdx = userService.join(user);
+        user.setUserIdx(userIdx);
 
         //when
-        User modifyUser = make_Nth_User(1);
+        UserReceivingDTO modifyUser = make_Nth_User(1);
+
         modifyUser.setUserIdx(user.getUserIdx());
         modifyUser.setUserId("modifiedId");
 
@@ -204,27 +235,37 @@ public class UserServiceTest {
     @Transactional
     public void 회원_정보_수정성공() throws Exception{
         //given
-        User user = make_Nth_User(1);
-        userService.join(user);
+
+        UserReceivingDTO user = make_Nth_User(1);
+        long userIdx = userService.join(user);
+        user.setUserIdx(userIdx);
 
         //when
-        User modifyUser = make_Nth_User(1);
-        modifyUser.setUserIdx(user.getUserIdx());
+        UserReceivingDTO modifyUser = make_Nth_User(1);
+        modifyUser.setUserIdx(userIdx);
+
         modifyUser.setUserImg("newImageURL");
         modifyUser.setUserPassword("newPassword");
         modifyUser.setGreeting("Hi");
+        modifyUser.setLastLogin(new Date());
         userService.modify(modifyUser);
 
         //then
-        Assertions.assertThat(userService.findUserByIndex(user.getUserIdx())).isEqualTo(modifyUser);
+        UserSendingDTO findUser = userService.findUserByIndex(user.getUserIdx());
+        modifyUser.setLastLogin(findUser.getLastLogin());
+            //new Date()와 DB에서 조회한 Date의 표현 포멧이 달라 임시로 구현
+        Assertions.assertThat(findUser).isEqualTo(modifyUser);
     }
 
     @Test
     @Transactional
     public void 회원_탈퇴() throws Exception{
         //given
-        User user = make_Nth_User(1);
+
+        UserReceivingDTO user = make_Nth_User(1);
+
         long userIndex = userService.join(user);
+        user.setUserIdx(userIndex);
 
         //when
         userService.unregiste(user);
@@ -233,8 +274,64 @@ public class UserServiceTest {
         Assertions.assertThat(userService.findUserByIndex(userIndex).isActive()).isFalse();
     }
 
-    private User make_Nth_User(int n){
-        User user = new User();
+
+    @Test
+    @Transactional
+    public void 정상_로그인() throws Exception{
+        //given
+        UserReceivingDTO savedUser = make_Nth_User(1);
+        long savedIndex = userService.join(savedUser);
+        savedUser.setUserIdx(savedIndex);
+
+        UserLoginDTO loginDTO = new UserLoginDTO();
+        loginDTO.setUserId(savedUser.getUserId());
+        loginDTO.setUserPassword(savedUser.getUserPassword());
+        HttpSession session = new MockHttpSession();
+
+        //when
+        HttpSession settingSession = userService.login(loginDTO, session);
+
+        //then
+        Assertions.assertThat(settingSession.getAttribute(HttpConst.SESSION_USER_INDEX)).isEqualTo(savedIndex);
+    }
+
+    @Test(expected = WrongPasswordException.class)
+    @Transactional
+    public void 잘못된_비밀번호_로그인() throws Exception{
+        UserReceivingDTO savedUser = make_Nth_User(1);
+        long savedIndex = userService.join(savedUser);
+        savedUser.setUserIdx(savedIndex);
+
+        UserLoginDTO loginDTO = new UserLoginDTO();
+        loginDTO.setUserId(savedUser.getUserId());
+        loginDTO.setUserPassword("WrongPassword");
+        HttpSession session = new MockHttpSession();
+
+        //when
+        HttpSession settingSession = userService.login(loginDTO, session);
+
+        //then
+    }
+
+    @Test(expected = UserCantFindException.class)
+    @Transactional
+    public void 없는_회원_로그인() throws Exception{
+        //given
+
+        //when
+        UserLoginDTO loginDTO = new UserLoginDTO();
+        loginDTO.setUserId("wrongId");
+        loginDTO.setUserPassword("WrongPassword");
+        HttpSession session = new MockHttpSession();
+
+        userService.login(loginDTO, session);
+        //then
+    }
+
+
+    private UserReceivingDTO make_Nth_User(int n){
+        UserReceivingDTO user = new UserReceivingDTO();
+
         String nString = Integer.toString(n);
         user.setUserId("user" + nString + "Id");
         user.setUserName("user" + nString + "Name");

@@ -1,6 +1,7 @@
 /*
 package com.example.tumblbugclone.controller;
 
+import com.example.tumblbugclone.dto.ProjectCardDTO;
 import com.example.tumblbugclone.managedconst.HttpConst;
 import com.example.tumblbugclone.model.Project;
 import com.example.tumblbugclone.model.ProjectCard;
@@ -23,7 +24,11 @@ import java.util.List;
 @RequestMapping(value = HttpConst.PROJECT_LIST_URI, produces = "application/json; charset=utf-8")
 public class ProjectCardController {
 
-    ProjectCardService projectCardService = new ProjectCardService();
+    private final ProjectCardService projectCardService;
+
+    public ProjectCardController(ProjectCardService projectCardService){
+        this.projectCardService = projectCardService;
+    }
 
     @GetMapping
     public ResponseEntity defaultAccess(){
@@ -31,12 +36,12 @@ public class ProjectCardController {
     }
 
     @GetMapping(HttpConst.ON_GOING)
-    public ResponseEntity<List<ProjectCard>> getOngoingProject(@RequestParam(required = false,name = "start-idx") String startIdx){
-        List<ProjectCard> projectCards;
+    public ResponseEntity<List<ProjectCardDTO>> getOngoingProject(@RequestParam(required = false,name = "start-idx") String startIdx){
+        List<ProjectCardDTO> projectCards;
 
         try{
             if(startIdx == null) {
-                projectCards = projectCardService.findOngoingFromStart();
+                projectCards = projectCardService.findPreLaunchingFromIdx(1);
             }else{
                 Long startIdxNum = Long.parseLong(startIdx);
                 ResponseEntity<List<ProjectCard>> response = checkStartIdx(startIdxNum);

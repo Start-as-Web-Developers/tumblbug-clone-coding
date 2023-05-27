@@ -1,26 +1,26 @@
 package com.example.tumblbugclone.controller;
-
+import com.example.tumblbugclone.dto.UserLoginDTO;
+import com.example.tumblbugclone.dto.UserReceivingDTO;
 import com.example.tumblbugclone.Exception.userexception.UnregisterUserException;
 import com.example.tumblbugclone.managedconst.HttpConst;
-import com.example.tumblbugclone.model.User;
-import com.example.tumblbugclone.repository.UserRepository;
+import com.example.tumblbugclone.managedconst.UserConst;
 import com.example.tumblbugclone.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
+
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -47,7 +47,8 @@ public class UserControllerTest {
     @Test
     @Transactional
     public void 빈_DB_회원가입_동작_테스트() throws Exception{
-        User user1 = make_Nth_User(1);
+
+        UserReceivingDTO user1 = make_Nth_User(1);
 
         mockMvc.perform(post(HttpConst.USER_URI)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -62,11 +63,12 @@ public class UserControllerTest {
     public void 중복_Id_테스트_inWeb() throws Exception{
 
         //given
-        User user1 = make_Nth_User(1);
+
+        UserReceivingDTO user1 = make_Nth_User(1);
         userService.join(user1);
 
         //when
-        User user2 = make_Nth_User(2);
+        UserReceivingDTO user2 = make_Nth_User(2);
         user2.setUserId(user1.getUserId());
 
         //then
@@ -83,11 +85,12 @@ public class UserControllerTest {
     public void 중복_Email_테스트_inWeb() throws Exception{
 
         //given
-        User user1 = make_Nth_User(1);
+
+        UserReceivingDTO user1 = make_Nth_User(1);
         userService.join(user1);
 
         //when
-        User user2 = make_Nth_User(2);
+        UserReceivingDTO user2 = make_Nth_User(2);
         user2.setUserEmail(user1.getUserEmail());
 
         //then
@@ -103,11 +106,12 @@ public class UserControllerTest {
     @Transactional
     public void 일반DB_회원가입_테스트() throws Exception{
         //given
-        User user1 = make_Nth_User(1);
+
+        UserReceivingDTO user1 = make_Nth_User(1);
         userService.join(user1);
 
         //when
-        User user2 = make_Nth_User(2);
+        UserReceivingDTO user2 = make_Nth_User(2);
 
         //then
         mockMvc.perform(post(HttpConst.USER_URI)
@@ -121,11 +125,13 @@ public class UserControllerTest {
     public void 회원정보_수정_inWeb() throws Exception{
 
         //given
-        User user = make_Nth_User(1);
+
+        UserReceivingDTO user = make_Nth_User(1);
         long savedIndex = userService.join(user);
 
         //when
-        User modifiedUser = make_Nth_User(1);
+        UserReceivingDTO modifiedUser = make_Nth_User(1);
+
         modifiedUser.setUserIdx(savedIndex);
         modifiedUser.setUserEmail("newEmail");
 
@@ -143,11 +149,13 @@ public class UserControllerTest {
     @Transactional
     public void 회원Id는_변경할수_없습니다() throws Exception{
         //given
-        User user = make_Nth_User(1);
+
+        UserReceivingDTO user = make_Nth_User(1);
         long savedIndex = userService.join(user);
 
         //when
-        User modifiedUser = make_Nth_User(1);
+        UserReceivingDTO modifiedUser = make_Nth_User(1);
+
         modifiedUser.setUserIdx(savedIndex);
         modifiedUser.setUserId("newId");
 
@@ -163,11 +171,13 @@ public class UserControllerTest {
     @Transactional
     public void 회원탈퇴_성공_테스트() throws Exception{
         //given
-        User user = make_Nth_User(1);
+
+        UserReceivingDTO user = make_Nth_User(1);
         long savedIdx = userService.join(user);
 
         //when
-        User deleteUser = make_Nth_User(1);
+        UserReceivingDTO deleteUser = make_Nth_User(1);
+
         deleteUser.setUserIdx(savedIdx);
         deleteUser.setActive(false);
 
@@ -175,52 +185,75 @@ public class UserControllerTest {
 
         mockMvc.perform(delete(HttpConst.USER_URI)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(user)))
+                        .content(objectMapper.writeValueAsString(deleteUser)))
                 .andExpect(status().isOk());
         Assertions.assertThat(userService.findUserByIndex(savedIdx)
                         .isActive())
                 .isFalse();
     }
-   /* @Test
-    public void 존재하지_않는_회원_변경() throws Exception{
+
+    @Test
+    @Transactional
+    public void 정상_로그인() throws Exception{
         //given
-        User modifyIdUser = new User("userName1", "userId1", "userPassword1", "userEmail");
-        modifyIdUser.setUserIdx(2l);
+        UserReceivingDTO user = make_Nth_User(1);
+        long savedIdx = userService.join(user);
 
         //when
+        UserLoginDTO loginDTO = new UserLoginDTO();
+        loginDTO.setUserId(user.getUserId());
+        loginDTO.setUserPassword(user.getUserPassword());
 
         //then
-        mockMvc.perform(patch(HttpConst.USER_URI + "/2")
+        mockMvc.perform(get(HttpConst.USER_URI + HttpConst.USER_LOGIN_URL)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(modifyIdUser)))
-                .andExpect(status().isBadRequest())
-                .andExpect(header().string(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.NO_USER_FIND_MESSAGE));
-    }*/
-
-
-    
-    /*@Test
-    public void 이미_탈퇴한_회원_탈퇴_inWeb() throws Exception{
-        //given
-        User deleteUser = new User("userName1", "userId1", "userPassword1", "userEmail1");
-        deleteUser.setUserIdx(1l);
-
-        //when
-        mockMvc.perform(delete(HttpConst.USER_URI)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(deleteUser)))
+                        .content(objectMapper.writeValueAsString(loginDTO)))
                 .andExpect(status().isOk());
+        // mock mvc 라서 그런지, 로그인 성공 상황에서 세션을 새로 생성해 주어도, 세션 관련 set-cookie를 확인 하지 못한다.
+        // 해당 기능 PostMan으로 확인 완료
+    }
+
+    @Test
+    public void 없는_회원_로그인() throws Exception{
+        //given
+        UserReceivingDTO user = make_Nth_User(1);
+
+        //when
+        UserLoginDTO loginDTO = new UserLoginDTO();
+        loginDTO.setUserId(user.getUserId());
+        loginDTO.setUserPassword(user.getUserPassword());
 
         //then
-        mockMvc.perform(delete(HttpConst.USER_URI)
+        mockMvc.perform(get(HttpConst.USER_URI + HttpConst.USER_LOGIN_URL)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(deleteUser)))
+                        .content(objectMapper.writeValueAsString(loginDTO)))
                 .andExpect(status().isBadRequest())
-                .andExpect(header().string(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.UNREGISTER_USER_MESSAGE));
-    }*/
+                .andExpect(header().string(HttpConst.HEADER_NAME_ERROR_MESSAGE, UserConst.NO_USER_FOUNDED_MESSAGE));
+    }
 
-    private User make_Nth_User(int N){
-        User user = new User();
+    @Test
+    @Transactional
+    public void 잘못된_비밀번호() throws Exception{
+        //given
+        UserReceivingDTO user = make_Nth_User(1);
+        userService.join(user);
+
+        //when
+        UserLoginDTO loginDTO = new UserLoginDTO();
+        loginDTO.setUserId(user.getUserId());
+        loginDTO.setUserPassword("WrongPassword");
+
+        //then
+        mockMvc.perform(get(HttpConst.USER_URI + HttpConst.USER_LOGIN_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(loginDTO)))
+                .andExpect(status().isBadRequest())
+                .andExpect(header().string(HttpConst.HEADER_NAME_ERROR_MESSAGE, UserConst.WRONG_PASSWORD));
+    }
+
+    private UserReceivingDTO make_Nth_User(int N){
+        UserReceivingDTO user = new UserReceivingDTO();
+
         user.setUserName("user" + N + "name");
         user.setUserId("user" + N + "Id");
         user.setUserEmail("user" + N + "Email");
