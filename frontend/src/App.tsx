@@ -25,8 +25,8 @@ function App() {
       element: <Profile />,
     },
     {
-      path: "/project-detail",
-      element: <ProjectDetail/>
+      path: "/project-detail/*",
+      element: <ProjectDetail />,
     },
   ]);
 

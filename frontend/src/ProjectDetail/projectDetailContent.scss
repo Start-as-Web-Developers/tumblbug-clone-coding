@@ -25,11 +25,18 @@
 
   .ChosenTab {
     background: linear-gradient(#fff 0% 95%, #000 95% 100%);
+    a {
+      color: #000;
+    }
   }
 
   a {
     text-decoration: none;
-    color: #000;
+    color: gray;
+
+    &:hover {
+      color: #000;
+    }
   }
 }
 

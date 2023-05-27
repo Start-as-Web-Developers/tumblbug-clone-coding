@@ -2,47 +2,46 @@ import React, { useState, useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
 import "./projectDetailContent.scss";
 import ProjectStory from "./ProjectStory/ProjectStory";
+import ProjectUpdate from "./ProjectUpdate/ProjectUpdate";
 import ProjectCreator from "./ProjectCreator/ProjectCreator";
 import ProjectPrice from "./ProjectPrice/ProjectPrice";
 
 function ProjectDetailContent() {
   const location = useLocation();
-  const [activeTab, setActiveTab] = useState("profile");
+  const [activeTab, setActiveTab] = useState("story");
 
   useEffect(() => {
     const path = location.pathname;
-    if (path === "/u/created") {
-      setActiveTab("created");
-    } else if (path === "/u/backed") {
-      setActiveTab("supported");
-    } else if (path === "/u") {
-      setActiveTab("profile");
+    if (path === "/project-detail/community/creator") {
+      setActiveTab("update");
+    } else if (path === "/project-detail/community/backer") {
+      setActiveTab("community");
+    } else if (path === "/project-detail") {
+      setActiveTab("story");
     }
   }, [location.pathname]);
 
-  const content = <ProjectStory />;
+  let content;
 
-  //   if (activeTab === "profile") {
-  //     content = <ProfileIntroduction />;
-  //   } else if (activeTab === "created") {
-  //     content = <ProfileMyProject />;
-  //   } else if (activeTab === "supported") {
-  //     content = <ProfileSupported />;
-  //   }
+  if (activeTab === "story") {
+    content = <ProjectStory />;
+  } else if (activeTab === "update") {
+    content = <ProjectUpdate />;
+  }
 
   return (
     <section className="ProjectDetailContent">
       <ul className="ProjectTabs">
         <li
           className={
-            activeTab === "profile" ? "ProjectTab ChosenTab" : "ProjectTab"
+            activeTab === "story" ? "ProjectTab ChosenTab" : "ProjectTab"
           }
         >
-          <Link to="/project-detail/story">프로젝트 계획</Link>
+          <Link to="/project-detail">프로젝트 계획</Link>
         </li>
         <li
           className={
-            activeTab === "created" ? "ProjectTab ChosenTab" : "ProjectTab"
+            activeTab === "update" ? "ProjectTab ChosenTab" : "ProjectTab"
           }
         >
           <Link to="/project-detail/community/creator">업데이트</Link>
