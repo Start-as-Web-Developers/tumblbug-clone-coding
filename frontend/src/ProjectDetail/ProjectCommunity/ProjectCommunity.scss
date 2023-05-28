@@ -1,0 +1,83 @@
+.ProjectCommunity {
+  width: 40vw;
+
+  .ProjectCommunityCommentBox {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    box-sizing: border-box;
+    width: 100%;
+    height: 4rem;
+    border-radius: 2px;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+
+    svg {
+      margin-left: auto;
+    }
+
+    a {
+      text-decoration: none;
+      color: #000;
+      font-weight: 700;
+    }
+  }
+  .Unavailable {
+    background-color: lightgray;
+    color: gray;
+    cursor: default;
+  }
+
+  .ProjectCommunityCommentContainer {
+    width: 100%;
+    margin: 2rem 0;
+
+    .ProjectCommunityCommentWrapper {
+      .ProjectCommunityWriter {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin: 1rem 0;
+
+        svg {
+          width: 40px;
+          height: 40px;
+          margin-right: 0.5rem;
+        }
+
+        .ProjectCommunityNameBody {
+          h5 {
+            font-weight: 700;
+          }
+        }
+      }
+
+      .ProjectCommunityContent {
+        margin: 20px 0;
+        line-height: 1.5rem;
+      }
+
+      .ProjectCommentFooter {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+        color: gray;
+
+        .ProjectCommentDateWrapper {
+          .ProjectCommentModified::before {
+            content: "·";
+            margin: 0 5px;
+          }
+        }
+      }
+
+      .ProjectCommunityHr {
+        border: none;
+        height: 1px;
+        background-color: gray;
+        margin: 2rem 0;
+      }
+    }
+  }
+}

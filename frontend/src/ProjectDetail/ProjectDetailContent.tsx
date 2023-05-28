@@ -3,6 +3,7 @@ import { useLocation, Link } from "react-router-dom";
 import "./projectDetailContent.scss";
 import ProjectStory from "./ProjectStory/ProjectStory";
 import ProjectUpdate from "./ProjectUpdate/ProjectUpdate";
+import ProjectCommunity from "./ProjectCommunity/ProjectCommunity";
 import ProjectCreator from "./ProjectCreator/ProjectCreator";
 import ProjectPrice from "./ProjectPrice/ProjectPrice";
 
@@ -27,6 +28,8 @@ function ProjectDetailContent() {
     content = <ProjectStory />;
   } else if (activeTab === "update") {
     content = <ProjectUpdate />;
+  } else if (activeTab === "community") {
+    content = <ProjectCommunity />;
   }
 
   return (
@@ -48,7 +51,7 @@ function ProjectDetailContent() {
         </li>
         <li
           className={
-            activeTab === "supported" ? "ProjectTab ChosenTab" : "ProjectTab"
+            activeTab === "community" ? "ProjectTab ChosenTab" : "ProjectTab"
           }
         >
           <Link to="/project-detail/community/backer">커뮤니티</Link>
