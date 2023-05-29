@@ -27,7 +27,7 @@ public class ProjectRepositoryListTest {
     /**
      * author : 장혁수
      */
-    java.sql.Date today = new java.sql.Date(2023, 05, 23);
+    Date today = new Date(2023, 05, 23);
 
     @Test
     @Transactional
@@ -38,7 +38,7 @@ public class ProjectRepositoryListTest {
         long startIndex = makeBasicProject(user);
 
         //when
-        List<Project> ongoingList = projectRepository.findOngoingList(1, "", today);
+        List<Project> ongoingList = projectRepository.findOngoingList(0, "", today);
 
         //then
         Assertions.assertThat(ongoingList.size()).isEqualTo(20);
@@ -77,7 +77,7 @@ public class ProjectRepositoryListTest {
         long startIndex = makeBasicProject(user);
 
         //when
-        List<Project> ongoingList = projectRepository.findPrelaunchingList(1, "", today);
+        List<Project> ongoingList = projectRepository.findPrelaunchingList(0, "", today);
 
         //then
         Assertions.assertThat(ongoingList.size()).isEqualTo(20);
@@ -105,45 +105,6 @@ public class ProjectRepositoryListTest {
             Assertions.assertThat(project.getStartDate()).isAfter(today);
         }
     }
-
-    /*
-    @Test
-    @Transactional
-    public void onGoing_섞여있는_상태에서_조회() throws Exception{
-        //given
-        User user = make_Nth_User(1);
-        userRepository.save(user);
-        long startIndex = makeBasicProject(user);
-
-        //when
-        List<Project> ongoingList = projectRepository.findOngoingList((int) startIndex + 50, "", today);
-
-        //then
-        Assertions.assertThat(ongoingList.size()).isEqualTo(20);
-        for (Project project : ongoingList) {
-            Assertions.assertThat(project.getStartDate()).isBeforeOrEqualTo(today);
-            Assertions.assertThat(project.getEndDate()).isAfter(today);
-        }
-    }
-
-    @Test
-    @Transactional
-    public void preLaunching_섞여있는_상태에서_조회() throws Exception{
-        //given
-        User user = make_Nth_User(1);
-        userRepository.save(user);
-        long startIndex = makeBasicProject(user);
-
-        //when
-        List<Project> ongoingList = projectRepository.findPrelaunchingList((int) startIndex + 50, "", today);
-
-        //then
-        Assertions.assertThat(ongoingList.size()).isEqualTo(20);
-        for (Project project : ongoingList) {
-            Assertions.assertThat(project.getStartDate()).isAfter(today);
-        }
-    }
-    */
 
     @Test
     @Transactional

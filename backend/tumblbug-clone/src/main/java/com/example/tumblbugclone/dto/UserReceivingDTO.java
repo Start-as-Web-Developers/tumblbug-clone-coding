@@ -10,7 +10,6 @@ import java.util.Date;
 
 @NoArgsConstructor
 @Data
-@EqualsAndHashCode(exclude = "userPassword")
 public class UserReceivingDTO extends UserSendingDTO {
 
 

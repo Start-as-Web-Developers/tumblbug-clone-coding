@@ -2,6 +2,7 @@
 package com.example.tumblbugclone.service;
 
 import com.example.tumblbugclone.Exception.projectException.ProjectCantFindException;
+import com.example.tumblbugclone.Exception.projectlistexception.StartIndexException;
 import com.example.tumblbugclone.Exception.userexception.UnregisterUserException;
 import com.example.tumblbugclone.Exception.userexception.UserCantFindException;
 import com.example.tumblbugclone.dto.ProjectCardDTO;
@@ -20,11 +21,11 @@ import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Slf4j
 @Service
 public class ProjectCardService {
-    //private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
 
     @Autowired
@@ -32,68 +33,53 @@ public class ProjectCardService {
         this.projectRepository = projectRepository;
     }
 
-    /*
-    public ArrayList<ProjectCardDTO> findOngoingFromIdx(long startIdx){
+
+    public ArrayList<ProjectCardDTO> findOngoingFromIdx(int startIdx) throws StartIndexException {
         return findOngoingFromIdx(startIdx, new Date());
     }
 
-    public ArrayList<ProjectCardDTO> findOngoingFromIdx(long startIdx, Date today){
-        ArrayList<ProjectCardDTO> projectList = new ArrayList<>();
+    public ArrayList<ProjectCardDTO> findOngoingFromIdx(int startIdx, Date today) throws StartIndexException {
+        ArrayList<ProjectCardDTO> projectDTOList = new ArrayList<>();
         long findIndex = startIdx;
 
-        while(projectList.size() < ProjectConst.PROJECT_CARDS_MAX_SIZE){
-            Project findProject;
-            try{
-                findProject = projectRepository.findProjectById(findIndex);
-            }catch (EmptyResultDataAccessException e){
-                break;
-            }
-
-            if(!findProject.getStartDate().after(today)){
-                if(findProject.getEndDate().before(today)){
-                    findIndex++;
-                    continue;
-                }
-                System.out.println();
-                ProjectCardDTO projectCardDTO = makeCardDTO(findProject);
-                projectList.add(projectCardDTO);
-            }
-            findIndex++;
+        if(startIdx % 20 != 0){
+            throw new StartIndexException("startIdx should be multiplier of 20");
         }
 
-        return projectList;
+        List<Project> ongoingList = projectRepository.findOngoingList(startIdx, "", today);
+
+        for (Project project : ongoingList) {
+            projectDTOList.add(makeCardDTO(project));
+        }
+
+        return projectDTOList;
     }
 
 
-    public ArrayList<ProjectCardDTO> findPreLaunchingFromIdx(long startIdx){
+    public ArrayList<ProjectCardDTO> findPreLaunchingFromIdx(int startIdx) throws StartIndexException {
         Date today = new Date();
 
-        return findPreLaunchingFromIdx(1l, today);
+        return findPreLaunchingFromIdx(startIdx, today);
     }
 
-    public ArrayList<ProjectCardDTO> findPreLaunchingFromIdx(long startIdx, Date today){
-        ArrayList<ProjectCardDTO> projectList = new ArrayList<>();
+    public ArrayList<ProjectCardDTO> findPreLaunchingFromIdx(int startIdx, Date today) throws StartIndexException {
+        ArrayList<ProjectCardDTO> projectDTOList = new ArrayList<>();
         long findIndex = startIdx;
 
-        while(projectList.size() < ProjectConst.PROJECT_CARDS_MAX_SIZE){
-            System.out.println(findIndex);
-            Project findProject;
-            try{
-                findProject= projectRepository.findProjectById(findIndex);
-            } catch (EmptyResultDataAccessException e){
-                break;
-            }
-
-            if(findProject.getStartDate().after(today)){
-                ProjectCardDTO projectCardDTO = makeCardDTO(findProject);
-                projectList.add(projectCardDTO);
-            }
-            findIndex++;
+        if(startIdx % 20 != 0){
+            throw new StartIndexException("startIdx should be multiplier of 20");
         }
 
-        return projectList;
+        List<Project> ongoingList = projectRepository.findPrelaunchingList(startIdx, "", today);
+
+        for (Project project : ongoingList) {
+            projectDTOList.add(makeCardDTO(project));
+        }
+
+        return projectDTOList;
     }
-    public ProjectCardDTO makeCardDTO(Project project){
+
+    private ProjectCardDTO makeCardDTO(Project project){
         ProjectCardDTO dto = new ProjectCardDTO();
         dto.setProjectId(project.getProjectId());
         dto.setTitle(project.getTitle());
@@ -112,7 +98,7 @@ public class ProjectCardService {
         return dto;
     }
 
-     */
+
 
 
 }

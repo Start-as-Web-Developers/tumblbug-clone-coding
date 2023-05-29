@@ -54,7 +54,7 @@ public class ProjectRepository {
     public List<Project> findOngoingList(int startIndex, String sort){
         return findOngoingList(startIndex, sort, new Date(System.currentTimeMillis()));
     }
-    public List<Project> findOngoingList(int startIndex, String sort, Date date){
+    public List<Project> findOngoingList(int startIndex, String sort, java.util.Date date){
 
         CriteriaBuilder  queryBuilder = em.getCriteriaBuilder();
         CriteriaQuery<Project> selectQuery = queryBuilder.createQuery(Project.class);
@@ -72,10 +72,10 @@ public class ProjectRepository {
     }
 
     public List<Project> findPrelaunchingList(int startIndex, String sort){
-        java.sql.Date date = new Date(System.currentTimeMillis());
+        java.util.Date date = new Date(System.currentTimeMillis());
         return findPrelaunchingList(startIndex, sort, date);
     }
-    public List<Project> findPrelaunchingList(int startIndex, String sort, java.sql.Date date){
+    public List<Project> findPrelaunchingList(int startIndex, String sort, java.util.Date date){
 
         CriteriaBuilder  queryBuilder = em.getCriteriaBuilder();
         CriteriaQuery<Project> selectQuery = queryBuilder.createQuery(Project.class);
