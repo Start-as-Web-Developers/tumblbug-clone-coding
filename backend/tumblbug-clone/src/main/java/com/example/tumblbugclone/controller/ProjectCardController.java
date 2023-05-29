@@ -1,4 +1,4 @@
-/*
+
 package com.example.tumblbugclone.controller;
 
 import com.example.tumblbugclone.dto.ProjectCardDTO;
@@ -39,57 +39,24 @@ public class ProjectCardController {
     public ResponseEntity<List<ProjectCardDTO>> getOngoingProject(@RequestParam(required = false,name = "start-idx") String startIdx){
         List<ProjectCardDTO> projectCards;
 
-        try{
-            if(startIdx == null) {
-                projectCards = projectCardService.findPreLaunchingFromIdx(1);
-            }else{
-                Long startIdxNum = Long.parseLong(startIdx);
-                ResponseEntity<List<ProjectCard>> response = checkStartIdx(startIdxNum);
-                if (response != null)
-                    return response;
-                projectCards = projectCardService.findOngoingFromIdx(startIdxNum);
-            }
-        } catch (ParseException e) {
-            log.debug("Project date format error");
-            return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
-        }
 
-        return ResponseEntity.ok(projectCards);
+
+
+
+
+        return null;
     }
 
 
 
     @GetMapping(HttpConst.PRE_LAUNCHING)
     public ResponseEntity<List<ProjectCard>> getPreLaunchingProject(@RequestParam(required = false,name = "start-idx") String startIdx){
-        List<ProjectCard> projectCards;
-
-        try{
-            if(startIdx == null) {
-                projectCards = projectCardService.findPreLaunchingFromStart();
-            }else{
-                Long startIdxNum = Long.parseLong(startIdx);
-                ResponseEntity<List<ProjectCard>> response = checkStartIdx(startIdxNum);
-                if (response != null)
-                    return response;
-                projectCards = projectCardService.findPreLaunchingFromIdx(startIdxNum);
-            }
-        } catch (ParseException e) {
-            log.debug("Project date format error");
-            return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
-        }
-
-        return ResponseEntity.ok(projectCards);
+        return null;
     }
 
     private ResponseEntity<List<ProjectCard>> checkStartIdx(Long startIdxNum) {
-        if(startIdxNum % 20 != 0){
-            HttpHeaders responseHeader = new HttpHeaders();
-            responseHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, "start-idx 값이 잘못되었습니다.");
-            return ResponseEntity
-                    .badRequest()
-                    .headers(responseHeader).build();
-        }
+
+
         return null;
     }
 }
-*/

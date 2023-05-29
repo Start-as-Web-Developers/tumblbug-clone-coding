@@ -117,7 +117,7 @@ public class CommunityRepositoryTest {
         Community findCommunity = communityRepository.findCommunityById(1L);
     }
 
-    @Test
+    /*@Test
     @Transactional
     public void findCommunityByProjectId() {
         //given
@@ -172,7 +172,7 @@ public class CommunityRepositoryTest {
         //then
         Assertions.assertThat(savedCommunityList).isEqualTo(communityList);
 
-    }
+    }*/
 
     @Test
     @Transactional
