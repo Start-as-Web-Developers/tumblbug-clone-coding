@@ -1,11 +1,13 @@
 
 package com.example.tumblbugclone.controller;
 
+import com.example.tumblbugclone.Exception.projectlistexception.StartIndexException;
 import com.example.tumblbugclone.dto.ProjectCardDTO;
 import com.example.tumblbugclone.managedconst.HttpConst;
 import com.example.tumblbugclone.model.Project;
 import com.example.tumblbugclone.model.ProjectCard;
 import com.example.tumblbugclone.service.ProjectCardService;
+import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -36,27 +39,39 @@ public class ProjectCardController {
     }
 
     @GetMapping(HttpConst.ON_GOING)
-    public ResponseEntity<List<ProjectCardDTO>> getOngoingProject(@RequestParam(required = false,name = "start-idx") String startIdx){
+    public ResponseEntity<List<ProjectCardDTO>> getOngoingProject(@RequestParam(required = false,name = "start-idx")int startIdx){
         List<ProjectCardDTO> projectCards;
 
+        try {
+            projectCards = projectCardService.findOngoingFromIdx(startIdx);
+        } catch (StartIndexException e) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, "start-idx should be multiple of 20");
 
-
-
-
-
-        return null;
+            return ResponseEntity.badRequest()
+                    .headers(headers)
+                    .build();
+        }
+        return ResponseEntity.ok()
+                .body(projectCards);
     }
-
-
 
     @GetMapping(HttpConst.PRE_LAUNCHING)
-    public ResponseEntity<List<ProjectCard>> getPreLaunchingProject(@RequestParam(required = false,name = "start-idx") String startIdx){
-        return null;
+    public ResponseEntity<List<ProjectCardDTO>> getPreLaunchingProject(@RequestParam(required = false,name = "start-idx") int startIdx){
+        List<ProjectCardDTO> projectCards;
+
+        try {
+            projectCards = projectCardService.findPreLaunchingFromIdx(startIdx);
+        } catch (StartIndexException e) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, "start-idx should be multiple of 20");
+
+            return ResponseEntity.badRequest()
+                    .headers(headers)
+                    .build();
+        }
+        return ResponseEntity.ok()
+                .body(projectCards);
     }
 
-    private ResponseEntity<List<ProjectCard>> checkStartIdx(Long startIdxNum) {
-
-
-        return null;
-    }
 }
