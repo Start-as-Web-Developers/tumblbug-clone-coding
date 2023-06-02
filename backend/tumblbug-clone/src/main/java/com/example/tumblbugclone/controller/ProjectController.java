@@ -3,7 +3,6 @@ package com.example.tumblbugclone.controller;
 ;
 import com.example.tumblbugclone.dto.PlanDTO;
 import com.example.tumblbugclone.dto.ProjectAllDTO;
-import com.example.tumblbugclone.dto.ProjectDTO;
 import com.example.tumblbugclone.managedconst.HttpConst;
 import com.example.tumblbugclone.model.Project;
 import com.example.tumblbugclone.service.ProjectService;

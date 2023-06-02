@@ -2,7 +2,6 @@ package com.example.tumblbugclone.controller;
 
 import com.example.tumblbugclone.dto.ProductDTO;
 import com.example.tumblbugclone.dto.ProjectAllDTO;
-import com.example.tumblbugclone.dto.ProjectDTO;
 import com.example.tumblbugclone.managedconst.HttpConst;
 import com.example.tumblbugclone.model.Product;
 import com.example.tumblbugclone.model.Project;

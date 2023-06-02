@@ -5,7 +5,6 @@ import com.example.tumblbugclone.dto.UserLoginDTO;
 import com.example.tumblbugclone.dto.UserReceivingDTO;
 import com.example.tumblbugclone.dto.UserSendingDTO;
 import com.example.tumblbugclone.managedconst.HttpConst;
-import com.example.tumblbugclone.model.User;
 import com.example.tumblbugclone.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -29,9 +28,14 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping()
-    public ResponseEntity test() {
-        return new ResponseEntity(HttpStatus.OK);
+    @GetMapping("/{userIdx}")
+    public ResponseEntity checkUser(@PathVariable String userIdx) {
+
+        UserSendingDTO userByIndex = userService.findUserByIndex(Long.parseLong(userIdx));
+
+
+        return ResponseEntity.ok()
+                .body(userByIndex);
     }
 
     @PostMapping
@@ -39,9 +43,9 @@ public class UserController {
     public ResponseEntity signUp(@RequestBody UserReceivingDTO newUserDTO) {
 
         HttpHeaders errorHeader = new HttpHeaders();
-
+        long userIndex;
         try {
-            userService.join(newUserDTO);
+            userIndex = userService.join(newUserDTO);
         } catch (UserIdDuplicatedException e) {
             errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.DUPLICATED_USER_ID_MESSAGE);
             return ResponseEntity.badRequest()
@@ -59,12 +63,17 @@ public class UserController {
                     .body("");
         }
 
-        return new ResponseEntity(HttpStatus.OK);
+        HttpHeaders userIndexHeader = new HttpHeaders();
+        userIndexHeader.set("userIndex", Long.toString(userIndex));
+
+        return ResponseEntity.ok()
+                .headers(userIndexHeader)
+                .build();
     }
 
 
     @PatchMapping("/{userIdx}")
-    public ResponseEntity update(@PathVariable String userIdx, @RequestBody UserReceivingDTO modifiedUserDTO) {
+    public ResponseEntity update(@RequestBody UserReceivingDTO modifiedUserDTO) {
 
         HttpHeaders errorHeader = new HttpHeaders();
         try {
@@ -102,9 +111,9 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    //==검증 필요 ==//
+
     @GetMapping(HttpConst.USER_LOGIN_URL)
-    public ResponseEntity login(@RequestBody UserLoginDTO loginDTO, HttpSession session, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity login(@RequestBody UserLoginDTO loginDTO, HttpSession session, HttpServletResponse response) {
         response.setCharacterEncoding("UTF-8");
         try {
             userService.login(loginDTO, session);
@@ -132,6 +141,4 @@ public class UserController {
         session.invalidate();
         return ResponseEntity.ok().build();
     }
-
-    //== 리팩토링 완료 ==//
 }

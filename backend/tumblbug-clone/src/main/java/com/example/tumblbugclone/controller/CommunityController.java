@@ -1,6 +1,5 @@
 package com.example.tumblbugclone.controller;
 
-import com.example.tumblbugclone.dto.ProjectAllDTO;
 import com.example.tumblbugclone.managedconst.HttpConst;
 import com.example.tumblbugclone.model.Community;
 import com.example.tumblbugclone.model.Project;
@@ -35,6 +34,8 @@ public class CommunityController {
         Project project = new Project();
         project.setProjectId(projectId);
 
+
+
         community.setProject(project);
         long communityId = communityService.writeCommunity(community);
         return ResponseEntity.ok(Long.toString(communityId));
@@ -68,7 +69,6 @@ public class CommunityController {
         communityService.delete(communityId);
         return new ResponseEntity(HttpStatus.OK);
     }
-
 
 
 }

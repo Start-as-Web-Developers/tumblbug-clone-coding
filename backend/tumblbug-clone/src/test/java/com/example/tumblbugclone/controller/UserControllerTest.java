@@ -1,7 +1,6 @@
 package com.example.tumblbugclone.controller;
 import com.example.tumblbugclone.dto.UserLoginDTO;
 import com.example.tumblbugclone.dto.UserReceivingDTO;
-import com.example.tumblbugclone.Exception.userexception.UnregisterUserException;
 import com.example.tumblbugclone.managedconst.HttpConst;
 import com.example.tumblbugclone.managedconst.UserConst;
 import com.example.tumblbugclone.service.UserService;
@@ -20,7 +19,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -38,11 +36,6 @@ public class UserControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Test
-    public void mockMvc_동작_테스트() throws Exception{
-        //given
-        this.mockMvc.perform(get(HttpConst.USER_URI)).andExpect(status().isOk());
-    }
 
     @Test
     @Transactional
