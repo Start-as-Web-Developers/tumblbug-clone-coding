@@ -28,6 +28,15 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping
+    public ResponseEntity getUser(HttpSession session) {
+        long userIndex = (long)session.getAttribute(HttpConst.SESSION_USER_INDEX);
+
+        UserSendingDTO userByIndex = userService.findUserByIndex(userIndex);
+
+        return ResponseEntity.ok()
+                .body(userByIndex);
+    }
     @GetMapping("/{userIdx}")
     public ResponseEntity checkUser(@PathVariable String userIdx) {
 
