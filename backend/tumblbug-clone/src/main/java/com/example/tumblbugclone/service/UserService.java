@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
+
 @Service
 public class UserService {
 
@@ -61,7 +63,6 @@ public class UserService {
 
     public void unregiste(UserReceivingDTO userDTO) throws UserDTOConvertException {
         User user = convertDTO2User(userDTO);
-        User findUser = userRepository.findUserByIndex(user.getUserIdx());
         user.setActive(false);
         userRepository.modify(user);
     }
@@ -76,7 +77,27 @@ public class UserService {
             throw new UserCantModifyIdException();
         }
 
-        userRepository.modify(user);
+        Field[] declaredFields = user.getClass().getDeclaredFields();
+        for(Field field : declaredFields){
+            Object value;
+            field.setAccessible(true);
+            try {
+                value = field.get(user);
+            } catch (IllegalAccessException e) {
+                continue;
+            }
+
+            if(value == null)
+                continue;
+
+            try {
+                field.set(findUser, value);
+            } catch (IllegalAccessException e) {
+                continue;
+            }
+        }
+
+        userRepository.modify(findUser);
     }
 
     public HttpSession login(UserLoginDTO user, HttpSession session) throws UserCantFindException, WrongPasswordException {

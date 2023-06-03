@@ -5,7 +5,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "PROJECT")
@@ -64,5 +66,6 @@ public class Project {
     @Column(name = "PLAN_GUIDE", nullable = false)
     private String planGuide;
 
-
+    @OneToMany(mappedBy = "project")
+    List<Like> likePeople = new ArrayList<>();
 }
