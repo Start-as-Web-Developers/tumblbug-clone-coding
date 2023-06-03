@@ -100,7 +100,7 @@ public class UserService {
         userRepository.modify(findUser);
     }
 
-    public HttpSession login(UserLoginDTO user, HttpSession session) throws UserCantFindException, WrongPasswordException {
+    public long login(UserLoginDTO user) throws UserCantFindException, WrongPasswordException {
         User userById;
         try {
             userById = userRepository.findUserById(user.getUserId());
@@ -112,9 +112,7 @@ public class UserService {
             throw new WrongPasswordException(UserConst.WRONG_PASSWORD);
         }
 
-        session.setAttribute(HttpConst.SESSION_USER_INDEX, userById.getUserIdx());
-        session.setMaxInactiveInterval(60 * 60 * 24);
-        return session;
+        return userById.getUserIdx();
     }
 
     public UserSendingDTO convertUser2DTO(User user){
