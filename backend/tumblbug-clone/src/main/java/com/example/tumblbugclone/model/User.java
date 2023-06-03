@@ -7,7 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "USER")
@@ -50,7 +52,9 @@ public class User {
     private boolean isActive;
 
 
-    //좋아요 - 1대 다 매핑
+    @Column(name = "Like")
+    @OneToMany(mappedBy = "user")
+    List<Like> likes = new ArrayList<>();
     //후원 - 1대 다 매핑
 
 
