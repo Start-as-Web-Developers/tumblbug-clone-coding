@@ -286,13 +286,12 @@ public class UserServiceTest {
         UserLoginDTO loginDTO = new UserLoginDTO();
         loginDTO.setUserId(savedUser.getUserId());
         loginDTO.setUserPassword(savedUser.getUserPassword());
-        HttpSession session = new MockHttpSession();
 
         //when
-        HttpSession settingSession = userService.login(loginDTO, session);
+        long userIndex = userService.login(loginDTO);
 
         //then
-        Assertions.assertThat(settingSession.getAttribute(HttpConst.SESSION_USER_INDEX)).isEqualTo(savedIndex);
+        Assertions.assertThat(userIndex).isEqualTo(savedIndex);
     }
 
     @Test(expected = WrongPasswordException.class)
@@ -305,10 +304,9 @@ public class UserServiceTest {
         UserLoginDTO loginDTO = new UserLoginDTO();
         loginDTO.setUserId(savedUser.getUserId());
         loginDTO.setUserPassword("WrongPassword");
-        HttpSession session = new MockHttpSession();
 
         //when
-        HttpSession settingSession = userService.login(loginDTO, session);
+        userService.login(loginDTO);
 
         //then
     }
@@ -324,7 +322,7 @@ public class UserServiceTest {
         loginDTO.setUserPassword("WrongPassword");
         HttpSession session = new MockHttpSession();
 
-        userService.login(loginDTO, session);
+        userService.login(loginDTO);
         //then
     }
 

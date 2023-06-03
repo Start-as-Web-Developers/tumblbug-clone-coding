@@ -124,8 +124,9 @@ public class UserController {
     @GetMapping(HttpConst.USER_LOGIN_URL)
     public ResponseEntity login(@RequestBody UserLoginDTO loginDTO, HttpSession session, HttpServletResponse response) {
         response.setCharacterEncoding("UTF-8");
+        long loginUserIndex;
         try {
-            userService.login(loginDTO, session);
+            loginUserIndex = userService.login(loginDTO);
         } catch (UserCantFindException | WrongPasswordException e) {
             HttpHeaders headers = new HttpHeaders();
             headers.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, e.getMessage());
@@ -133,6 +134,10 @@ public class UserController {
                     .headers(headers)
                     .build();
         }
+
+        session.setAttribute(HttpConst.SESSION_USER_INDEX, loginUserIndex);
+        session.setMaxInactiveInterval(60 * 60 * 24);
+
         return ResponseEntity.ok().build();
     }
 
