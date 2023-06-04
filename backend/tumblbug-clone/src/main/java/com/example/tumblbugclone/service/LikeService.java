@@ -1,5 +1,12 @@
 package com.example.tumblbugclone.service;
 
+import com.example.tumblbugclone.model.Like;
+import com.example.tumblbugclone.model.Project;
+import com.example.tumblbugclone.model.User;
+import com.example.tumblbugclone.repository.LikeRepository;
+import com.example.tumblbugclone.repository.ProjectRepository;
+import com.example.tumblbugclone.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -7,6 +14,19 @@ import java.util.List;
 
 @Service
 public class LikeService {
+
+    private final LikeRepository likeRepository;
+
+    private final UserRepository userRepository;
+
+    private final ProjectRepository projectRepository;
+
+    @Autowired
+    public LikeService(LikeRepository likeRepository, UserRepository userRepository, ProjectRepository projectRepository){
+        this.likeRepository = likeRepository;
+        this.userRepository = userRepository;
+        this.projectRepository = projectRepository;
+    }
 
     /*
     * 사용자 정보는 어떻게 받아오나?
@@ -18,19 +38,30 @@ public class LikeService {
     *   해당 부분은 SessionService, SessionRepository로 분기 될 수 있음
     * Service에서 사용자 Entity를 이용한다.*/
 
-    public long like(){
-        return 0l;
+    public void like(long userIdx, long projectId){
+        Project project = projectRepository.findProjectById(projectId);
+        User user = userRepository.findUserByIndex(userIdx);
+
+        likeRepository.like(user, project);
     }
 
-    public void dislike(){}
+    public int countProjectLike(long projectId){
+        Project project = projectRepository.findProjectById(projectId);
+        List<Like> likes = likeRepository.getProjectLikeList(project);
 
-    public int countProjectLike(){
-        return 0;
+        return likes.size();
     }
 
-    /*public List<Like> getUserLikes(){
-        return new ArrayList<>();
-    }*/
+    /*
+    public boolean checkLike(long userIdx, long projectId) {
+        Project project = projectRepository.findProjectById(projectId);
+        User user = userRepository.findUserByIndex(userIdx);
+
+        Like like = likeRepository.findLikeByParam(user, project);
+
+        return like.isActive();
+    }
+    */
 
  
 }

@@ -12,8 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
-import static org.junit.Assert.*;
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:appConfig.xml")
 public class LikeRepositoryTest {
@@ -37,7 +35,7 @@ public class LikeRepositoryTest {
         projectRepository.save(project);
 
         //when
-        long likeId = likeRepository.save(user, project);
+        long likeId = likeRepository.like(user, project);
 
         //then
         Assertions.assertThat(likeRepository.findLikeById(likeId)
@@ -59,10 +57,10 @@ public class LikeRepositoryTest {
         userRepository.save(user);
         Project project = makeProject(user);
         projectRepository.save(project);
-        likeRepository.save(user, project);
+        likeRepository.like(user, project);
 
         //when
-        long likeId = likeRepository.save(user, project);
+        long likeId = likeRepository.like(user, project);
 
         //then
         Assertions.assertThat(likeRepository.findLikeById(likeId)
@@ -85,11 +83,11 @@ public class LikeRepositoryTest {
         userRepository.save(user);
         Project project = makeProject(user);
         projectRepository.save(project);
-        long firstLikeId = likeRepository.save(user, project);
-        likeRepository.save(user, project);
+        long firstLikeId = likeRepository.like(user, project);
+        likeRepository.like(user, project);
 
         //when
-        long likeId = likeRepository.save(user, project);
+        long likeId = likeRepository.like(user, project);
 
         //then
         Assertions.assertThat(firstLikeId).isEqualTo(likeId);

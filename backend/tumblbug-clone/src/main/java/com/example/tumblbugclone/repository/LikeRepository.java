@@ -9,13 +9,16 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 
+import java.util.LinkedList;
+import java.util.List;
+
 @Repository
 public class LikeRepository {
 
     @PersistenceContext
     EntityManager em;
 
-    public long save(User user, Project project){
+    public long like(User user, Project project){
         Like like = findLikeByParam(user, project);
         if(like == null) {
             like = new Like();
@@ -51,5 +54,12 @@ public class LikeRepository {
         }catch(NoResultException e){
             return null;
         }
+    }
+
+    public List<Like> getProjectLikeList(Project project){
+        TypedQuery<Like> selectLikeQuery = em.createQuery("select l from Like l where l.project = :project", Like.class)
+                .setParameter("project", project);
+
+        return selectLikeQuery.getResultList();
     }
 }
