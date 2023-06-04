@@ -42,6 +42,10 @@ public class LikeRepository {
         return like;
     }
 
+    /**
+     * find like data about user between project
+     * @return null if data isn't exist, Like else
+     */
     public Like findLikeByParam(User user, Project project){
 
         TypedQuery<Like> selectLikeQuery = em.createQuery("select l from Like l where l.user = :user and l.project = :project", Like.class)

@@ -45,6 +45,15 @@ public class LikeService {
         likeRepository.like(user, project);
     }
 
+    public boolean isLike(long userIdx, long projectId){
+        Project project = projectRepository.findProjectById(projectId);
+        User user = userRepository.findUserByIndex(userIdx);
+        Like likeByParam = likeRepository.findLikeByParam(user, project);
+        if(likeByParam == null)
+            return false;
+        return likeByParam.isActive();
+    }
+
     public int countProjectLike(long projectId){
         Project project = projectRepository.findProjectById(projectId);
         List<Like> likes = likeRepository.getProjectLikeList(project);
