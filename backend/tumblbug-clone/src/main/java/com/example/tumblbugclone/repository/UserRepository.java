@@ -3,9 +3,6 @@ package com.example.tumblbugclone.repository;
 import com.example.tumblbugclone.Exception.userexception.UserEmailDuplicatedException;
 import com.example.tumblbugclone.Exception.userexception.UserIdDuplicatedException;
 import com.example.tumblbugclone.model.User;
-
-import org.springframework.dao.DataIntegrityViolationException;
-
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 import jakarta.persistence.*;

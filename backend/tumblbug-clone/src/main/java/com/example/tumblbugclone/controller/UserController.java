@@ -1,9 +1,10 @@
 package com.example.tumblbugclone.controller;
 
-import com.example.tumblbugclone.Exception.userexception.*;
+import com.example.tumblbugclone.Exception.TumblbugException;
 import com.example.tumblbugclone.dto.UserLoginDTO;
 import com.example.tumblbugclone.dto.UserReceivingDTO;
 import com.example.tumblbugclone.dto.UserSendingDTO;
+import com.example.tumblbugclone.managedconst.ExceptionConst;
 import com.example.tumblbugclone.managedconst.HttpConst;
 import com.example.tumblbugclone.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,6 +38,7 @@ public class UserController {
         return ResponseEntity.ok()
                 .body(userByIndex);
     }
+
     @GetMapping("/{userIdx}")
     public ResponseEntity checkUser(@PathVariable String userIdx) {
 
@@ -49,34 +51,24 @@ public class UserController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity signUp(@RequestBody UserReceivingDTO newUserDTO) {
+    public ResponseEntity signUp(@RequestBody UserReceivingDTO newUserDTO, HttpSession session) {
 
-        HttpHeaders errorHeader = new HttpHeaders();
         long userIndex;
         try {
             userIndex = userService.join(newUserDTO);
-        } catch (UserIdDuplicatedException e) {
-            errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.DUPLICATED_USER_ID_MESSAGE);
-            return ResponseEntity.badRequest()
-                    .headers(errorHeader)
-                    .body("");
-        } catch (UserEmailDuplicatedException e) {
-            errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.DUPLICATED_USER_EMAIL_MESSAGE);
-            return ResponseEntity.badRequest()
-                    .headers(errorHeader)
-                    .body("");
-        } catch (UserDTOConvertException e) {
-            errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, e.getMessage());
-            return ResponseEntity.badRequest()
-                    .headers(errorHeader)
-                    .body("");
+        } catch (TumblbugException e) {
+            return ResponseEntity
+                    .status(e.getErrorStatus())
+                    .build();
         }
-
+/*
         HttpHeaders userIndexHeader = new HttpHeaders();
-        userIndexHeader.set("userIndex", Long.toString(userIndex));
+        userIndexHeader.set("userIndex", Long.toString(userIndex));*/
+        session.setAttribute(HttpConst.SESSION_USER_INDEX, userIndex);
+        session.setMaxInactiveInterval(60 * 60 * 24);
 
         return ResponseEntity.ok()
-                .headers(userIndexHeader)
+                //.headers(userIndexHeader)
                 .build();
     }
 
@@ -84,20 +76,10 @@ public class UserController {
     @PatchMapping("/{userIdx}")
     public ResponseEntity update(@RequestBody UserReceivingDTO modifiedUserDTO) {
 
-        HttpHeaders errorHeader = new HttpHeaders();
         try {
             userService.modify(modifiedUserDTO);
-        } catch (UserCantModifyIdException e) {
-            errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.CANT_MODIFY_USER_ID_MESSAGE);
-            return ResponseEntity.badRequest()
-                    .headers(errorHeader)
-                    .body("");
-        } catch (UserDTOConvertException e) {
-            errorHeader.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, e.getMessage());
-
-            return ResponseEntity.badRequest()
-                    .headers(errorHeader)
-                    .body("");
+        }catch (TumblbugException e){
+            return ResponseEntity.status(e.getErrorStatus()).build();
         }
 
         return ResponseEntity.ok("");
@@ -107,14 +89,10 @@ public class UserController {
     @DeleteMapping
     public ResponseEntity unregister(@RequestBody UserReceivingDTO deleteUser) {
 
-        HttpHeaders httpHeaders = new HttpHeaders();
         try {
             userService.unregiste(deleteUser);
-        } catch (UserDTOConvertException e) {
-            httpHeaders.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, e.getMessage());
-            return ResponseEntity.badRequest()
-                    .headers(httpHeaders)
-                    .build();
+        }catch (TumblbugException e){
+            return ResponseEntity.status(e.getErrorStatus()).build();
         }
 
         return ResponseEntity.ok().build();
@@ -122,16 +100,12 @@ public class UserController {
 
 
     @GetMapping(HttpConst.USER_LOGIN_URL)
-    public ResponseEntity login(@RequestBody UserLoginDTO loginDTO, HttpSession session, HttpServletResponse response) {
-        response.setCharacterEncoding("UTF-8");
+    public ResponseEntity login(@RequestBody UserLoginDTO loginDTO, HttpSession session) {
         long loginUserIndex;
         try {
             loginUserIndex = userService.login(loginDTO);
-        } catch (UserCantFindException | WrongPasswordException e) {
-            HttpHeaders headers = new HttpHeaders();
-            headers.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, e.getMessage());
-            return ResponseEntity.badRequest()
-                    .headers(headers)
+        } catch (TumblbugException e){
+            return ResponseEntity.status(e.getErrorStatus())
                     .build();
         }
 
@@ -145,10 +119,8 @@ public class UserController {
     public ResponseEntity logout(HttpServletRequest request){
         HttpSession session = request.getSession(false);
         if(session == null){
-            HttpHeaders headers = new HttpHeaders();
-            headers.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.LOGIN_NECESSARY);
-            return ResponseEntity.badRequest()
-                    .headers(headers)
+            return ResponseEntity
+                    .status(ExceptionConst.LoginRequiredStatus)
                     .build();
         }
 
