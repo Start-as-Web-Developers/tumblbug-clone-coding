@@ -7,6 +7,7 @@ import com.example.tumblbugclone.dto.UserSendingDTO;
 import com.example.tumblbugclone.managedconst.ExceptionConst;
 import com.example.tumblbugclone.managedconst.HttpConst;
 import com.example.tumblbugclone.service.UserService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -14,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -50,7 +50,6 @@ public class UserController {
     }
 
     @PostMapping
-    @Transactional
     public ResponseEntity signUp(@RequestBody UserReceivingDTO newUserDTO, HttpSession session) {
 
         long userIndex;
@@ -61,14 +60,23 @@ public class UserController {
                     .status(e.getErrorStatus())
                     .build();
         }
-/*
-        HttpHeaders userIndexHeader = new HttpHeaders();
-        userIndexHeader.set("userIndex", Long.toString(userIndex));*/
+
+        HttpHeaders headers = new HttpHeaders();
         session.setAttribute(HttpConst.SESSION_USER_INDEX, userIndex);
         session.setMaxInactiveInterval(60 * 60 * 24);
 
+        ResponseCookie cookie = ResponseCookie.from("JSESSIONID", session.getId())
+                .domain("zangsu-backend.store")
+                .path("/")
+                .sameSite("None")
+                .httpOnly(true)
+                .secure(true)
+                .maxAge(60 * 60 * 24)
+                .build();
+        headers.set("set-cookie", cookie.toString());
+
         return ResponseEntity.ok()
-                //.headers(userIndexHeader)
+                .headers(headers)
                 .build();
     }
 

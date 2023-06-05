@@ -6,8 +6,10 @@ import com.example.tumblbugclone.model.User;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 import jakarta.persistence.*;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
+@Transactional
 public class UserRepository {
     /*
      * Refactoring :
@@ -25,6 +27,7 @@ public class UserRepository {
 
     @PersistenceContext
     EntityManager em;
+
 
 
     public long save(User user){

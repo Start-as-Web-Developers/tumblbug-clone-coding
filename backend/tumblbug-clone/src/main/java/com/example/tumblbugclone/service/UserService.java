@@ -27,7 +27,6 @@ public class UserService {
     public UserService(UserRepository userRepository){this.userRepository = userRepository;}
 
 
-
     public long join(UserReceivingDTO userDTO) throws UserEmailDuplicatedException, UserIdDuplicatedException, UserDTOConvertException {
         User user = convertDTO2User(userDTO);
  

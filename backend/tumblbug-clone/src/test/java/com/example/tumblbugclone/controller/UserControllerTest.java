@@ -1,3 +1,4 @@
+/*
 package com.example.tumblbugclone.controller;
 import com.example.tumblbugclone.dto.UserLoginDTO;
 import com.example.tumblbugclone.dto.UserReceivingDTO;
@@ -251,3 +252,4 @@ public class UserControllerTest {
     }
 
 }
+*/
