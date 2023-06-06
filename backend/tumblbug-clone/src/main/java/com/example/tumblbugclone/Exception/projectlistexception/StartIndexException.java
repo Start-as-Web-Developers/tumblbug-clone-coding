@@ -1,8 +1,11 @@
 package com.example.tumblbugclone.Exception.projectlistexception;
 
-public class StartIndexException extends Exception {
+import com.example.tumblbugclone.Exception.TumblbugException;
+import com.example.tumblbugclone.managedconst.ExceptionConst;
+
+public class StartIndexException extends TumblbugException {
     public StartIndexException() {
-        super();
+        super(ExceptionConst.StartIndexStatus);
     }
 
     public StartIndexException(String message) {

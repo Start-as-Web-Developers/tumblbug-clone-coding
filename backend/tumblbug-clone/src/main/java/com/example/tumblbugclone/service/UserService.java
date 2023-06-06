@@ -9,10 +9,8 @@ import com.example.tumblbugclone.dto.UserLoginDTO;
 import com.example.tumblbugclone.dto.UserReceivingDTO;
 import com.example.tumblbugclone.dto.UserSendingDTO;
 import com.example.tumblbugclone.managedconst.HttpConst;
-import com.example.tumblbugclone.managedconst.UserConst;
 import com.example.tumblbugclone.model.User;
 import com.example.tumblbugclone.repository.UserRepository;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -27,7 +25,6 @@ public class UserService {
 
     @Autowired
     public UserService(UserRepository userRepository){this.userRepository = userRepository;}
-
 
 
     public long join(UserReceivingDTO userDTO) throws UserEmailDuplicatedException, UserIdDuplicatedException, UserDTOConvertException {
@@ -105,11 +102,11 @@ public class UserService {
         try {
             userById = userRepository.findUserById(user.getUserId());
         }catch (EmptyResultDataAccessException e){
-            throw new UserCantFindException(UserConst.NO_USER_FOUNDED_MESSAGE);
+            throw new UserCantFindException();
         }
 
         if(!userById.getUserPassword().equals(user.getUserPassword())){
-            throw new WrongPasswordException(UserConst.WRONG_PASSWORD);
+            throw new WrongPasswordException();
         }
 
         return userById.getUserIdx();
@@ -117,25 +114,21 @@ public class UserService {
 
     public UserSendingDTO convertUser2DTO(User user){
         UserSendingDTO userDTO = new UserSendingDTO();
-
         userDTO.setUserId(user.getUserId());
-
         userDTO.setUserName(user.getUserName());
-
         userDTO.setUserEmail(user.getUserEmail());
-
         userDTO.setUserIdx(user.getUserIdx());
         userDTO.setUserImg(user.getUserImg());
         userDTO.setActive(user.isActive());
         userDTO.setGreeting(user.getGreeting());
         userDTO.setLastLogin(user.getLastLogin());
-
         return userDTO;
     }
 
     public User convertDTO2User(UserReceivingDTO newUserDTO) throws UserDTOConvertException {
         User user = new User();
         user.setUserIdx(newUserDTO.getUserIdx());
+
         if(newUserDTO.getUserName() == null){
             throw new UserDTOConvertException(HttpConst.USERNAME_IS_NULL);
         }

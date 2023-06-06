@@ -1,8 +1,10 @@
 
 package com.example.tumblbugclone.controller;
 
+import com.example.tumblbugclone.Exception.TumblbugException;
 import com.example.tumblbugclone.Exception.projectlistexception.StartIndexException;
 import com.example.tumblbugclone.dto.ProjectCardDTO;
+import com.example.tumblbugclone.managedconst.ExceptionConst;
 import com.example.tumblbugclone.managedconst.HttpConst;
 import com.example.tumblbugclone.service.ProjectCardService;
 import lombok.extern.slf4j.Slf4j;
@@ -37,12 +39,9 @@ public class ProjectCardController {
 
         try {
             projectCards = projectCardService.findOngoingFromIdx(startIdx);
-        } catch (StartIndexException e) {
-            HttpHeaders headers = new HttpHeaders();
-            headers.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, "start-idx should be multiple of 20");
-
-            return ResponseEntity.badRequest()
-                    .headers(headers)
+        } catch (TumblbugException e) {
+            return ResponseEntity
+                    .status(e.getErrorStatus())
                     .build();
         }
         return ResponseEntity.ok()
@@ -55,16 +54,12 @@ public class ProjectCardController {
 
         try {
             projectCards = projectCardService.findPreLaunchingFromIdx(startIdx);
-        } catch (StartIndexException e) {
-            HttpHeaders headers = new HttpHeaders();
-            headers.set(HttpConst.HEADER_NAME_ERROR_MESSAGE, "start-idx should be multiple of 20");
-
-            return ResponseEntity.badRequest()
-                    .headers(headers)
+        } catch (TumblbugException e) {
+            return ResponseEntity
+                    .status(e.getErrorStatus())
                     .build();
         }
         return ResponseEntity.ok()
                 .body(projectCards);
     }
-
 }
