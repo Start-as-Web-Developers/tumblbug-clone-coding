@@ -11,6 +11,7 @@ import com.example.tumblbugclone.dto.UserSendingDTO;
 import com.example.tumblbugclone.managedconst.HttpConst;
 import com.example.tumblbugclone.model.User;
 import com.example.tumblbugclone.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
 
+@Slf4j
 @Service
 public class UserService {
 
@@ -98,6 +100,10 @@ public class UserService {
     }
 
     public long login(UserLoginDTO user) throws UserCantFindException, WrongPasswordException {
+        log.info("UserService.login");
+        log.info("user.getUserId() = {}/" , user.getUserId() );
+        log.info("user.getUserPassword() = {}/");
+
         User userById;
         try {
             userById = userRepository.findUserById(user.getUserId());

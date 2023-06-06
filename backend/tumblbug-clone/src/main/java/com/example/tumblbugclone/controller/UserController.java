@@ -105,23 +105,37 @@ public class UserController {
     }
 
 
-    @GetMapping(HttpConst.USER_LOGIN_URL)
+    @PostMapping(HttpConst.USER_LOGIN_URL)
     public ResponseEntity login(@RequestBody UserLoginDTO loginDTO, HttpSession session) {
         long loginUserIndex;
         try {
+            log.info("login Id:{}, PW:{}/", loginDTO.getUserId(), loginDTO.getUserPassword());
             loginUserIndex = userService.login(loginDTO);
         } catch (TumblbugException e){
             return ResponseEntity.status(e.getErrorStatus())
                     .build();
         }
 
+        HttpHeaders headers = new HttpHeaders();
         session.setAttribute(HttpConst.SESSION_USER_INDEX, loginUserIndex);
         session.setMaxInactiveInterval(60 * 60 * 24);
 
-        return ResponseEntity.ok().build();
+        ResponseCookie cookie = ResponseCookie.from("JSESSIONID", session.getId())
+                .domain("zangsu-backend.store")
+                .path("/")
+                .sameSite("None")
+                .httpOnly(true)
+                .secure(true)
+                .maxAge(60 * 60 * 24)
+                .build();
+        headers.set("set-cookie", cookie.toString());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .build();
     }
 
-    @GetMapping(HttpConst.USER_LOGOUT_URL)
+    @PostMapping(HttpConst.USER_LOGOUT_URL)
     public ResponseEntity logout(HttpServletRequest request){
         HttpSession session = request.getSession(false);
         if(session == null){
