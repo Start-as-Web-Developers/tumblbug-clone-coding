@@ -100,10 +100,6 @@ public class UserService {
     }
 
     public long login(UserLoginDTO user) throws UserCantFindException, WrongPasswordException {
-        log.info("UserService.login");
-        log.info("user.getUserId() = {}/" , user.getUserId() );
-        log.info("user.getUserPassword() = {}/");
-
         User userById;
         try {
             userById = userRepository.findUserById(user.getUserId());

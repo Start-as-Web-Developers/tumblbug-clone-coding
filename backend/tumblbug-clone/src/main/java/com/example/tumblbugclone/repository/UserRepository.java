@@ -46,8 +46,6 @@ public class UserRepository {
     }
 
     public User findUserById(String id){
-        log.info("UserRepository.findUserById - id : {}/");
-
         User findUser = em.createQuery("select m from User m where m.userId = :id", User.class)
                 .setParameter("id", id)
                 .getSingleResult();

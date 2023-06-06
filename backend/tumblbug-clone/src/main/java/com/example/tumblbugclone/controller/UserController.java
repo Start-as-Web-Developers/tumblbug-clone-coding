@@ -109,7 +109,6 @@ public class UserController {
     public ResponseEntity login(@RequestBody UserLoginDTO loginDTO, HttpSession session) {
         long loginUserIndex;
         try {
-            log.info("login Id:{}, PW:{}/", loginDTO.getUserId(), loginDTO.getUserPassword());
             loginUserIndex = userService.login(loginDTO);
         } catch (TumblbugException e){
             return ResponseEntity.status(e.getErrorStatus())
