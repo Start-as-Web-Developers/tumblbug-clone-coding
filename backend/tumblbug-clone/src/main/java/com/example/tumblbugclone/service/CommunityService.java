@@ -1,6 +1,7 @@
 package com.example.tumblbugclone.service;
 
 import com.example.tumblbugclone.Exception.communityException.CommunityCantFindException;
+import com.example.tumblbugclone.Exception.communityException.CommunityCantModify;
 import com.example.tumblbugclone.model.Community;
 import com.example.tumblbugclone.model.User;
 import com.example.tumblbugclone.repository.CommunityRepository;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class CommunityService {
@@ -23,9 +25,6 @@ public class CommunityService {
     }
 
     public long writeCommunity(Community community) throws ParseException {
-        // 임시 저장
-        User user = userRepository.findUserByIndex(1L);
-        community.setUser(user);
 
         community.setWriteDate(Callendar.getToday());
         return communityRepository.save(community);
@@ -43,22 +42,33 @@ public class CommunityService {
         return communityList;
     }
 
-    public long modify(Community community) throws Exception {
+    public long modify(Community community, Long userIndex) throws Exception {
         Community findCommunity = communityRepository.findCommunityById(community.getCommunityId());
         if(findCommunity.getCommunityId() != community.getCommunityId()) {
             throw new CommunityCantFindException();
         }
 
-        // 임시 저장
-        User user = userRepository.findUserByIndex(1L);
+        if(!Objects.equals(findCommunity.getUser().getUserIdx(), userIndex)) {
+            throw new CommunityCantModify();
+        }
+
+        User user = new User();
+        user.setUserIdx(userIndex);
         community.setUser(user);
+
         community.setWriteDate(findCommunity.getWriteDate());
         community.setModiDate(Callendar.getToday());
 
        return communityRepository.modify(community);
     }
 
-    public void delete(long communityId) throws Exception {
+    public void delete(long communityId, Long userIndex) throws Exception {
+        Community findCommunity = communityRepository.findCommunityById(communityId);
+
+        if(!Objects.equals(findCommunity.getUser().getUserIdx(), userIndex)) {
+            throw new CommunityCantModify();
+        }
+
        communityRepository.delete(communityId);
     }
 
