@@ -1,10 +1,8 @@
-/*
 package com.example.tumblbugclone.controller;
 import com.example.tumblbugclone.dto.UserLoginDTO;
 import com.example.tumblbugclone.dto.UserReceivingDTO;
 import com.example.tumblbugclone.managedconst.ExceptionConst;
 import com.example.tumblbugclone.managedconst.HttpConst;
-import com.example.tumblbugclone.managedconst.UserConst;
 import com.example.tumblbugclone.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
@@ -178,7 +176,7 @@ public class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(deleteUser)))
                 .andExpect(status().isOk());
-        Assertions.assertThat(userService.findUserByIndex(savedIdx)
+        Assertions.assertThat(userService.findSendingUserByIndex(savedIdx)
                         .isActive())
                 .isFalse();
     }
@@ -196,7 +194,7 @@ public class UserControllerTest {
         loginDTO.setUserPassword(user.getUserPassword());
 
         //then
-        mockMvc.perform(get(HttpConst.USER_URI + HttpConst.USER_LOGIN_URL)
+        mockMvc.perform(get(HttpConst.USER_URI + HttpConst.USER_LOGIN_URI)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginDTO)))
                 .andExpect(status().isOk());
@@ -215,7 +213,7 @@ public class UserControllerTest {
         loginDTO.setUserPassword(user.getUserPassword());
 
         //then
-        mockMvc.perform(get(HttpConst.USER_URI + HttpConst.USER_LOGIN_URL)
+        mockMvc.perform(get(HttpConst.USER_URI + HttpConst.USER_LOGIN_URI)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginDTO)))
                 .andExpect(status().is(ExceptionConst.UserCantFindStatus));
@@ -234,7 +232,7 @@ public class UserControllerTest {
         loginDTO.setUserPassword("WrongPassword");
 
         //then
-        mockMvc.perform(get(HttpConst.USER_URI + HttpConst.USER_LOGIN_URL)
+        mockMvc.perform(get(HttpConst.USER_URI + HttpConst.USER_LOGIN_URI)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginDTO)))
                 .andExpect(status().is(ExceptionConst.WrongPasswordStatus));
@@ -252,4 +250,3 @@ public class UserControllerTest {
     }
 
 }
-*/

@@ -9,6 +9,7 @@ public class ExceptionConst { //Tumblbug 내부에 작성하는 것이 좋았을
     public static final int UserIdDuplicatedStatus = 415;
     public static final int WrongPasswordStatus = 416;
     public static final int LoginRequiredStatus = 417;
+    public static final int UnauthorizedUser = 418;
 
     //== Project card const ==//
     public static final int StartIndexStatus = 421;
@@ -17,4 +18,5 @@ public class ExceptionConst { //Tumblbug 내부에 작성하는 것이 좋았을
     public static final int UpdateCantModifyId = 631;
     public static final int UpdateCantModifyModifiedToFalse = 632;
     public static final int CantFindUpdate = 633;
+    public static final int NotMatchProjectId = 634;
 }

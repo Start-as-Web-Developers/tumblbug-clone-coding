@@ -42,13 +42,16 @@ public class UserService {
     }
 
 
-    public UserSendingDTO findUserByIndex(long userIdx){
+    public UserSendingDTO findSendingUserByIndex(long userIdx){
 
         User findUser = userRepository.findUserByIndex(userIdx);
 
         return convertUser2DTO(findUser);
     }
 
+    public User findUserByIndex(long userIdx){
+        return userRepository.findUserByIndex(userIdx);
+    }
 
     public UserSendingDTO findUserById(String userId){
 
