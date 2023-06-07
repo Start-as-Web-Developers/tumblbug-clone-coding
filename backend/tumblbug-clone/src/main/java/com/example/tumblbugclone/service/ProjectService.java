@@ -1,5 +1,6 @@
 package com.example.tumblbugclone.service;
 
+import com.example.tumblbugclone.Exception.projectException.ProjectCantModify;
 import com.example.tumblbugclone.dto.PlanDTO;
 import com.example.tumblbugclone.dto.ProjectAllDTO;
 import com.example.tumblbugclone.dto.ProductDTO;
@@ -23,23 +24,28 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
 
     @Autowired
-    public ProjectService(ProjectRepository projectRepository, ProductService productService, UserRepository userRepository) {
+    public ProjectService(ProjectRepository projectRepository, ProductService productService, UserRepository userRepository, LikeService likeService, UserService userService) {
         this.projectRepository = projectRepository;
         this.productService = productService;
-        this.userRepository = userRepository;
+        this.likeService = likeService;
+        this.userService = userService;
     }
     private final ProductService productService;
-
-    //임시 유저 저장 로직
-    private final UserRepository userRepository;
-
+    private final LikeService likeService;
+    private final UserService userService;
 
 
-    public long saveProject(ProjectAllDTO projectAllDTO) throws ParseException {
+
+
+    public long saveProject(ProjectAllDTO projectAllDTO, long userIndex) throws ParseException {
         Project project = new Project();
         ProjectDTO projectAtDTO = projectAllDTO.getProject();
-        project.setUser(saveUser());
+
         makeProjectFromDTO(project, projectAtDTO);
+
+        User user = new User();
+        user.setUserIdx(userIndex);
+        project.setUser(user);
 
         long projectId = projectRepository.save(project);
 
@@ -52,21 +58,7 @@ public class ProjectService {
         return projectId;
     }
 
-
-    //유저 임시 저장 로직
-    private User saveUser() {
-        User user = new User();
-        user.setUserId("id");
-        user.setUserEmail("email");
-        user.setUserName("name");
-        user.setUserPassword("password");
-        user.setGreeting("greeting");
-        user.setUserImg("img");
-        userRepository.save(user);
-        return user;
-    }
-
-    public ProjectAllDTO readProject(long projectId) throws Exception {
+    public ProjectAllDTO readProject(long projectId, long userIndex) throws Exception {
         ProjectAllDTO projectAll = new ProjectAllDTO();
         ProjectDTO projectDTO = new ProjectDTO();
 
@@ -74,12 +66,25 @@ public class ProjectService {
         project = projectRepository.findProjectById(projectId);
         makeDTOFromProject(project, projectDTO);
 
+        projectDTO.setTotalLike((long) likeService.countProjectLike(projectId));
+        projectDTO.setLike(likeService.isLike(userIndex, projectId));
+
+        if(userIndex == project.getUser().getUserIdx())
+            projectDTO.setCreate(true);
+        else
+            projectDTO.setCreate(false);
+
+        // 현재 후원 정보가 없어 구현은 불가하므로 임시 삽입
+        projectDTO.setAchievement(50L);
+        projectDTO.setSponsor(50L);
+
         List<ProductDTO> productDTO = productService.readProduct(projectId);
 
         projectAll.setProject(projectDTO);
         projectAll.setProduct(productDTO);
-        //임시 삽입
-        projectAll.setCreater(userRepository.findUserById("id"));
+
+        User creater = project.getUser();
+        projectAll.setCreater(userService.convertUser2DTO(creater));
 
         return projectAll;
     }
@@ -99,12 +104,22 @@ public class ProjectService {
         return planDTO;
     }
 
-    public long updateProject(Project project) throws ParseException {
-        project.setUser(userRepository.findUserById("id"));
+    public long updateProject(Project project, long userIndex) throws ParseException, ProjectCantModify {
+        Project targetProject = projectRepository.findProjectById(project.getProjectId());
+        if(targetProject.getUser().getUserIdx() != userIndex)
+            throw new ProjectCantModify();
+
+        User user = new User();
+        user.setUserIdx(userIndex);
+        project.setUser(user);
+        
         return projectRepository.modify(project);
     }
 
-    public void deleteProject(long projectId) throws Exception {
+    public void deleteProject(long projectId, long userIndex) throws Exception {
+        Project targetProject = projectRepository.findProjectById(projectId);
+        if(targetProject.getUser().getUserIdx() != userIndex)
+            throw new ProjectCantModify();
         productService.deleteProduct(projectId);
         projectRepository.delete(projectId);
     }
