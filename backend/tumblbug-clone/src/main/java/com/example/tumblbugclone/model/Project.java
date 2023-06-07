@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 @Entity
@@ -67,5 +68,8 @@ public class Project {
     private String planGuide;
 
     @OneToMany(mappedBy = "project")
-    List<Like> likePeople = new ArrayList<>();
+    List<Like> likePeople = new LinkedList<>();
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    List<ProjectUpdate> update = new LinkedList<>();
 }
