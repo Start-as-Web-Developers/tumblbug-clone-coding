@@ -14,7 +14,7 @@ public class ProjectUpdateDTO {
 
     long id;
     String content;
-    String createrName;
+    UserSendingDTO creater;
     long projectId;
     Date updateDate;
     boolean modified = false;

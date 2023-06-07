@@ -31,7 +31,7 @@ public class UserController {
     public ResponseEntity getUser(HttpSession session) {
         long userIndex = (long)session.getAttribute(HttpConst.SESSION_USER_INDEX);
 
-        UserSendingDTO userByIndex = userService.findUserByIndex(userIndex);
+        UserSendingDTO userByIndex = userService.findSendingUserByIndex(userIndex);
 
         return ResponseEntity.ok()
                 .body(userByIndex);
@@ -40,7 +40,7 @@ public class UserController {
     @GetMapping("/{userIdx}")
     public ResponseEntity checkUser(@PathVariable String userIdx) {
 
-        UserSendingDTO userByIndex = userService.findUserByIndex(Long.parseLong(userIdx));
+        UserSendingDTO userByIndex = userService.findSendingUserByIndex(Long.parseLong(userIdx));
 
 
         return ResponseEntity.ok()
@@ -105,7 +105,7 @@ public class UserController {
     }
 
 
-    @GetMapping(HttpConst.USER_LOGIN_URL)
+    @GetMapping(HttpConst.USER_LOGIN_URI)
     public ResponseEntity login(@RequestBody UserLoginDTO loginDTO, HttpSession session) {
         long loginUserIndex;
         try {
@@ -121,7 +121,7 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(HttpConst.USER_LOGOUT_URL)
+    @GetMapping(HttpConst.USER_LOGOUT_URI)
     public ResponseEntity logout(HttpServletRequest request){
         HttpSession session = request.getSession(false);
         if(session == null){

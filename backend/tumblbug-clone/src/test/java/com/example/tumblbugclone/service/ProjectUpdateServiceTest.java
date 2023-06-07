@@ -1,6 +1,7 @@
 package com.example.tumblbugclone.service;
 
 import com.example.tumblbugclone.Exception.updateException.CantFindUpdateException;
+import com.example.tumblbugclone.Exception.userexception.UnauthorizedUserException;
 import com.example.tumblbugclone.dto.ProjectUpdateDTO;
 import com.example.tumblbugclone.model.Project;
 import com.example.tumblbugclone.model.ProjectUpdate;
@@ -41,12 +42,12 @@ public class ProjectUpdateServiceTest {
         ProjectUpdateDTO dto = makeUpdate();
 
         //when
-        long updateId = projectUpdateService.save(userIndex, projectId, dto);
+        long updateId = projectUpdateService.save(userIndex, projectId, dto.getContent());
         ProjectUpdateDTO projectUpdateDTO = projectUpdateService.findProjectUpdateDTO(updateId);
 
         //then
         Assertions.assertThat(projectUpdateDTO.getContent()).isEqualTo(dto.getContent());
-        Assertions.assertThat(projectUpdateDTO.getCreaterName()).isEqualTo(user.getUserName());
+        Assertions.assertThat(projectUpdateDTO.getCreater().getUserName()).isEqualTo(user.getUserName());
         Assertions.assertThat(projectUpdateDTO.getProjectId()).isEqualTo(projectId);
     }
 
@@ -60,14 +61,14 @@ public class ProjectUpdateServiceTest {
         Project project = makeProject(user);
         long projectId = projectRepository.save(project);
         ProjectUpdateDTO dto = makeUpdate();
-        long updateId = projectUpdateService.save(userIndex, projectId, dto);
+        long updateId = projectUpdateService.save(userIndex, projectId, dto.getContent());
 
         //when
         ProjectUpdateDTO projectUpdateDTO = projectUpdateService.findProjectUpdateDTO(updateId);
 
         //then
         Assertions.assertThat(projectUpdateDTO
-                        .getCreaterName())
+                        .getCreater().getUserName())
                 .isEqualTo(user.getUserName());
         Assertions.assertThat(projectUpdateDTO
                         .getProjectId())
@@ -89,17 +90,34 @@ public class ProjectUpdateServiceTest {
         Project project = makeProject(user);
         long projectId = projectRepository.save(project);
         ProjectUpdateDTO update = makeUpdate();
-        long updateId = projectUpdateService.save(userIdx, projectId, update);
+        long updateId = projectUpdateService.save(userIdx, projectId, update.getContent());
 
         //when
-        ProjectUpdateDTO original = projectUpdateService.findProjectUpdateDTO(updateId);
-        original.setContent("Modified Content");
-        projectUpdateService.update(original);
+        String modifyString = "Modified Content";
+        projectUpdateService.update(userIdx, updateId, modifyString);
         ProjectUpdateDTO modifiedDTO = projectUpdateService.findProjectUpdateDTO(updateId);
 
         //then
         Assertions.assertThat(modifiedDTO.isModified()).isTrue();
-        Assertions.assertThat(modifiedDTO.getContent()).isEqualTo(original.getContent());
+        Assertions.assertThat(modifiedDTO.getContent()).isEqualTo(modifyString);
+    }
+
+    @Test(expected = UnauthorizedUserException.class)
+    @Transactional
+    public void 잘못된_권한으로_업데이트_수정() throws Exception{
+        //given
+        User user = makeNthUser(1);
+        long userIdx = userRepository.save(user);
+        Project project = makeProject(user);
+        long projectId = projectRepository.save(project);
+        ProjectUpdateDTO update = makeUpdate();
+        long updateId = projectUpdateService.save(userIdx, projectId, update.getContent());
+
+        //when
+        String modifyString = "Modified Content";
+        projectUpdateService.update(userIdx+1, updateId, modifyString);
+
+        //then
     }
 
     @Test(expected = CantFindUpdateException.class)
@@ -111,15 +129,29 @@ public class ProjectUpdateServiceTest {
         Project project = makeProject(user);
         long projectId = projectRepository.save(project);
         ProjectUpdateDTO update = makeUpdate();
-        long updateId = projectUpdateService.save(userIdx, projectId, update);
+        long updateId = projectUpdateService.save(userIdx, projectId, update.getContent());
 
         //when
-        projectUpdateService.delete(updateId);
+        projectUpdateService.delete(userIdx, updateId);
 
         //then
         projectUpdateService.findProjectUpdateDTO(updateId);
     }
 
+    @Test(expected = UnauthorizedUserException.class)
+    @Transactional
+    public void 잘못된_권한_업데이트_삭제() throws Exception{
+        //given
+        User user = makeNthUser(1);
+        long userIdx = userRepository.save(user);
+        Project project = makeProject(user);
+        long projectId = projectRepository.save(project);
+        ProjectUpdateDTO update = makeUpdate();
+        long updateId = projectUpdateService.save(userIdx, projectId, update.getContent());
+
+        //when
+        projectUpdateService.delete(userIdx+1, updateId);
+    }
     @Test
     @Transactional
     public void 업데이트_목록_조회() throws Exception{
@@ -129,16 +161,16 @@ public class ProjectUpdateServiceTest {
         Project project = makeProject(user);
         long projectId = projectRepository.save(project);
         ProjectUpdateDTO update1 = makeUpdate();
-        long updateId1 = projectUpdateService.save(userIdx, projectId, update1);
+        long updateId1 = projectUpdateService.save(userIdx, projectId, update1.getContent());
         update1 = projectUpdateService.findProjectUpdateDTO(updateId1);
         ProjectUpdateDTO update2 = makeUpdate();
-        long updateId2 = projectUpdateService.save(userIdx, projectId, update2);
+        long updateId2 = projectUpdateService.save(userIdx, projectId, update2.getContent());
         update2 = projectUpdateService.findProjectUpdateDTO(updateId2);
         ProjectUpdateDTO update3 = makeUpdate();
-        long updateId3 = projectUpdateService.save(userIdx, projectId, update3);
+        long updateId3 = projectUpdateService.save(userIdx, projectId, update3.getContent());
         update3 = projectUpdateService.findProjectUpdateDTO(updateId3);
         ProjectUpdateDTO update4 = makeUpdate();
-        long updateId4 = projectUpdateService.save(userIdx, projectId, update4);
+        long updateId4 = projectUpdateService.save(userIdx, projectId, update4.getContent());
         update4 = projectUpdateService.findProjectUpdateDTO(updateId4);
 
         //when
