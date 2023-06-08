@@ -1,5 +1,6 @@
 package com.example.tumblbugclone.service;
 
+import com.example.tumblbugclone.Exception.TumblbugException;
 import com.example.tumblbugclone.Exception.communityException.CommunityCantFindException;
 import com.example.tumblbugclone.Exception.communityException.CommunityCantModify;
 import com.example.tumblbugclone.model.Community;
@@ -18,19 +19,19 @@ import java.util.Objects;
 public class CommunityService {
 
     private final CommunityRepository communityRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final ProjectRepository projectRepository;
 
-    public CommunityService(CommunityRepository communityRepository, ProjectRepository projectRepository, UserRepository userRepository, ProjectRepository projectRepository1) {
+    public CommunityService(CommunityRepository communityRepository, ProjectRepository projectRepository, UserRepository userRepository, UserService userService, ProjectRepository projectRepository1) {
         this.communityRepository = communityRepository;
-        this.userRepository = userRepository;
+        this.userService = userService;
         this.projectRepository = projectRepository1;
     }
 
-    public long writeCommunity(Community community, long projectId, long userIndex) throws ParseException {
+    public long writeCommunity(Community community, long projectId, long userIndex) throws ParseException, TumblbugException {
 
         Project project = projectRepository.findProjectById(projectId);
-        User user = userRepository.findUserByIndex(userIndex);
+        User user = userService.findUserByIndex(userIndex);
 
         community.setProject(project);
         community.setUser(user);
@@ -61,7 +62,7 @@ public class CommunityService {
             throw new CommunityCantModify();
         }
 
-        User user = userRepository.findUserByIndex(userIndex);
+        User user = userService.findUserByIndex(userIndex);
         community.setUser(user);
 
         community.setWriteDate(findCommunity.getWriteDate());
