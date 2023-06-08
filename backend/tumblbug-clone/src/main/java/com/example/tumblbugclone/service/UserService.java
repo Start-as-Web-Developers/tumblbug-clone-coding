@@ -56,13 +56,18 @@ public class UserService {
         return convertUser2DTO(findUser);
     }
 
-    public User findUserByIndex(long userIdx){
-        return userRepository.findUserByIndex(userIdx);
+    public User findUserByIndex(long userIdx) throws TumblbugException {
+        User user = userRepository.findUserByIndex(userIdx);
+        if(user == null)
+            throw new UserCantFindException();
+        return user;
     }
 
-    public UserSendingDTO findUserById(String userId){
+    public UserSendingDTO findUserById(String userId) throws TumblbugException {
 
         User findUser = userRepository.findUserById(userId);
+        if(findUser == null)
+            throw new UserCantFindException();
 
         return convertUser2DTO(findUser);
     }
