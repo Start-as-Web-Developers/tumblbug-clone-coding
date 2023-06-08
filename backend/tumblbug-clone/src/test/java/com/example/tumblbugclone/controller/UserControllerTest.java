@@ -194,7 +194,7 @@ public class UserControllerTest {
         loginDTO.setUserPassword(user.getUserPassword());
 
         //then
-        mockMvc.perform(get(HttpConst.USER_URI + HttpConst.USER_LOGIN_URI)
+        mockMvc.perform(post(HttpConst.USER_URI + HttpConst.USER_LOGIN_URI)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginDTO)))
                 .andExpect(status().isOk());
@@ -213,7 +213,7 @@ public class UserControllerTest {
         loginDTO.setUserPassword(user.getUserPassword());
 
         //then
-        mockMvc.perform(get(HttpConst.USER_URI + HttpConst.USER_LOGIN_URI)
+        mockMvc.perform(post(HttpConst.USER_URI + HttpConst.USER_LOGIN_URI)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginDTO)))
                 .andExpect(status().is(ExceptionConst.UserCantFindStatus));
@@ -232,7 +232,7 @@ public class UserControllerTest {
         loginDTO.setUserPassword("WrongPassword");
 
         //then
-        mockMvc.perform(get(HttpConst.USER_URI + HttpConst.USER_LOGIN_URI)
+        mockMvc.perform(post(HttpConst.USER_URI + HttpConst.USER_LOGIN_URI)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginDTO)))
                 .andExpect(status().is(ExceptionConst.WrongPasswordStatus));

@@ -1,5 +1,6 @@
 package com.example.tumblbugclone.service;
 
+import com.example.tumblbugclone.Exception.TumblbugException;
 import com.example.tumblbugclone.Exception.updateException.CantFindUpdateException;
 import com.example.tumblbugclone.Exception.updateException.UpdateCantModifyModifiedToFalse;
 import com.example.tumblbugclone.Exception.userexception.UnauthorizedUserException;
@@ -34,7 +35,7 @@ public class ProjectUpdateService {
         this.userService = userService;
     }
 
-    public long save(long userIndex, long projectId, String content) throws UserCantFindException {
+    public long save(long userIndex, long projectId, String content) throws TumblbugException {
         User user;
         ProjectUpdateDTO projectUpdateDTO = new ProjectUpdateDTO();
         try{
@@ -59,14 +60,14 @@ public class ProjectUpdateService {
         return updateId;
     }
 
-    public ProjectUpdateDTO findProjectUpdateDTO(long projectUpdateId) throws CantFindUpdateException {
+    public ProjectUpdateDTO findProjectUpdateDTO(long projectUpdateId) throws TumblbugException {
         ProjectUpdate byId = projectUpdateRepository.findById(projectUpdateId);
         if(byId == null)
             throw new CantFindUpdateException();
         return convertUpdate2DTO(byId);
     }
 
-    public ProjectUpdateDTO update(long userIdx, long ContentId, String newContent) throws UnauthorizedUserException {
+    public ProjectUpdateDTO update(long userIdx, long ContentId, String newContent) throws TumblbugException {
         ProjectUpdate originalUpdate = projectUpdateRepository.findById(ContentId);
         if(originalUpdate.getCreater().getUserIdx() != userIdx)
             throw new UnauthorizedUserException();
@@ -79,7 +80,7 @@ public class ProjectUpdateService {
         return convertUpdate2DTO(originalUpdate);
     }
 
-    public void delete(long userIdx, long ContentId) throws UnauthorizedUserException, CantFindUpdateException {
+    public void delete(long userIdx, long ContentId) throws TumblbugException {
         //사용자의 삭제 권한 확인 필요
         ProjectUpdate updateById = projectUpdateRepository.findById(ContentId);
         if(updateById == null)
@@ -89,7 +90,7 @@ public class ProjectUpdateService {
         projectUpdateRepository.remove(updateById);
     }
 
-    public List<ProjectUpdateDTO> findUpdateList(long projectId) throws CantFindUpdateException {
+    public List<ProjectUpdateDTO> findUpdateList(long projectId) throws TumblbugException {
         List<ProjectUpdate> updates = projectUpdateRepository.findUpdateAboutProject(projectRepository.findProjectById(projectId));
         List<ProjectUpdateDTO> dtos = new LinkedList<>();
         if(updates.isEmpty())
@@ -113,8 +114,13 @@ public class ProjectUpdateService {
         return projectUpdate;
     }
 
-    private ProjectUpdateDTO convertUpdate2DTO(ProjectUpdate projectUpdate) {
-        UserSendingDTO creater = userService.findSendingUserByIndex(projectUpdate.getCreater().getUserIdx());
+    private ProjectUpdateDTO convertUpdate2DTO(ProjectUpdate projectUpdate) throws TumblbugException {
+        UserSendingDTO creater = null;
+        try {
+            creater = userService.findSendingUserByIndex(projectUpdate.getCreater().getUserIdx());
+        } catch (TumblbugException e) {
+            throw e;
+        }
 
         ProjectUpdateDTO projectUpdateDTO = new ProjectUpdateDTO();
         projectUpdateDTO.setId(projectUpdate.getId());
