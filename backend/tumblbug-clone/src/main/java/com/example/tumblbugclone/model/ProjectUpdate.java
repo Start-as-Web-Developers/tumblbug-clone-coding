@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "PROJECT_UPDATE")
@@ -16,6 +17,7 @@ public class ProjectUpdate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "UPDATE_ID")
     long id;
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -36,5 +38,7 @@ public class ProjectUpdate {
     @Column(name = "IS_MODIFIED")
     boolean modified = false;
 
-    //댓글
+    @Column(name = "comment")
+    @OneToMany(mappedBy = "update")
+    List<UpdateComment> comment;
 }
