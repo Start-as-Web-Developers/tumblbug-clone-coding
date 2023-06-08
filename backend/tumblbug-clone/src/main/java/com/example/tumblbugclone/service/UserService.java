@@ -44,10 +44,14 @@ public class UserService {
     }
 
 
-    public UserSendingDTO findUserByIndex(long userIdx){
+    public UserSendingDTO findUserByIndex(long userIdx) throws UserCantFindException {
 
-        User findUser = userRepository.findUserByIndex(userIdx);
-
+        User findUser = null;
+        try{
+            findUser  = userRepository.findUserByIndex(userIdx);
+        } catch (EmptyResultDataAccessException e){
+            throw new UserCantFindException();
+        }
         return convertUser2DTO(findUser);
     }
 

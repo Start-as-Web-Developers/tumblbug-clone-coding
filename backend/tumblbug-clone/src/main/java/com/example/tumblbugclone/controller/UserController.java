@@ -1,6 +1,7 @@
 package com.example.tumblbugclone.controller;
 
 import com.example.tumblbugclone.Exception.TumblbugException;
+import com.example.tumblbugclone.Exception.userexception.UserCantFindException;
 import com.example.tumblbugclone.dto.UserLoginDTO;
 import com.example.tumblbugclone.dto.UserReceivingDTO;
 import com.example.tumblbugclone.dto.UserSendingDTO;
@@ -29,19 +30,28 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity getUser(HttpSession session) {
-        long userIndex = (long)session.getAttribute(HttpConst.SESSION_USER_INDEX);
+        long userIdx = (long)session.getAttribute(HttpConst.SESSION_USER_INDEX);
 
-        UserSendingDTO userByIndex = userService.findUserByIndex(userIndex);
+        UserSendingDTO userByIndex;
+        try {
+            userByIndex = userService.findUserByIndex(userIdx);
+        } catch (TumblbugException e) {
+            return ResponseEntity.status(e.getErrorStatus()).build();
+        }
 
         return ResponseEntity.ok()
                 .body(userByIndex);
     }
 
     @GetMapping("/{userIdx}")
-    public ResponseEntity checkUser(@PathVariable String userIdx) {
+    public ResponseEntity checkUser(@PathVariable long userIdx) {
 
-        UserSendingDTO userByIndex = userService.findUserByIndex(Long.parseLong(userIdx));
-
+        UserSendingDTO userByIndex;
+        try {
+            userByIndex = userService.findUserByIndex(userIdx);
+        } catch (TumblbugException e) {
+            return ResponseEntity.status(e.getErrorStatus()).build();
+        }
 
         return ResponseEntity.ok()
                 .body(userByIndex);
