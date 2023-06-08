@@ -33,17 +33,9 @@ public class CommunityController {
     @PostMapping
     @Transactional
     public ResponseEntity<String> createCommunity(@RequestBody Community community, @PathVariable("project-id") Long projectId, HttpSession session) throws Exception {
-        Project project = new Project();
-        project.setProjectId(projectId);
 
         long userIndex = (long)session.getAttribute(HttpConst.SESSION_USER_INDEX);
-        User user = new User();
-        user.setUserIdx(userIndex);
-
-        community.setProject(project);
-        community.setUser(user);
-
-        long communityId = communityService.writeCommunity(community);
+        long communityId = communityService.writeCommunity(community, projectId, userIndex);
         return ResponseEntity.ok(Long.toString(communityId));
     }
 

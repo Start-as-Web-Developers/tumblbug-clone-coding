@@ -3,6 +3,7 @@ package com.example.tumblbugclone.service;
 import com.example.tumblbugclone.Exception.communityException.CommunityCantFindException;
 import com.example.tumblbugclone.Exception.communityException.CommunityCantModify;
 import com.example.tumblbugclone.model.Community;
+import com.example.tumblbugclone.model.Project;
 import com.example.tumblbugclone.model.User;
 import com.example.tumblbugclone.repository.CommunityRepository;
 import com.example.tumblbugclone.repository.ProjectRepository;
@@ -18,13 +19,21 @@ public class CommunityService {
 
     private final CommunityRepository communityRepository;
     private final UserRepository userRepository;
+    private final ProjectRepository projectRepository;
 
-    public CommunityService(CommunityRepository communityRepository, ProjectRepository projectRepository, UserRepository userRepository) {
+    public CommunityService(CommunityRepository communityRepository, ProjectRepository projectRepository, UserRepository userRepository, ProjectRepository projectRepository1) {
         this.communityRepository = communityRepository;
         this.userRepository = userRepository;
+        this.projectRepository = projectRepository1;
     }
 
-    public long writeCommunity(Community community) throws ParseException {
+    public long writeCommunity(Community community, long projectId, long userIndex) throws ParseException {
+
+        Project project = projectRepository.findProjectById(projectId);
+        User user = userRepository.findUserByIndex(userIndex);
+
+        community.setProject(project);
+        community.setUser(user);
 
         community.setWriteDate(Callendar.getToday());
         return communityRepository.save(community);
@@ -52,8 +61,7 @@ public class CommunityService {
             throw new CommunityCantModify();
         }
 
-        User user = new User();
-        user.setUserIdx(userIndex);
+        User user = userRepository.findUserByIndex(userIndex);
         community.setUser(user);
 
         community.setWriteDate(findCommunity.getWriteDate());
