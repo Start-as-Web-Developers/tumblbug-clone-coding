@@ -13,5 +13,5 @@ public class ProjectAllDTO {
 
     private ProjectDTO project;
     private List<ProductDTO> product;
-    private User creater;
+    private UserSendingDTO creater;
 }
