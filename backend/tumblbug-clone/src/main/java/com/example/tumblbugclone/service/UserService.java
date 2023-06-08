@@ -2,6 +2,7 @@
 package com.example.tumblbugclone.service;
 
 
+import com.example.tumblbugclone.Exception.TumblbugException;
 import com.example.tumblbugclone.Exception.userexception.*;
 
 
@@ -11,6 +12,7 @@ import com.example.tumblbugclone.dto.UserSendingDTO;
 import com.example.tumblbugclone.managedconst.HttpConst;
 import com.example.tumblbugclone.model.User;
 import com.example.tumblbugclone.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
 
+@Slf4j
 @Service
 public class UserService {
 
@@ -27,7 +30,7 @@ public class UserService {
     public UserService(UserRepository userRepository){this.userRepository = userRepository;}
 
 
-    public long join(UserReceivingDTO userDTO) throws UserEmailDuplicatedException, UserIdDuplicatedException, UserDTOConvertException {
+    public long join(UserReceivingDTO userDTO) throws TumblbugException {
         User user = convertDTO2User(userDTO);
  
         try {
@@ -42,30 +45,42 @@ public class UserService {
     }
 
 
-    public UserSendingDTO findUserByIndex(long userIdx){
+    public UserSendingDTO findSendingUserByIndex(long userIdx) throws TumblbugException {
 
-        User findUser = userRepository.findUserByIndex(userIdx);
-
+        User findUser = null;
+        try{
+            findUser  = userRepository.findUserByIndex(userIdx);
+        } catch (EmptyResultDataAccessException e){
+            throw new UserCantFindException();
+        }
         return convertUser2DTO(findUser);
     }
 
+    public User findUserByIndex(long userIdx) throws TumblbugException {
+        User user = userRepository.findUserByIndex(userIdx);
+        if(user == null)
+            throw new UserCantFindException();
+        return user;
+    }
 
-    public UserSendingDTO findUserById(String userId){
+    public UserSendingDTO findUserById(String userId) throws TumblbugException {
 
         User findUser = userRepository.findUserById(userId);
+        if(findUser == null)
+            throw new UserCantFindException();
 
         return convertUser2DTO(findUser);
     }
 
 
-    public void unregiste(UserReceivingDTO userDTO) throws UserDTOConvertException {
+    public void unregiste(UserReceivingDTO userDTO) throws TumblbugException {
         User user = convertDTO2User(userDTO);
         user.setActive(false);
         userRepository.modify(user);
     }
 
 
-    public void modify(UserReceivingDTO userDTO) throws UserCantModifyIdException, UserDTOConvertException {
+    public void modify(UserReceivingDTO userDTO) throws TumblbugException {
         User user = convertDTO2User(userDTO);
 
         User findUser = userRepository.findUserByIndex(user.getUserIdx());
@@ -97,7 +112,7 @@ public class UserService {
         userRepository.modify(findUser);
     }
 
-    public long login(UserLoginDTO user) throws UserCantFindException, WrongPasswordException {
+    public long login(UserLoginDTO user) throws TumblbugException {
         User userById;
         try {
             userById = userRepository.findUserById(user.getUserId());

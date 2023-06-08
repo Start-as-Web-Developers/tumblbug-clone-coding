@@ -2,26 +2,23 @@
 package com.example.tumblbugclone.service;
 
 
+import com.example.tumblbugclone.Exception.TumblbugException;
 import com.example.tumblbugclone.Exception.userexception.*;
 
 import com.example.tumblbugclone.dto.UserLoginDTO;
 import com.example.tumblbugclone.dto.UserReceivingDTO;
 import com.example.tumblbugclone.dto.UserSendingDTO;
-import com.example.tumblbugclone.managedconst.HttpConst;
 import jakarta.servlet.http.HttpSession;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
@@ -47,13 +44,13 @@ public class UserServiceTest {
         long userIdx = userService.join(user);
 
         //then
-        Assertions.assertThat(userService.findUserByIndex(userIdx).getUserIdx()).isNotEqualTo(0);
+        Assertions.assertThat(userService.findSendingUserByIndex(userIdx).getUserIdx()).isNotEqualTo(0);
     }
 
 
     @Test(expected = UserIdDuplicatedException.class)
     @Transactional
-    public void Id가_중복되면_Exception() throws UserEmailDuplicatedException, UserIdDuplicatedException, UserDTOConvertException {
+    public void Id가_중복되면_Exception() throws TumblbugException {
         //given
 
         UserReceivingDTO user = new UserReceivingDTO();
@@ -187,7 +184,7 @@ public class UserServiceTest {
         System.out.println(userIndex);
 
         //when
-        UserSendingDTO findUserBuIndex = userService.findUserByIndex(userIndex);
+        UserSendingDTO findUserBuIndex = userService.findSendingUserByIndex(userIndex);
 
 
         //then
@@ -204,7 +201,7 @@ public class UserServiceTest {
         long savedIndex = userService.join(user);
 
         //when
-        UserSendingDTO findByIndex = userService.findUserByIndex(savedIndex);
+        UserSendingDTO findByIndex = userService.findSendingUserByIndex(savedIndex);
         UserSendingDTO findById = userService.findUserById(user.getUserId());
 
 
@@ -251,7 +248,7 @@ public class UserServiceTest {
         userService.modify(modifyUser);
 
         //then
-        UserSendingDTO findUser = userService.findUserByIndex(user.getUserIdx());
+        UserSendingDTO findUser = userService.findSendingUserByIndex(user.getUserIdx());
         modifyUser.setLastLogin(findUser.getLastLogin());
             //new Date()와 DB에서 조회한 Date의 표현 포멧이 달라 임시로 구현
         Assertions.assertThat(findUser).isEqualTo(modifyUser);
@@ -271,7 +268,7 @@ public class UserServiceTest {
         userService.unregiste(user);
 
         //then
-        Assertions.assertThat(userService.findUserByIndex(userIndex).isActive()).isFalse();
+        Assertions.assertThat(userService.findSendingUserByIndex(userIndex).isActive()).isFalse();
     }
 
 

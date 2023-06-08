@@ -71,7 +71,7 @@ public class ProjectUpdateRepositoryTest {
         projectUpdateRepository.update(projectUpdate);
 
         //then
-        Assertions.assertThat(projectUpdateRepository.findById(projectId)
+        Assertions.assertThat(projectUpdateRepository.findById(updateId)
                         .getContent())
                 .isEqualTo(modifyString);
         Assertions.assertThat(projectUpdateRepository.findById(updateId)

@@ -4,13 +4,18 @@ public class HttpConst {
     //==MAIN URL ==//
     public static final String USER_URI = "/user";
     public static final String USER_SIGNUP_URI = "/signup";
-    public static final String USER_LOGIN_URL = "/login";
-    public static final String USER_LOGOUT_URL = "/logout";
+    public static final String USER_LOGIN_URI = "/login";
+    public static final String USER_LOGOUT_URI = "/logout";
+
     public static final String PROJECT_URI = "/project";
     public static final String COMMUNITY_URI = "/project/{project-id}/community";
     public static final String PROJECT_LIST_URI = "/projects";
     public static final String PRODUCT_URI = "/project/{project-id}/product";
     public static final String COMPONENT_URI = "/product/{product-id}/component";
+
+    public static final String UPDATE_URI = PROJECT_URI + "/{project-id}/update";
+    public static final String UPDATE_ID = "/{update-id}";
+
 
     //== method URL ==//
     public static final String ON_GOING = "/ongoing";
