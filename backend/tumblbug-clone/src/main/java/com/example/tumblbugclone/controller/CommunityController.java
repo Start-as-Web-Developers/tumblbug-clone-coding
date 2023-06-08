@@ -3,9 +3,11 @@ package com.example.tumblbugclone.controller;
 import com.example.tumblbugclone.managedconst.HttpConst;
 import com.example.tumblbugclone.model.Community;
 import com.example.tumblbugclone.model.Project;
+import com.example.tumblbugclone.model.User;
 import com.example.tumblbugclone.service.CommunityService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,14 +32,10 @@ public class CommunityController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<String> createCommunity(@RequestBody Community community, @PathVariable("project-id") Long projectId) throws Exception {
-        Project project = new Project();
-        project.setProjectId(projectId);
+    public ResponseEntity<String> createCommunity(@RequestBody Community community, @PathVariable("project-id") Long projectId, HttpSession session) throws Exception {
 
-
-
-        community.setProject(project);
-        long communityId = communityService.writeCommunity(community);
+        long userIndex = (long)session.getAttribute(HttpConst.SESSION_USER_INDEX);
+        long communityId = communityService.writeCommunity(community, projectId, userIndex);
         return ResponseEntity.ok(Long.toString(communityId));
     }
 
@@ -52,21 +50,25 @@ public class CommunityController {
 
     @PatchMapping("/{community-id}")
     @Transactional
-    public ResponseEntity<String> updateCommunity(@RequestBody Community community, @PathVariable("project-id") Long projectId, @PathVariable("community-id") Long communityId) throws Exception {
+    public ResponseEntity<String> updateCommunity(@RequestBody Community community, @PathVariable("project-id") Long projectId, @PathVariable("community-id") Long communityId, HttpSession session) throws Exception {
         Project project = new Project();
         project.setProjectId(projectId);
 
         community.setProject(project);
         community.setCommunityId(communityId);
 
-        long modiCommunityId = communityService.modify(community);
+        long userIndex = (long)session.getAttribute(HttpConst.SESSION_USER_INDEX);
+
+        long modiCommunityId = communityService.modify(community, userIndex);
         return ResponseEntity.ok(Long.toString(modiCommunityId));
     }
 
     @DeleteMapping("/{community-id}")
     @Transactional
-    public ResponseEntity deleteCommunity(@PathVariable("community-id") Long communityId) throws Exception {
-        communityService.delete(communityId);
+    public ResponseEntity deleteCommunity(@PathVariable("community-id") Long communityId, HttpSession session) throws Exception {
+        long userIndex = (long)session.getAttribute(HttpConst.SESSION_USER_INDEX);
+
+        communityService.delete(communityId, userIndex);
         return new ResponseEntity(HttpStatus.OK);
     }
 

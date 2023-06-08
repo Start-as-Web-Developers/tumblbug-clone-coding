@@ -2,6 +2,7 @@
 package com.example.tumblbugclone.service;
 
 
+import com.example.tumblbugclone.Exception.TumblbugException;
 import com.example.tumblbugclone.Exception.userexception.*;
 
 import com.example.tumblbugclone.dto.UserLoginDTO;
@@ -49,7 +50,7 @@ public class UserServiceTest {
 
     @Test(expected = UserIdDuplicatedException.class)
     @Transactional
-    public void Id가_중복되면_Exception() throws UserEmailDuplicatedException, UserIdDuplicatedException, UserDTOConvertException {
+    public void Id가_중복되면_Exception() throws TumblbugException {
         //given
 
         UserReceivingDTO user = new UserReceivingDTO();
