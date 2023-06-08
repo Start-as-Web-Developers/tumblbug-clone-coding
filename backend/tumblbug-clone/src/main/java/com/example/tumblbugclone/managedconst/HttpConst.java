@@ -16,6 +16,9 @@ public class HttpConst {
     public static final String UPDATE_URI = PROJECT_URI + "/{project-id}/update";
     public static final String UPDATE_ID = "/{update-id}";
 
+    public static final String UPDATE_COMMENT_URI = UPDATE_URI + UPDATE_ID + "/comment";
+    public static final String UPDATE_COMMENT_ID = "/{comment-id}";
+
 
     //== method URL ==//
     public static final String ON_GOING = "/ongoing";

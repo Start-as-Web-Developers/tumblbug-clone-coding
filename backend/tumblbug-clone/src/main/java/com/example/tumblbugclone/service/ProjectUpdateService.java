@@ -5,6 +5,7 @@ import com.example.tumblbugclone.Exception.updateException.CantFindUpdateExcepti
 import com.example.tumblbugclone.Exception.updateException.UpdateCantModifyModifiedToFalse;
 import com.example.tumblbugclone.Exception.userexception.UnauthorizedUserException;
 import com.example.tumblbugclone.Exception.userexception.UserCantFindException;
+import com.example.tumblbugclone.dto.CommentDTO;
 import com.example.tumblbugclone.dto.ProjectUpdateDTO;
 import com.example.tumblbugclone.dto.UserSendingDTO;
 import com.example.tumblbugclone.model.Project;
@@ -26,13 +27,16 @@ public class ProjectUpdateService {
     private final ProjectUpdateRepository projectUpdateRepository;
     private final ProjectRepository projectRepository;
     private final UserService userService;
+    private final CommentService commentService;
 
 
     @Autowired
-    public ProjectUpdateService(ProjectUpdateRepository projectUpdateRepository, ProjectRepository projectRepository, UserService userService){
+    public ProjectUpdateService
+            (ProjectUpdateRepository projectUpdateRepository, ProjectRepository projectRepository, UserService userService, CommentService commentService){
         this.projectUpdateRepository = projectUpdateRepository;
         this.projectRepository = projectRepository;
         this.userService = userService;
+        this.commentService = commentService;
     }
 
     public long save(long userIndex, long projectId, String content) throws TumblbugException {
@@ -132,6 +136,10 @@ public class ProjectUpdateService {
         projectUpdateDTO.setProjectId(projectUpdate.getProject().getProjectId());
         projectUpdateDTO.setModified(projectUpdate.isModified());
         projectUpdateDTO.setCreater(creater);
+
+        List<CommentDTO> comments = commentService.getComments(projectUpdate.getId());
+        projectUpdateDTO.setComments(comments);
+
 
         return projectUpdateDTO;
     }

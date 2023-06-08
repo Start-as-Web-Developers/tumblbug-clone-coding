@@ -8,6 +8,7 @@ import com.example.tumblbugclone.model.UpdateComment;
 import com.example.tumblbugclone.model.User;
 import com.example.tumblbugclone.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -22,7 +23,7 @@ public class CommentService {
     private final ProjectUpdateService updateService;
 
     @Autowired
-    public CommentService(CommentRepository commentRepository, UserService userService, ProjectUpdateService updateService) {
+    public CommentService(CommentRepository commentRepository, UserService userService, @Lazy ProjectUpdateService updateService) {
         this.commentRepository = commentRepository;
         this.userService = userService;
         this.updateService = updateService;
