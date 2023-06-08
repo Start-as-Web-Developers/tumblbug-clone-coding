@@ -18,27 +18,27 @@ public class ProjectUpdate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "UPDATE_ID")
-    long id;
+    private long id;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "PROJECT_ID")
-    Project project;
+    private Project project;
 
     @Column(name = "CONTENT")
-    String content;
+    private String content;
 
     @ManyToOne
     @JoinColumn(name = "USER_IDX")
-    User creater;
+    private User creater;
 
     @Column(name = "UPDATE_DATE")
     @Temporal(TemporalType.TIMESTAMP)
-    Date updateDate;
+    private Date updateDate;
 
     @Column(name = "IS_MODIFIED")
-    boolean modified = false;
+    private boolean modified = false;
 
     @Column(name = "comment")
     @OneToMany(mappedBy = "update")
-    List<UpdateComment> comment;
+    private List<UpdateComment> comment;
 }

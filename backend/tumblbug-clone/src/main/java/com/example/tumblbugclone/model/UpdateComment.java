@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Entity
 @Table(name = "UPDATE_COMMNENT")
 @Data
@@ -11,16 +13,20 @@ import lombok.NoArgsConstructor;
 public class UpdateComment {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+    private long id;
 
     @ManyToOne
     @JoinColumn(name = "UPDATE_ID")
-    ProjectUpdate update;
+    private ProjectUpdate update;
 
     @ManyToOne
     @JoinColumn(name = "USER_IDX")
-    User user;
+    private User user;
 
     @Column(name = "COMMENT")
-    String comment;
+    private String comment;
+
+    @Column(name = "MODIFIED_AT")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date modifiedTime;
 }

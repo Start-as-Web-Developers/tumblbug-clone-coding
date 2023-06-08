@@ -61,12 +61,15 @@ public class ProjectUpdateService {
     }
 
     public ProjectUpdateDTO findProjectUpdateDTO(long projectUpdateId) throws TumblbugException {
+        return convertUpdate2DTO(findProjectUpdate(projectUpdateId));
+    }
+
+    public ProjectUpdate findProjectUpdate(long projectUpdateId) throws TumblbugException {
         ProjectUpdate byId = projectUpdateRepository.findById(projectUpdateId);
         if(byId == null)
             throw new CantFindUpdateException();
-        return convertUpdate2DTO(byId);
+        return byId;
     }
-
     public ProjectUpdateDTO update(long userIdx, long ContentId, String newContent) throws TumblbugException {
         ProjectUpdate originalUpdate = projectUpdateRepository.findById(ContentId);
         if(originalUpdate.getCreater().getUserIdx() != userIdx)

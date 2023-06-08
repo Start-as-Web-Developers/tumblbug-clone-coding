@@ -4,7 +4,6 @@ import com.example.tumblbugclone.model.ProjectUpdate;
 import com.example.tumblbugclone.model.UpdateComment;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.hibernate.sql.Update;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +22,11 @@ public class CommentRepository {
         return comment.getId();
     }
 
-    public List<UpdateComment> getComments(ProjectUpdate update){
+    public UpdateComment getComment(long commentId){
+        return em.find(UpdateComment.class, commentId);
+    }
+
+    public List<UpdateComment> getAllComments(ProjectUpdate update){
         List comments = em.createQuery("select c from UpdateComment c where c.update = :update")
                 .setParameter("update", update)
                 .getResultList();

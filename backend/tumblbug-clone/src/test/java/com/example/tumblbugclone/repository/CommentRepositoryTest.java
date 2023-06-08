@@ -15,8 +15,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.Assert.*;
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:appConfig.xml")
 public class CommentRepositoryTest {
@@ -42,7 +40,7 @@ public class CommentRepositoryTest {
         commentRepository.save(comment);
 
         //then
-        List<UpdateComment> comments = commentRepository.getComments(update);
+        List<UpdateComment> comments = commentRepository.getAllComments(update);
         Assertions.assertThat(comments.size()).isEqualTo(1);
         for (UpdateComment updateComment : comments) {
             updateComment.getComment().equals("comment");
@@ -73,7 +71,7 @@ public class CommentRepositoryTest {
         commentRepository.save(comment5);
 
         //then
-        List<UpdateComment> comments = commentRepository.getComments(update);
+        List<UpdateComment> comments = commentRepository.getAllComments(update);
         Assertions.assertThat(comments.size()).isEqualTo(5);
         for (UpdateComment updateComment : comments) {
             updateComment.getComment().equals("comment");
@@ -100,7 +98,7 @@ public class CommentRepositoryTest {
         commentRepository.modify(comment);
 
         //then
-        List<UpdateComment> comments = commentRepository.getComments(update);
+        List<UpdateComment> comments = commentRepository.getAllComments(update);
         Assertions.assertThat(comments.size()).isEqualTo(1);
         Assertions.assertThat(comments.get(0).getId()).isEqualTo(savedId);
         Assertions.assertThat(comments.get(0).getComment()).isEqualTo(modifyString);
@@ -123,7 +121,7 @@ public class CommentRepositoryTest {
         commentRepository.delete(comment);
 
         //then
-        List<UpdateComment> comments = commentRepository.getComments(update);
+        List<UpdateComment> comments = commentRepository.getAllComments(update);
         Assertions.assertThat(comments.isEmpty()).isTrue();
     }
     private User makeNthUser(int i){
