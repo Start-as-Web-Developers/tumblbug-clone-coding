@@ -2,6 +2,7 @@
 package com.example.tumblbugclone.service;
 
 
+import com.example.tumblbugclone.Exception.TumblbugException;
 import com.example.tumblbugclone.Exception.userexception.*;
 
 
@@ -29,7 +30,7 @@ public class UserService {
     public UserService(UserRepository userRepository){this.userRepository = userRepository;}
 
 
-    public long join(UserReceivingDTO userDTO) throws UserEmailDuplicatedException, UserIdDuplicatedException, UserDTOConvertException {
+    public long join(UserReceivingDTO userDTO) throws TumblbugException {
         User user = convertDTO2User(userDTO);
  
         try {
@@ -44,7 +45,7 @@ public class UserService {
     }
 
 
-    public UserSendingDTO findUserByIndex(long userIdx) throws UserCantFindException {
+    public UserSendingDTO findSendingUserByIndex(long userIdx) throws TumblbugException {
 
         User findUser = null;
         try{
@@ -55,6 +56,9 @@ public class UserService {
         return convertUser2DTO(findUser);
     }
 
+    public User findUserByIndex(long userIdx){
+        return userRepository.findUserByIndex(userIdx);
+    }
 
     public UserSendingDTO findUserById(String userId){
 
@@ -64,14 +68,14 @@ public class UserService {
     }
 
 
-    public void unregiste(UserReceivingDTO userDTO) throws UserDTOConvertException {
+    public void unregiste(UserReceivingDTO userDTO) throws TumblbugException {
         User user = convertDTO2User(userDTO);
         user.setActive(false);
         userRepository.modify(user);
     }
 
 
-    public void modify(UserReceivingDTO userDTO) throws UserCantModifyIdException, UserDTOConvertException {
+    public void modify(UserReceivingDTO userDTO) throws TumblbugException {
         User user = convertDTO2User(userDTO);
 
         User findUser = userRepository.findUserByIndex(user.getUserIdx());
@@ -103,7 +107,7 @@ public class UserService {
         userRepository.modify(findUser);
     }
 
-    public long login(UserLoginDTO user) throws UserCantFindException, WrongPasswordException {
+    public long login(UserLoginDTO user) throws TumblbugException {
         User userById;
         try {
             userById = userRepository.findUserById(user.getUserId());

@@ -1,7 +1,6 @@
 package com.example.tumblbugclone.controller;
 
 import com.example.tumblbugclone.Exception.TumblbugException;
-import com.example.tumblbugclone.Exception.userexception.UserCantFindException;
 import com.example.tumblbugclone.dto.UserLoginDTO;
 import com.example.tumblbugclone.dto.UserReceivingDTO;
 import com.example.tumblbugclone.dto.UserSendingDTO;
@@ -34,21 +33,7 @@ public class UserController {
 
         UserSendingDTO userByIndex;
         try {
-            userByIndex = userService.findUserByIndex(userIdx);
-        } catch (TumblbugException e) {
-            return ResponseEntity.status(e.getErrorStatus()).build();
-        }
-
-        return ResponseEntity.ok()
-                .body(userByIndex);
-    }
-
-    @GetMapping("/{userIdx}")
-    public ResponseEntity checkUser(@PathVariable long userIdx) {
-
-        UserSendingDTO userByIndex;
-        try {
-            userByIndex = userService.findUserByIndex(userIdx);
+            userByIndex = userService.findSendingUserByIndex(userIdx);
         } catch (TumblbugException e) {
             return ResponseEntity.status(e.getErrorStatus()).build();
         }
@@ -115,7 +100,7 @@ public class UserController {
     }
 
 
-    @PostMapping(HttpConst.USER_LOGIN_URL)
+    @PostMapping(HttpConst.USER_LOGIN_URI)
     public ResponseEntity login(@RequestBody UserLoginDTO loginDTO, HttpSession session) {
         long loginUserIndex;
         try {
@@ -144,7 +129,7 @@ public class UserController {
                 .build();
     }
 
-    @PostMapping(HttpConst.USER_LOGOUT_URL)
+    @PostMapping(HttpConst.USER_LOGOUT_URI)
     public ResponseEntity logout(HttpServletRequest request){
         HttpSession session = request.getSession(false);
         if(session == null){
