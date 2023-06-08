@@ -43,8 +43,7 @@ public class ProjectService {
 
         makeProjectFromDTO(project, projectAtDTO);
 
-        User user = new User();
-        user.setUserIdx(userIndex);
+        User user = userService.findUserByIndex(userIndex);
         project.setUser(user);
 
         long projectId = projectRepository.save(project);
@@ -109,8 +108,7 @@ public class ProjectService {
         if(targetProject.getUser().getUserIdx() != userIndex)
             throw new ProjectCantModify();
 
-        User user = new User();
-        user.setUserIdx(userIndex);
+        User user = userService.findUserByIndex(userIndex);
         project.setUser(user);
         
         return projectRepository.modify(project);
