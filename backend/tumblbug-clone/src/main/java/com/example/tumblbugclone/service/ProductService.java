@@ -1,10 +1,14 @@
 package com.example.tumblbugclone.service;
 
 
+import com.example.tumblbugclone.Exception.TumblbugException;
+import com.example.tumblbugclone.Exception.projectException.ProjectCantModify;
 import com.example.tumblbugclone.dto.ProductDTO;
 import com.example.tumblbugclone.model.Component;
 import com.example.tumblbugclone.model.Product;
+import com.example.tumblbugclone.model.Project;
 import com.example.tumblbugclone.repository.ProductRepository;
+import com.example.tumblbugclone.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,17 +20,24 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final ComponentService componentService;
+    private final ProjectRepository projectRepository;
 
     @Autowired
-    public ProductService(ProductRepository productRepository, ComponentService componentService) {
+    public ProductService(ProductRepository productRepository, ComponentService componentService, ProjectRepository projectRepository) {
         this.productRepository = productRepository;
         this.componentService = componentService;
+        this.projectRepository = projectRepository;
     }
 
-    public long saveProduct(ProductDTO productDTO) {
+    public long saveProduct(ProductDTO productDTO, long projectId, long userIndex) throws TumblbugException {
+
+        Project project = projectRepository.findProjectById(projectId);
+
+        if(project.getUser().getUserIdx() != userIndex)
+            throw new ProjectCantModify();
 
         Product product = new Product();
-        product.setProject(productDTO.getProject());
+        product.setProject(project);
         product.setName(productDTO.getName());
         product.setPrice(productDTO.getPrice());
         long productId = productRepository.save(product);
@@ -80,12 +91,24 @@ public class ProductService {
 
     }
 
-    public void deleteProductById(long productId) throws Exception {
+    public void deleteProductById(long productId, long userIndex) throws Exception {
+        Product product = productRepository.findProductById(productId);
+
+        if(product.getProject().getUser().getUserIdx() != userIndex)
+            throw new ProjectCantModify();
+
         componentService.deleteComponent(productId);
         productRepository.delete(productId);
     }
 
-    public long patchProduct(Product product) {
+    public long patchProduct(Product product, long projectId, long userIndex) throws ProjectCantModify {
+
+        Project project = projectRepository.findProjectById(projectId);
+
+        if(project.getUser().getUserIdx() != userIndex)
+            throw new ProjectCantModify();
+
+        product.setProject(project);
         return productRepository.modify(product);
     }
 

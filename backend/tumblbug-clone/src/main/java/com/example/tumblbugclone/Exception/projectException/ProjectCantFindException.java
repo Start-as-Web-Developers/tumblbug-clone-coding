@@ -1,12 +1,12 @@
 package com.example.tumblbugclone.Exception.projectException;
 
-public class ProjectCantFindException extends Exception{
+import com.example.tumblbugclone.Exception.TumblbugException;
+import com.example.tumblbugclone.managedconst.ExceptionConst;
+
+public class ProjectCantFindException extends TumblbugException {
 
     public ProjectCantFindException() {
-        super();
+        super(ExceptionConst.ProjectCantFind);
     }
 
-    public ProjectCantFindException(String message) {
-        super(message);
-    }
 }
