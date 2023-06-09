@@ -7,16 +7,17 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 public class ProjectUpdateDTO {
 
-    long id;
-    String content;
-    UserSendingDTO creater;
-    long projectId;
-    Date updateDate;
-    boolean modified = false;
-    //댓글
+    private long id;
+    private String content;
+    private UserSendingDTO creater;
+    private long projectId;
+    private Date updateDate;
+    private boolean modified = false;
+    private List<CommentDTO> comments;
 }

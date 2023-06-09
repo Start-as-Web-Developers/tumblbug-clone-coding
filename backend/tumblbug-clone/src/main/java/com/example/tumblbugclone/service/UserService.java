@@ -57,9 +57,12 @@ public class UserService {
     }
 
     public User findUserByIndex(long userIdx) throws TumblbugException {
-        User user = userRepository.findUserByIndex(userIdx);
-        if(user == null)
+        User user;
+        try{
+            user = userRepository.findUserByIndex(userIdx);
+        }catch (EmptyResultDataAccessException e) {
             throw new UserCantFindException();
+        }
         return user;
     }
 
