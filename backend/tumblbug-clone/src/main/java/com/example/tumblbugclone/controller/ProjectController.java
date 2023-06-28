@@ -1,6 +1,7 @@
 package com.example.tumblbugclone.controller;
 
 ;
+import com.example.tumblbugclone.Exception.TumblbugException;
 import com.example.tumblbugclone.dto.PlanDTO;
 import com.example.tumblbugclone.dto.ProjectAllDTO;
 import com.example.tumblbugclone.managedconst.HttpConst;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+
 @Slf4j
 @Controller
 @RequestMapping(value =HttpConst.PROJECT_URI, produces = "application/json; charset=utf-8")
@@ -31,16 +34,28 @@ public class ProjectController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<String> createProject(@RequestBody ProjectAllDTO project, HttpSession session) throws Exception {
+    public ResponseEntity<String> createProject(@RequestBody ProjectAllDTO project, HttpSession session) throws ParseException {
         long userIndex = (long)session.getAttribute(HttpConst.SESSION_USER_INDEX);
-        long projectId = projectService.saveProject(project, userIndex);
+        long projectId = 0;
+        try {
+            projectId = projectService.saveProject(project, userIndex);
+        } catch (TumblbugException e) {
+            return ResponseEntity.status(e.getErrorStatus()).build();
+        }
         return ResponseEntity.ok(Long.toString(projectId));
     }
 
     @GetMapping("/{project-id}")
     public ResponseEntity<String> readProject(@PathVariable("project-id") Long projectId, HttpSession session) throws Exception {
         long userIndex = (long)session.getAttribute(HttpConst.SESSION_USER_INDEX);
-        ProjectAllDTO project = projectService.readProject(projectId, userIndex);
+        ProjectAllDTO project;
+        try {
+            project = projectService.readProject(projectId, userIndex);
+        } catch (TumblbugException e) {
+            return ResponseEntity.status(e.getErrorStatus()).build();
+        }
+
+
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonList = objectMapper.writeValueAsString(project);
 
@@ -51,7 +66,13 @@ public class ProjectController {
     public ResponseEntity updateProject(@RequestBody Project project, @PathVariable("project-id") Long projectId, HttpSession session) throws Exception {
         long userIndex = (long)session.getAttribute(HttpConst.SESSION_USER_INDEX);
         project.setProjectId(projectId);
-        projectService.updateProject(project, userIndex);
+
+        try {
+            projectService.updateProject(project, userIndex);
+        } catch (TumblbugException e) {
+            return ResponseEntity.status(e.getErrorStatus()).build();
+        }
+
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -59,7 +80,13 @@ public class ProjectController {
     @Transactional
     public ResponseEntity deleteProject(@PathVariable("project-id") Long projectId, HttpSession session) throws Exception {
         long userIndex = (long)session.getAttribute(HttpConst.SESSION_USER_INDEX);
-        projectService.deleteProject(projectId, userIndex);
+
+        try {
+            projectService.deleteProject(projectId, userIndex);
+        } catch (TumblbugException e) {
+            return ResponseEntity.status(e.getErrorStatus()).build();
+        }
+
         return new ResponseEntity(HttpStatus.OK);
     }
 
