@@ -45,7 +45,7 @@ public class ProductService {
         List<Component> componentList = productDTO.getComponent();
         for(Component component : componentList) {
             component.setProduct(product);
-            componentService.saveComponent(component);
+            componentService.saveComponent(component, productId, userIndex);
         }
 
         return productId;
