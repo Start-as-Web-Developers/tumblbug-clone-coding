@@ -1,5 +1,6 @@
 package com.example.tumblbugclone.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,7 @@ public class Component {
 
     @ManyToOne
     @JoinColumn(name = "PRODUCT_ID")
+    @JsonIgnore
     private Product product;
 
     /*
