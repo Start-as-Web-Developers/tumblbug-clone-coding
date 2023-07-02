@@ -1,24 +1,14 @@
 
 package com.example.tumblbugclone.service;
 
-import com.example.tumblbugclone.Exception.projectException.ProjectCantFindException;
 import com.example.tumblbugclone.Exception.projectlistexception.StartIndexException;
-import com.example.tumblbugclone.Exception.userexception.UnregisterUserException;
-import com.example.tumblbugclone.Exception.userexception.UserCantFindException;
 import com.example.tumblbugclone.dto.ProjectCardDTO;
-import com.example.tumblbugclone.managedconst.ProjectConst;
 import com.example.tumblbugclone.model.Project;
-import com.example.tumblbugclone.model.ProjectCard;
-import com.example.tumblbugclone.model.User;
 import com.example.tumblbugclone.repository.ProjectRepository;
-import com.example.tumblbugclone.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Array;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

@@ -1,9 +1,8 @@
 package com.example.tumblbugclone.controller;
 import com.example.tumblbugclone.dto.UserLoginDTO;
 import com.example.tumblbugclone.dto.UserReceivingDTO;
-import com.example.tumblbugclone.Exception.userexception.UnregisterUserException;
+import com.example.tumblbugclone.managedconst.ExceptionConst;
 import com.example.tumblbugclone.managedconst.HttpConst;
-import com.example.tumblbugclone.managedconst.UserConst;
 import com.example.tumblbugclone.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
@@ -20,8 +19,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -38,11 +35,6 @@ public class UserControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Test
-    public void mockMvc_동작_테스트() throws Exception{
-        //given
-        this.mockMvc.perform(get(HttpConst.USER_URI)).andExpect(status().isOk());
-    }
 
     @Test
     @Transactional
@@ -76,8 +68,7 @@ public class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(user2))
                 )
-                .andExpect(status().isBadRequest())
-                .andExpect(header().string(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.DUPLICATED_USER_ID_MESSAGE));
+                .andExpect(status().is(ExceptionConst.UserIdDuplicatedStatus));
     }
 
     @Test
@@ -98,8 +89,7 @@ public class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(user2))
                 )
-                .andExpect(status().isBadRequest())
-                .andExpect(header().string(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.DUPLICATED_USER_EMAIL_MESSAGE));
+                .andExpect(status().is(ExceptionConst.UserEmailDuplicatedStatus));
     }
 
     @Test
@@ -163,8 +153,7 @@ public class UserControllerTest {
         mockMvc.perform(patch(HttpConst.USER_URI + "/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(modifiedUser)))
-                .andExpect(status().isBadRequest())
-                .andExpect(header().string(HttpConst.HEADER_NAME_ERROR_MESSAGE, HttpConst.CANT_MODIFY_USER_ID_MESSAGE));
+                .andExpect(status().is(ExceptionConst.UserCantModifyIdStatus));
     }
 
     @Test
@@ -187,7 +176,7 @@ public class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(deleteUser)))
                 .andExpect(status().isOk());
-        Assertions.assertThat(userService.findUserByIndex(savedIdx)
+        Assertions.assertThat(userService.findSendingUserByIndex(savedIdx)
                         .isActive())
                 .isFalse();
     }
@@ -205,7 +194,7 @@ public class UserControllerTest {
         loginDTO.setUserPassword(user.getUserPassword());
 
         //then
-        mockMvc.perform(get(HttpConst.USER_URI + HttpConst.USER_LOGIN_URL)
+        mockMvc.perform(post(HttpConst.USER_URI + HttpConst.USER_LOGIN_URI)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginDTO)))
                 .andExpect(status().isOk());
@@ -224,11 +213,10 @@ public class UserControllerTest {
         loginDTO.setUserPassword(user.getUserPassword());
 
         //then
-        mockMvc.perform(get(HttpConst.USER_URI + HttpConst.USER_LOGIN_URL)
+        mockMvc.perform(post(HttpConst.USER_URI + HttpConst.USER_LOGIN_URI)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginDTO)))
-                .andExpect(status().isBadRequest())
-                .andExpect(header().string(HttpConst.HEADER_NAME_ERROR_MESSAGE, UserConst.NO_USER_FOUNDED_MESSAGE));
+                .andExpect(status().is(ExceptionConst.UserCantFindStatus));
     }
 
     @Test
@@ -244,11 +232,10 @@ public class UserControllerTest {
         loginDTO.setUserPassword("WrongPassword");
 
         //then
-        mockMvc.perform(get(HttpConst.USER_URI + HttpConst.USER_LOGIN_URL)
+        mockMvc.perform(post(HttpConst.USER_URI + HttpConst.USER_LOGIN_URI)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginDTO)))
-                .andExpect(status().isBadRequest())
-                .andExpect(header().string(HttpConst.HEADER_NAME_ERROR_MESSAGE, UserConst.WRONG_PASSWORD));
+                .andExpect(status().is(ExceptionConst.WrongPasswordStatus));
     }
 
     private UserReceivingDTO make_Nth_User(int N){

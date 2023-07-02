@@ -1,8 +1,12 @@
 package com.example.tumblbugclone.Exception.userexception;
 
-public class UserDTOConvertException extends Exception{
+import com.example.tumblbugclone.Exception.TumblbugException;
+import com.example.tumblbugclone.managedconst.ExceptionConst;
+
+public class UserDTOConvertException extends TumblbugException {
     public UserDTOConvertException() {
-        super();
+        super(ExceptionConst.UserDTOConvertStatus);
+
     }
 
     public UserDTOConvertException(String message) {

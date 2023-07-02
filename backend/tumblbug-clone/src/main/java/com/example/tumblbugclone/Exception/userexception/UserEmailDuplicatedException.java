@@ -1,8 +1,11 @@
 package com.example.tumblbugclone.Exception.userexception;
 
-public class UserEmailDuplicatedException extends Exception{
+import com.example.tumblbugclone.Exception.TumblbugException;
+import com.example.tumblbugclone.managedconst.ExceptionConst;
+
+public class UserEmailDuplicatedException extends TumblbugException {
     public UserEmailDuplicatedException() {
-        super();
+        super(ExceptionConst.UserEmailDuplicatedStatus);
     }
 
     public UserEmailDuplicatedException(String message) {

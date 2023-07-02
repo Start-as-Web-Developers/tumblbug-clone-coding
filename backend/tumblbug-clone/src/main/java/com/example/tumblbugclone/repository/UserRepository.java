@@ -3,14 +3,15 @@ package com.example.tumblbugclone.repository;
 import com.example.tumblbugclone.Exception.userexception.UserEmailDuplicatedException;
 import com.example.tumblbugclone.Exception.userexception.UserIdDuplicatedException;
 import com.example.tumblbugclone.model.User;
-
-import org.springframework.dao.DataIntegrityViolationException;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 import jakarta.persistence.*;
+import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Repository
+@Transactional
 public class UserRepository {
     /*
      * Refactoring :
@@ -30,6 +31,7 @@ public class UserRepository {
     EntityManager em;
 
 
+
     public long save(User user){
         em.persist(user);
         return user.getUserIdx();
@@ -44,7 +46,6 @@ public class UserRepository {
     }
 
     public User findUserById(String id){
-
         User findUser = em.createQuery("select m from User m where m.userId = :id", User.class)
                 .setParameter("id", id)
                 .getSingleResult();

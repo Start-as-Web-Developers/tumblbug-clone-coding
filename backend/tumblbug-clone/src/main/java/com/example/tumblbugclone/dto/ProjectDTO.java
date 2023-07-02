@@ -27,12 +27,12 @@ public class ProjectDTO {
     private String planExplain;
     private String planGuide;
 
-    // 아직 구현 불가
+    // 후원 기능의 부재로 구현 불가
     private Long achievement;
     private Long sponsor;
-    private Long totalLike;
 
     //user 쿠키
+    private Long totalLike;
     private boolean like;
     private boolean create;
 

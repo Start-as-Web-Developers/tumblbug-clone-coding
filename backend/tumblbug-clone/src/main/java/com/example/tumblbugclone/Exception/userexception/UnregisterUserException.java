@@ -1,6 +1,9 @@
 package com.example.tumblbugclone.Exception.userexception;
 
-public class UnregisterUserException extends Exception{
+import com.example.tumblbugclone.Exception.TumblbugException;
+
+public class UnregisterUserException extends TumblbugException {
+
     public UnregisterUserException() {
         super();
     }
