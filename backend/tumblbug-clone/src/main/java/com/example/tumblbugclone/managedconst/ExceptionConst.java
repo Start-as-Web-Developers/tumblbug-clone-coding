@@ -25,4 +25,5 @@ public class ExceptionConst { //Tumblbug 내부에 작성하는 것이 좋았을
     public static final int NotMatchProjectId = 634;
 
     public static final int ProjectCantModify = 650;
+    public static final int ProjectSortException = 651;
 }

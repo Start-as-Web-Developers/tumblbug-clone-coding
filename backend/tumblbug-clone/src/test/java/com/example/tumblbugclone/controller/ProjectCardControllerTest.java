@@ -1,6 +1,7 @@
-/*
 package com.example.tumblbugclone.controller;
 
+import com.example.tumblbugclone.dto.ProjectCardDTO;
+import com.example.tumblbugclone.dto.ProjectUpdateDTO;
 import com.example.tumblbugclone.managedconst.HttpConst;
 import com.example.tumblbugclone.model.Project;
 import com.example.tumblbugclone.model.ProjectCard;
@@ -8,7 +9,10 @@ import com.example.tumblbugclone.model.User;
 import com.example.tumblbugclone.repository.ProjectRepository;
 import com.example.tumblbugclone.repository.UserRepository;
 import com.example.tumblbugclone.service.ProjectCardService;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.transaction.Transactional;
+import org.assertj.core.api.Assertions;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,23 +24,37 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(SpringRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = "classpath:appConfig.xml")
 @WebMvcTest
 @AutoConfigureMockMvc
 public class ProjectCardControllerTest {
-    private UserRepository userRepository = UserRepository.getUserRepository();
-    private ProjectRepository projectRepository = ProjectRepository.getProjectRepository();
-    ProjectCardService projectCardService = new ProjectCardService();
+
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private ProjectRepository projectRepository;
+    @Autowired
+    ProjectCardService projectCardService;
+    @Autowired
+    ProjectCardController projectCardController;
 
     @Autowired
     private MockMvc mockMvc;
@@ -44,76 +62,148 @@ public class ProjectCardControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    User user;
+
+
     @Before
-    public void 테스트용_데이터_생성() throws Exception {
-        for(int i = 0; i<25; i++) { //1~25 : onGoing
+    public void makeBasicProject() throws Exception {
 
-                Project ongoingProject = new Project(1l, "", "Img","카테고리", "코멘트", 35000000l, 240000l, "2023-04-03", "2024-05-02", "String planIntro", "String planBudget", "String planSchedule", "String planTeam", "String planExplain", "String planGuide");
-            projectRepository.save(ongoingProject);
+        user = new User();
+        user.setUserId("UserId");
+        user.setUserName("userName");
+        user.setUserEmail("userEmail");
+        user.setUserPassword("userPassword");
+
+        userRepository.save(user);
+
+        long startIdx = 0l;
+
+        for(int i = 0; i<25; i++){
+            Project project = makeOngoingProject(i);
+            long savedId = projectRepository.save(project);
+            if(i == 0)
+                startIdx = savedId;
         }
-
-        for(int i = 0; i<25; i++) { //26 ~ 50 : preLaunching
-            Project preLaunchingProject = new Project(1l, "", "Img","카테고리", "코멘트", 35000000l, 240000l, "2023-06-03", "2024-01-02", "String planIntro", "String planBudget", "String planSchedule", "String planTeam", "String planExplain", "String planGuide");
-            projectRepository.save(preLaunchingProject);
+        for(int i = 25; i<50; i++){
+            Project project = makePrelaunchingProject(i);
+            projectRepository.save(project);
         }
+        for(int i = 50; i<100; i++){
+            Project project;
+            if(i%2 == 0)
+                project = makeOngoingProject(i);
+            else
+                project = makePrelaunchingProject(i);
 
-        for(int i = 0; i<20; i++){ //51~90 홀수 : 진행중, 짝수 : 진행 예정
-            Project ongoingProject = new Project(1l, "", "Img","카테고리", "코멘트", 35000000l, 240000l, "2023-04-03", "2024-05-02", "String planIntro", "String planBudget", "String planSchedule", "String planTeam", "String planExplain", "String planGuide");
-            projectRepository.save(ongoingProject);
-
-            Project preLaunchingProject = new Project(1l, "", "Img","카테고리", "코멘트", 35000000l, 240000l, "2023-06-03", "2023-01-02", "String planIntro", "String planBudget", "String planSchedule", "String planTeam", "String planExplain", "String planGuide");
-            projectRepository.save(preLaunchingProject);
+            projectRepository.save(project);
         }
-
-        User user1 = new User("userName1", "userId1", "userPassword1", "userEmail1");
-        userRepository.save(user1);
     }
-
-    @After
-    public void 테스트용_프로젝트_삭제(){
-        projectRepository.clear();
-        userRepository.clear();
-    }
-
 
     @Test
+    @Transactional
     public void 접근_테스트() throws Exception{
         //given
         mockMvc.perform(get(HttpConst.PROJECT_LIST_URI))
                 .andExpect(status().isOk());
+
         //when
 
         //then
     }
 
     @Test
-    public void onGoing_처음부터_조회() throws Exception{
-
+    @Transactional
+    public void ongoing조회는_startIdx_생략가능() throws Exception{
         //given
-        ArrayList<ProjectCard> projectCards = projectCardService.findOngoingFromStart();
+         MvcResult mvcResult = mockMvc.perform(get(HttpConst.PROJECT_LIST_URI + HttpConst.ON_GOING))
+                .andExpect(status().isOk())
+                .andReturn();
 
         //when
-        mockMvc.perform(get(HttpConst.PROJECT_LIST_URI + HttpConst.ON_GOING))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(projectCards)));
+        List<ProjectCardDTO> findDTOs = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<List<ProjectCardDTO>>() {});
+
+
+
         //then
+        Assertions.assertThat(findDTOs.size()).isEqualTo(20);
+        for(ProjectCardDTO card : findDTOs){
+            this.assertOngoingProject(card);
+        }
     }
 
     @Test
+    @Transactional
+    public void ongoing조회는_startIdx_생략가능_1() throws Exception{
+        //given
+        ResponseEntity<List<ProjectCardDTO>> ongoingProject = projectCardController.getOngoingProject(null, null);
+
+        //when
+        List<ProjectCardDTO> resultBody = ongoingProject.getBody();
+
+        //then
+        Assertions.assertThat(resultBody.size()).isEqualTo(20);
+        for(ProjectCardDTO card : resultBody){
+            this.assertOngoingProject(card);
+        }
+    }
+
+    @Test
+    @Transactional
+    public void ongoing조회_sort적용() throws Exception{
+        //given
+        MvcResult mvcResult = mockMvc.perform(get(HttpConst.PROJECT_LIST_URI + HttpConst.ON_GOING + "?sort=new"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        //when
+        ProjectCardDTO[] findDTOs = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), ProjectCardDTO[].class);
+
+        //then
+        Assertions.assertThat(findDTOs.length).isEqualTo(20);
+        for(ProjectCardDTO card : findDTOs){
+            this.assertOngoingProject(card);
+        }
+    }
+
+    @Test
+    @Transactional
     public void onGoing_20번째부터_조회() throws Exception{
 
         //given
-        ArrayList<ProjectCard> projectCards = projectCardService.findOngoingFromIdx(20l);
+        MvcResult mvcResult = mockMvc.perform(get(HttpConst.PROJECT_LIST_URI + HttpConst.ON_GOING + "?start-idx=20"))
+                .andExpect(status().isOk())
+                .andReturn();
 
         //when
-        mockMvc.perform(get(HttpConst.PROJECT_LIST_URI + HttpConst.ON_GOING)
-                        .param("start-idx", "20"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(projectCards)));
+        ProjectCardDTO[] findDTOs = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), ProjectCardDTO[].class);
+
         //then
+        Assertions.assertThat(findDTOs.length).isEqualTo(20);
+        for(ProjectCardDTO card : findDTOs){
+            this.assertOngoingProject(card);
+        }
     }
 
     @Test
+    @Transactional
+    public void onGoing_끝까지_조회() throws Exception{
+        //given
+        MvcResult mvcResult = mockMvc.perform(get(HttpConst.PROJECT_LIST_URI + HttpConst.ON_GOING + "?start-idx=40"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        //when
+        ProjectCardDTO[] findDTOs = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), ProjectCardDTO[].class);
+
+        //then
+        Assertions.assertThat(findDTOs.length).isNotEqualTo(20);
+        for(ProjectCardDTO card : findDTOs){
+            this.assertOngoingProject(card);
+        }
+    }
+
+    /*@Test
+
     public void onGoing_80번째부터_끝까지_조회() throws Exception{
 
         //given
@@ -187,5 +277,39 @@ public class ProjectCardControllerTest {
         //when
 
         //then
+    }*/
+
+    private Project makeOngoingProject(int i){
+
+        Project project = new Project();
+        project.setUser(user);
+        project.setTitle("ongoing_project title " + Integer.toString(i));
+        project.setProjectImg("img");
+        project.setCategory("category");
+        project.setComment("comment");
+        project.setGoalMoney(1000L);
+        project.setStartDate(new Date(2023, 2, 5));
+        project.setEndDate(new Date(2032, 3, 5));
+        project.setPlanIntro("planIntro");
+        project.setPlanBudget("planBudget");
+        project.setPlanSchedule("planSchedule");
+        project.setPlanTeam("planTeam");
+        project.setPlanExplain("planExplain");
+        project.setPlanGuide("planGuide");
+
+        return project;
     }
-}*/
+
+    private Project  makePrelaunchingProject(int i){
+        Project project = makeOngoingProject(i);
+
+        project.setTitle("preLaunching title " + Integer.toString(i));
+        project.setStartDate(new Date(2025, 2, 5));
+
+        return project;
+    }
+
+    private void assertOngoingProject(ProjectCardDTO projectCardDTO){
+        Assertions.assertThat(projectCardDTO.getTitle().contains("ongoing"));
+    }
+}

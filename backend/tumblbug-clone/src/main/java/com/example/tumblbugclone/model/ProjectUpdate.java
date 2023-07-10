@@ -15,6 +15,7 @@ import java.util.Date;
 public class ProjectUpdate {
 
     @Id
+    @Column(name = "UPDATE_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
 
@@ -37,4 +38,6 @@ public class ProjectUpdate {
     boolean modified = false;
 
     //댓글
+
+
 }

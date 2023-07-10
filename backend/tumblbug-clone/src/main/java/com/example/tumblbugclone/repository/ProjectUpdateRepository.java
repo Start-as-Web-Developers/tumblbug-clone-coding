@@ -37,7 +37,7 @@ public class ProjectUpdateRepository {
 
     //updateList
     public List<ProjectUpdate> findUpdateAboutProject(Project project){
-        return em.createQuery("select u from ProjectUpdate u where u.project = :project")
+        return em.createQuery("select u from ProjectUpdate u where u.project = :project", ProjectUpdate.class)
                 .setParameter("project", project)
                 .getResultList();
     }

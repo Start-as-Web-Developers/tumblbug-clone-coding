@@ -78,7 +78,7 @@ public class ProjectCardServiceTest {
         makeBasicProject();
 
         //when
-        ArrayList<ProjectCardDTO> ongoingFromStart = projectCardService.findOngoingFromIdx(0, today);
+        ArrayList<ProjectCardDTO> ongoingFromStart = projectCardService.findOngoingFromIdx(0, null);
 
         //then
         Assertions.assertThat(ongoingFromStart.size()).isEqualTo(20);
@@ -97,7 +97,7 @@ public class ProjectCardServiceTest {
         makeBasicProject();
 
         //when
-        ArrayList<ProjectCardDTO> preLaunchingFromIdx = projectCardService.findPreLaunchingFromIdx(0, today);
+        ArrayList<ProjectCardDTO> preLaunchingFromIdx = projectCardService.findPreLaunchingFromIdx(0, null, today);
 
         //then
         Assertions.assertThat(preLaunchingFromIdx.size()).isEqualTo(20);
@@ -114,7 +114,7 @@ public class ProjectCardServiceTest {
         makeBasicProject();
 
         //when
-        ArrayList<ProjectCardDTO> preLaunchingFromIdx = projectCardService.findOngoingFromIdx(20, today);
+        ArrayList<ProjectCardDTO> preLaunchingFromIdx = projectCardService.findOngoingFromIdx(20, null, today);
 
         //then
         Assertions.assertThat(preLaunchingFromIdx.size()).isEqualTo(20);
@@ -132,7 +132,7 @@ public class ProjectCardServiceTest {
         makeBasicProject();
 
         //when
-        ArrayList<ProjectCardDTO> preLaunchingFromIdx = projectCardService.findPreLaunchingFromIdx(20, today);
+        ArrayList<ProjectCardDTO> preLaunchingFromIdx = projectCardService.findPreLaunchingFromIdx(20, null, today);
 
         //then
         Assertions.assertThat(preLaunchingFromIdx.size()).isEqualTo(20);
@@ -151,7 +151,7 @@ public class ProjectCardServiceTest {
         long startIndex = makeBasicProject();
 
         //when
-        ArrayList<ProjectCardDTO> ongoingFromStart = projectCardService.findOngoingFromIdx(40, today);
+        ArrayList<ProjectCardDTO> ongoingFromStart = projectCardService.findOngoingFromIdx(40, null, today);
 
         //then
         Assertions.assertThat(ongoingFromStart.size()).isLessThan(20);
@@ -170,7 +170,7 @@ public class ProjectCardServiceTest {
         long startIndex = makeBasicProject();
 
         //when
-        ArrayList<ProjectCardDTO> preLaunchingFromIdx = projectCardService.findPreLaunchingFromIdx(40, today);
+        ArrayList<ProjectCardDTO> preLaunchingFromIdx = projectCardService.findPreLaunchingFromIdx(40, null, today);
 
         //then
         Assertions.assertThat(preLaunchingFromIdx.size()).isLessThan(20);
@@ -187,7 +187,7 @@ public class ProjectCardServiceTest {
         long startIndex = makeBasicProject();
 
         //when
-        ArrayList<ProjectCardDTO> ongoingFromStart = projectCardService.findOngoingFromIdx(30, today);
+        ArrayList<ProjectCardDTO> ongoingFromStart = projectCardService.findOngoingFromIdx(30, null, today);
     }
 
     @Test(expected = StartIndexException.class)
@@ -197,7 +197,7 @@ public class ProjectCardServiceTest {
         long startIndex = makeBasicProject();
 
         //when
-        ArrayList<ProjectCardDTO> preLaunchingFromIdx = projectCardService.findPreLaunchingFromIdx(30, today);
+        ArrayList<ProjectCardDTO> preLaunchingFromIdx = projectCardService.findPreLaunchingFromIdx(30, null, today);
 
         //then
         Assertions.assertThat(preLaunchingFromIdx.size()).isLessThan(20);

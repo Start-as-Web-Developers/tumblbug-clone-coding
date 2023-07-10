@@ -38,7 +38,7 @@ public class ProjectRepositoryListTest {
         long startIndex = makeBasicProject(user);
 
         //when
-        List<Project> ongoingList = projectRepository.findOngoingList(0, "", today);
+        List<Project> ongoingList = projectRepository.findOngoingList(0, null, today);
 
         //then
         Assertions.assertThat(ongoingList.size()).isEqualTo(20);
@@ -57,7 +57,7 @@ public class ProjectRepositoryListTest {
         long startIndex = makeBasicProject(user);
 
         //when
-        List<Project> ongoingList = projectRepository.findOngoingList(6, "", today);
+        List<Project> ongoingList = projectRepository.findOngoingList(6, null, today);
 
         //then
         Assertions.assertThat(ongoingList.size()).isEqualTo(20);
@@ -77,7 +77,7 @@ public class ProjectRepositoryListTest {
         long startIndex = makeBasicProject(user);
 
         //when
-        List<Project> ongoingList = projectRepository.findPrelaunchingList(0, "", today);
+        List<Project> ongoingList = projectRepository.findPrelaunchingList(0, null, today);
 
         //then
         Assertions.assertThat(ongoingList.size()).isEqualTo(20);
@@ -97,7 +97,7 @@ public class ProjectRepositoryListTest {
         long startIndex = makeBasicProject(user);
 
         //when
-        List<Project> ongoingList = projectRepository.findPrelaunchingList(6, "", today);
+        List<Project> ongoingList = projectRepository.findPrelaunchingList(6, null, today);
 
         //then
         Assertions.assertThat(ongoingList.size()).isEqualTo(20);
@@ -115,7 +115,7 @@ public class ProjectRepositoryListTest {
         long startIndex = makeBasicProject(user);
 
         //when
-        List<Project> ongoingList = projectRepository.findOngoingList(40, "", today);
+        List<Project> ongoingList = projectRepository.findOngoingList(40, null, today);
 
         //then
         Assertions.assertThat(ongoingList.size()).isLessThan(20);
@@ -135,7 +135,7 @@ public class ProjectRepositoryListTest {
         long startIndex = makeBasicProject(user);
 
         //when
-        List<Project> ongoingList = projectRepository.findPrelaunchingList(40, "", today);
+        List<Project> ongoingList = projectRepository.findPrelaunchingList(40, null, today);
 
         //then
         Assertions.assertThat(ongoingList.size()).isLessThan(20);

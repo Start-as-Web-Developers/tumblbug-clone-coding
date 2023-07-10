@@ -1,5 +1,6 @@
 package com.example.tumblbugclone.service;
 
+import com.example.tumblbugclone.Exception.TumblbugException;
 import com.example.tumblbugclone.Exception.projectException.ProjectCantModify;
 import com.example.tumblbugclone.dto.PlanDTO;
 import com.example.tumblbugclone.dto.ProjectAllDTO;
@@ -37,7 +38,7 @@ public class ProjectService {
 
 
 
-    public long saveProject(ProjectAllDTO projectAllDTO, long userIndex) throws ParseException {
+    public long saveProject(ProjectAllDTO projectAllDTO, long userIndex) throws ParseException, TumblbugException {
         Project project = new Project();
         ProjectDTO projectAtDTO = projectAllDTO.getProject();
 
@@ -103,7 +104,7 @@ public class ProjectService {
         return planDTO;
     }
 
-    public long updateProject(Project project, long userIndex) throws ParseException, ProjectCantModify {
+    public long updateProject(Project project, long userIndex) throws ParseException, TumblbugException {
         Project targetProject = projectRepository.findProjectById(project.getProjectId());
         if(targetProject.getUser().getUserIdx() != userIndex)
             throw new ProjectCantModify();
