@@ -6,14 +6,12 @@ import com.example.tumblbugclone.model.User;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -141,8 +139,8 @@ public class ProjectUpdateRepositoryTest {
         project.setCategory("category");
         project.setComment("comment");
         project.setGoalMoney(1000L);
-        project.setStartDate(new Date());
-        project.setEndDate(new Date());
+        project.setStartDate(LocalDate.now());
+        project.setEndDate(LocalDate.now());
         project.setPlanIntro("planIntro");
         project.setPlanBudget("planBudget");
         project.setPlanSchedule("planSchedule");
@@ -156,7 +154,7 @@ public class ProjectUpdateRepositoryTest {
     private ProjectUpdate makeUpdate(User user, Project project){
         ProjectUpdate update = new ProjectUpdate();
         update.setProject(project);
-        update.setUpdateDate(new Date());
+        update.setUpdateDate(LocalDate.now());
         update.setModified(false);
         update.setCreater(user);
         update.setContent("");

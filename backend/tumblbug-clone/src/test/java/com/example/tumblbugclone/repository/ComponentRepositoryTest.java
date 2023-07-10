@@ -13,6 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -44,8 +45,8 @@ public class ComponentRepositoryTest {
         project.setCategory("category");
         project.setComment("comment");
         project.setGoalMoney(1000L);
-        project.setStartDate(new Date());
-        project.setEndDate(new Date());
+        project.setStartDate(LocalDate.now());
+        project.setEndDate(LocalDate.now());
         project.setPlanIntro("planIntro");
         project.setPlanBudget("planBudget");
         project.setPlanSchedule("planSchedule");
@@ -86,8 +87,8 @@ public class ComponentRepositoryTest {
         project.setCategory("category");
         project.setComment("comment");
         project.setGoalMoney(1000L);
-        project.setStartDate(new Date());
-        project.setEndDate(new Date());
+        project.setStartDate(LocalDate.now());
+        project.setEndDate(LocalDate.now());
         project.setPlanIntro("planIntro");
         project.setPlanBudget("planBudget");
         project.setPlanSchedule("planSchedule");
@@ -144,8 +145,8 @@ public class ComponentRepositoryTest {
         project.setCategory("category");
         project.setComment("comment");
         project.setGoalMoney(1000L);
-        project.setStartDate(new Date());
-        project.setEndDate(new Date());
+        project.setStartDate(LocalDate.now());
+        project.setEndDate(LocalDate.now());
         project.setPlanIntro("planIntro");
         project.setPlanBudget("planBudget");
         project.setPlanSchedule("planSchedule");
@@ -204,8 +205,8 @@ public class ComponentRepositoryTest {
         project.setCategory("category");
         project.setComment("comment");
         project.setGoalMoney(1000L);
-        project.setStartDate(new Date());
-        project.setEndDate(new Date());
+        project.setStartDate(LocalDate.now());
+        project.setEndDate(LocalDate.now());
         project.setPlanIntro("planIntro");
         project.setPlanBudget("planBudget");
         project.setPlanSchedule("planSchedule");
@@ -262,8 +263,8 @@ public class ComponentRepositoryTest {
         project.setCategory("category");
         project.setComment("comment");
         project.setGoalMoney(1000L);
-        project.setStartDate(new Date());
-        project.setEndDate(new Date());
+        project.setStartDate(LocalDate.now());
+        project.setEndDate(LocalDate.now());
         project.setPlanIntro("planIntro");
         project.setPlanBudget("planBudget");
         project.setPlanSchedule("planSchedule");

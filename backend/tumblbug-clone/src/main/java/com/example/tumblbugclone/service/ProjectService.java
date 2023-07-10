@@ -16,8 +16,7 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.util.List;
 
-import static com.example.tumblbugclone.service.Callendar.convertDate;
-import static com.example.tumblbugclone.service.Callendar.convertString;
+import static com.example.tumblbugclone.service.Callendar.*;
 
 @Service
 public class ProjectService {
@@ -130,8 +129,8 @@ public class ProjectService {
         project.setComment(projectAtDTO.getComment());
         project.setGoalMoney(projectAtDTO.getGoalMoney());
         project.setTotalMoney(projectAtDTO.getTotalMoney());
-        project.setStartDate(convertDate(projectAtDTO.getStartDate()));
-        project.setEndDate(convertDate(projectAtDTO.getEndDate()));
+        project.setStartDate(convertLocalDate(convertDate(projectAtDTO.getStartDate())));
+        project.setEndDate(convertLocalDate(convertDate(projectAtDTO.getEndDate())));
         project.setPlanIntro(projectAtDTO.getPlanIntro());
         project.setPlanBudget(projectAtDTO.getPlanBudget());
         project.setPlanSchedule(projectAtDTO.getPlanSchedule());
@@ -148,8 +147,8 @@ public class ProjectService {
         projectAtDTO.setComment(project.getComment());
         projectAtDTO.setGoalMoney(project.getGoalMoney());
         projectAtDTO.setTotalMoney(project.getTotalMoney());
-        projectAtDTO.setStartDate(convertString(project.getStartDate()));
-        projectAtDTO.setEndDate(convertString(project.getEndDate()));
+        projectAtDTO.setStartDate(convertString(convertDate(project.getStartDate())));
+        projectAtDTO.setEndDate(convertString(convertDate(project.getEndDate())));
         projectAtDTO.setPlanIntro(project.getPlanIntro());
         projectAtDTO.setPlanBudget(project.getPlanBudget());
         projectAtDTO.setPlanSchedule(project.getPlanSchedule());

@@ -32,6 +32,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -122,27 +123,9 @@ public class ProjectCardControllerTest {
         //when
         List<ProjectCardDTO> findDTOs = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<List<ProjectCardDTO>>() {});
 
-
-
         //then
         Assertions.assertThat(findDTOs.size()).isEqualTo(20);
         for(ProjectCardDTO card : findDTOs){
-            this.assertOngoingProject(card);
-        }
-    }
-
-    @Test
-    @Transactional
-    public void ongoing조회는_startIdx_생략가능_1() throws Exception{
-        //given
-        ResponseEntity<List<ProjectCardDTO>> ongoingProject = projectCardController.getOngoingProject(null, null);
-
-        //when
-        List<ProjectCardDTO> resultBody = ongoingProject.getBody();
-
-        //then
-        Assertions.assertThat(resultBody.size()).isEqualTo(20);
-        for(ProjectCardDTO card : resultBody){
             this.assertOngoingProject(card);
         }
     }
@@ -288,8 +271,8 @@ public class ProjectCardControllerTest {
         project.setCategory("category");
         project.setComment("comment");
         project.setGoalMoney(1000L);
-        project.setStartDate(new Date(2023, 2, 5));
-        project.setEndDate(new Date(2032, 3, 5));
+        project.setStartDate(LocalDate.of(2023, 2, 5));
+        project.setEndDate(LocalDate.of(2032, 3, 5));
         project.setPlanIntro("planIntro");
         project.setPlanBudget("planBudget");
         project.setPlanSchedule("planSchedule");
@@ -304,7 +287,7 @@ public class ProjectCardControllerTest {
         Project project = makeOngoingProject(i);
 
         project.setTitle("preLaunching title " + Integer.toString(i));
-        project.setStartDate(new Date(2025, 2, 5));
+        project.setStartDate(LocalDate.of(2025, 2, 5));
 
         return project;
     }

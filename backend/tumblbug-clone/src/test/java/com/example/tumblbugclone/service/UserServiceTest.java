@@ -19,7 +19,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -244,7 +244,7 @@ public class UserServiceTest {
         modifyUser.setUserImg("newImageURL");
         modifyUser.setUserPassword("newPassword");
         modifyUser.setGreeting("Hi");
-        modifyUser.setLastLogin(new Date());
+        modifyUser.setLastLogin(LocalDate.now());
         userService.modify(modifyUser);
 
         //then

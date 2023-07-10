@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -16,7 +17,7 @@ public class ProjectUpdateDTO {
     String content;
     UserSendingDTO creater;
     long projectId;
-    Date updateDate;
+    LocalDate updateDate;
     boolean modified = false;
     //댓글
 }

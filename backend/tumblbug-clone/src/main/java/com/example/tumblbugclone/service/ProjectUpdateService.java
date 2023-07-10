@@ -13,10 +13,12 @@ import com.example.tumblbugclone.model.User;
 import com.example.tumblbugclone.repository.ProjectRepository;
 import com.example.tumblbugclone.repository.ProjectUpdateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -53,7 +55,7 @@ public class ProjectUpdateService {
         }
 
         projectUpdateDTO.setContent(content);
-        projectUpdateDTO.setUpdateDate(new Date());
+        projectUpdateDTO.setUpdateDate(LocalDate.now());
 
         ProjectUpdate projectUpdate = convertDTO2Update(user, project, projectUpdateDTO);
         long updateId = projectUpdateRepository.save(projectUpdate.getProject(), projectUpdate);
@@ -71,7 +73,7 @@ public class ProjectUpdateService {
         ProjectUpdate originalUpdate = projectUpdateRepository.findById(ContentId);
         if(originalUpdate.getCreater().getUserIdx() != userIdx)
             throw new UnauthorizedUserException();
-        originalUpdate.setUpdateDate(new Date());
+        originalUpdate.setUpdateDate(LocalDate.now());
         originalUpdate.setContent(newContent);
         originalUpdate.setModified(true);
 

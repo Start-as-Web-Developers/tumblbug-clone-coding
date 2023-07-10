@@ -15,6 +15,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -31,7 +32,7 @@ public class ProjectCardServiceTest {
     @Autowired
     private UserRepository userRepository;
 
-    java.util.Date today = new java.util.Date(2023, 5, 23);
+    LocalDate today = LocalDate.now();
 
     User user;
 
@@ -215,8 +216,8 @@ public class ProjectCardServiceTest {
         project.setCategory("category");
         project.setComment("comment");
         project.setGoalMoney(1000L);
-        project.setStartDate(new Date(2023, 2, 5));
-        project.setEndDate(new Date(2032, 3, 5));
+        project.setStartDate(LocalDate.of(2023, 2, 5));
+        project.setEndDate(LocalDate.of(2032, 3, 5));
         project.setPlanIntro("planIntro");
         project.setPlanBudget("planBudget");
         project.setPlanSchedule("planSchedule");
@@ -231,7 +232,7 @@ public class ProjectCardServiceTest {
         Project project = makeOngoingProject(i);
 
         project.setTitle("preLaunching title " + Integer.toString(i));
-        project.setStartDate(new Date(2025, 2, 5));
+        project.setStartDate(LocalDate.of(2025, 2, 5));
 
         return project;
     }

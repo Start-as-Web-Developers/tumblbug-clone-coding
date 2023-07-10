@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -31,10 +32,10 @@ public class Community {
 
     @Column(name = "WRITE_DATE", nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date writeDate;
+    private LocalDate writeDate;
 
     @Column(name = "MODI_DATE")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date modiDate;
+    private LocalDate modiDate;
 
 }

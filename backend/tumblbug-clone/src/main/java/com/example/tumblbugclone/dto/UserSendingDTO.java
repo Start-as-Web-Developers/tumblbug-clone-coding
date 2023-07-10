@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 
+import java.time.LocalDate;
 import java.util.Date;
 
 
@@ -18,7 +19,7 @@ public class UserSendingDTO {
     private String userEmail;
     private String greeting;
     private String userImg;
-    private Date lastLogin;
+    private LocalDate lastLogin;
     private boolean isActive;
 
     //좋아요 - 1대 다 매핑

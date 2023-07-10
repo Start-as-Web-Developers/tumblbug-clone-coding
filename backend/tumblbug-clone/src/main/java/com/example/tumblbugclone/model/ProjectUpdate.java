@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -31,8 +32,7 @@ public class ProjectUpdate {
     User creater;
 
     @Column(name = "UPDATE_DATE")
-    @Temporal(TemporalType.TIMESTAMP)
-    Date updateDate;
+    LocalDate updateDate;
 
     @Column(name = "IS_MODIFIED")
     boolean modified = false;
