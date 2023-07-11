@@ -7,8 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -45,8 +45,7 @@ public class User {
     private String userImg;
 
     @Column(name = "LAST_LOGIN")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date lastLogin;
+    private LocalDate lastLogin;
 
     @Column(name = "IS_ACTIVE")
     private boolean isActive;

@@ -4,9 +4,7 @@ import com.example.tumblbugclone.model.Community;
 import com.example.tumblbugclone.model.Project;
 import com.example.tumblbugclone.model.User;
 import org.assertj.core.api.Assertions;
-import org.junit.After;
 import org.junit.Test;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -14,8 +12,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -30,75 +28,27 @@ public class CommunityRepositoryTest {
     @Transactional
     public void save() throws Exception {
         //given
-        User user = new User();
-        user.setUserId("UserId");
-        user.setUserName("userName");
-        user.setUserEmail("userEmail");
-        user.setUserPassword("userPassword");
-        userRepository.save(user);
+        User user = saveUser();
 
-        Project project = new Project();
-        project.setUser(user);
-        project.setTitle("title");
-        project.setProjectImg("img");
-        project.setCategory("category");
-        project.setComment("comment");
-        project.setGoalMoney(1000L);
-        project.setStartDate(new Date());
-        project.setEndDate(new Date());
-        project.setPlanIntro("planIntro");
-        project.setPlanBudget("planBudget");
-        project.setPlanSchedule("planSchedule");
-        project.setPlanTeam("planTeam");
-        project.setPlanExplain("planExplain");
-        project.setPlanGuide("planGuide");
-        projectRepository.save(project);
+        Project project = saveProject(user);
 
-        Community community = new Community();
-        community.setProject(project);
-        community.setUser(user);
-        community.setComment("comment");
-        community.setModiDate(new Date(2023, 05, 15));
-        community.setWriteDate(new Date(2023, 05, 15));
+        Community community = saveCommunity(project, user, "comment");
 
         //when
         communityRepository.save(community);
     }
 
+
+
     @Test
     @Transactional
     public void findCommunityById() throws Exception {
         //given
-        User user = new User();
-        user.setUserId("UserId");
-        user.setUserName("userName");
-        user.setUserEmail("userEmail");
-        user.setUserPassword("userPassword");
-        userRepository.save(user);
+        User user = saveUser();
 
-        Project project = new Project();
-        project.setUser(user);
-        project.setTitle("title");
-        project.setProjectImg("img");
-        project.setCategory("category");
-        project.setComment("comment");
-        project.setGoalMoney(1000L);
-        project.setStartDate(new Date());
-        project.setEndDate(new Date());
-        project.setPlanIntro("planIntro");
-        project.setPlanBudget("planBudget");
-        project.setPlanSchedule("planSchedule");
-        project.setPlanTeam("planTeam");
-        project.setPlanExplain("planExplain");
-        project.setPlanGuide("planGuide");
-        projectRepository.save(project);
+        Project project = saveProject(user);
 
-        Community community = new Community();
-        community.setProject(project);
-        community.setUser(user);
-        community.setComment("comment");
-        community.setModiDate(new Date(2023, 05, 15));
-        community.setWriteDate(new Date(2023, 05, 15));
+        Community community = saveCommunity(project, user, "comment");
 
         //when
         long communityId = communityRepository.save(community);
@@ -107,6 +57,8 @@ public class CommunityRepositoryTest {
         //then
         Assertions.assertThat(communityId).isEqualTo(savedCommunity.getCommunityId());
     }
+
+
 
     @Test(expected = EmptyResultDataAccessException.class)
     @Transactional
@@ -178,43 +130,13 @@ public class CommunityRepositoryTest {
     @Transactional
     public void findCommunityByProjectId_EX() throws Exception {
         //given
-        User user = new User();
-        user.setUserId("UserId");
-        user.setUserName("userName");
-        user.setUserEmail("userEmail");
-        user.setUserPassword("userPassword");
-        userRepository.save(user);
+        User user = saveUser();
 
-        Project project = new Project();
-        project.setUser(user);
-        project.setTitle("title");
-        project.setProjectImg("img");
-        project.setCategory("category");
-        project.setComment("comment");
-        project.setGoalMoney(1000L);
-        project.setStartDate(new Date());
-        project.setEndDate(new Date());
-        project.setPlanIntro("planIntro");
-        project.setPlanBudget("planBudget");
-        project.setPlanSchedule("planSchedule");
-        project.setPlanTeam("planTeam");
-        project.setPlanExplain("planExplain");
-        project.setPlanGuide("planGuide");
-        projectRepository.save(project);
+        Project project = saveProject(user);
 
-        Community community1 = new Community();
-        community1.setProject(project);
-        community1.setUser(user);
-        community1.setComment("comment1");
-        community1.setModiDate(new Date(2023, 05, 15));
-        community1.setWriteDate(new Date(2023, 05, 15));
+        Community community1 = saveCommunity(project, user, "comment1");
 
-        Community community2 = new Community();
-        community2.setProject(project);
-        community2.setUser(user);
-        community2.setComment("comment2");
-        community2.setModiDate(new Date(2023, 05, 15));
-        community2.setWriteDate(new Date(2023, 05, 15));
+        Community community2 = saveCommunity(project, user, "comment2");
 
         //when
         communityRepository.save(community1);
@@ -233,36 +155,11 @@ public class CommunityRepositoryTest {
     @Transactional
     public void modify() throws Exception {
         //given
-        User user = new User();
-        user.setUserId("UserId");
-        user.setUserName("userName");
-        user.setUserEmail("userEmail");
-        user.setUserPassword("userPassword");
-        userRepository.save(user);
+        User user = saveUser();
 
-        Project project = new Project();
-        project.setUser(user);
-        project.setTitle("title");
-        project.setProjectImg("img");
-        project.setCategory("category");
-        project.setComment("comment");
-        project.setGoalMoney(1000L);
-        project.setStartDate(new Date());
-        project.setEndDate(new Date());
-        project.setPlanIntro("planIntro");
-        project.setPlanBudget("planBudget");
-        project.setPlanSchedule("planSchedule");
-        project.setPlanTeam("planTeam");
-        project.setPlanExplain("planExplain");
-        project.setPlanGuide("planGuide");
-        projectRepository.save(project);
+        Project project = saveProject(user);
 
-        Community community = new Community();
-        community.setProject(project);
-        community.setUser(user);
-        community.setComment("comment");
-        community.setModiDate(new Date(2023, 05, 15));
-        community.setWriteDate(new Date(2023, 05, 15));
+        Community community = saveCommunity(project, user, "comment");
 
         //when
         communityRepository.save(community);
@@ -280,13 +177,40 @@ public class CommunityRepositoryTest {
     @Transactional
     public void delete() throws Exception {
         //given
+        User user = saveUser();
+
+        Project project = saveProject(user);
+
+        Community community = saveCommunity(project, user, "comment");
+
+        long communityId = communityRepository.save(community);
+
+        //when
+        communityRepository.delete(communityId);
+        communityRepository.findCommunityById(communityId);
+    }
+
+    private User saveUser() {
         User user = new User();
         user.setUserId("UserId");
         user.setUserName("userName");
         user.setUserEmail("userEmail");
         user.setUserPassword("userPassword");
         userRepository.save(user);
+        return user;
+    }
 
+    private Community saveCommunity(Project project, User user, String comment) {
+        Community community = new Community();
+        community.setProject(project);
+        community.setUser(user);
+        community.setComment(comment);
+        community.setModiDate(LocalDate.of(2023, 05, 15));
+        community.setWriteDate(LocalDate.of(2023, 05, 15));
+        return community;
+    }
+
+    private Project saveProject(User user) {
         Project project = new Project();
         project.setUser(user);
         project.setTitle("title");
@@ -294,8 +218,8 @@ public class CommunityRepositoryTest {
         project.setCategory("category");
         project.setComment("comment");
         project.setGoalMoney(1000L);
-        project.setStartDate(new Date());
-        project.setEndDate(new Date());
+        project.setStartDate(LocalDate.now());
+        project.setEndDate(LocalDate.now());
         project.setPlanIntro("planIntro");
         project.setPlanBudget("planBudget");
         project.setPlanSchedule("planSchedule");
@@ -303,18 +227,6 @@ public class CommunityRepositoryTest {
         project.setPlanExplain("planExplain");
         project.setPlanGuide("planGuide");
         projectRepository.save(project);
-
-        Community community = new Community();
-        community.setProject(project);
-        community.setUser(user);
-        community.setComment("comment");
-        community.setModiDate(new Date(2023, 05, 15));
-        community.setWriteDate(new Date(2023, 05, 15));
-
-        long communityId = communityRepository.save(community);
-
-        //when
-        communityRepository.delete(communityId);
-        communityRepository.findCommunityById(communityId);
+        return project;
     }
 }

@@ -8,10 +8,11 @@ import com.example.tumblbugclone.model.Project;
 import com.example.tumblbugclone.repository.ProjectRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -26,10 +27,10 @@ public class ProjectCardService {
 
 
     public ArrayList<ProjectCardDTO> findOngoingFromIdx(Integer startIdx, String sort) throws TumblbugException {
-        return findOngoingFromIdx(startIdx, sort, new Date());
+        return findOngoingFromIdx(startIdx, sort, LocalDate.now());
     }
 
-    public ArrayList<ProjectCardDTO> findOngoingFromIdx(Integer startIdx, String sort,  Date today) throws TumblbugException {
+    public ArrayList<ProjectCardDTO> findOngoingFromIdx(Integer startIdx, String sort,  LocalDate today) throws TumblbugException {
         ArrayList<ProjectCardDTO> projectDTOList = new ArrayList<>();
         long findIndex = startIdx;
 
@@ -48,12 +49,10 @@ public class ProjectCardService {
 
 
     public ArrayList<ProjectCardDTO> findPreLaunchingFromIdx(int startIdx, String sort) throws TumblbugException {
-        Date today = new Date();
-
-        return findPreLaunchingFromIdx(startIdx, sort, today);
+        return findPreLaunchingFromIdx(startIdx, sort, LocalDate.now());
     }
 
-    public ArrayList<ProjectCardDTO> findPreLaunchingFromIdx(int startIdx, String sort, Date today) throws TumblbugException {
+    public ArrayList<ProjectCardDTO> findPreLaunchingFromIdx(int startIdx, String sort, LocalDate today) throws TumblbugException {
         ArrayList<ProjectCardDTO> projectDTOList = new ArrayList<>();
         long findIndex = startIdx;
 

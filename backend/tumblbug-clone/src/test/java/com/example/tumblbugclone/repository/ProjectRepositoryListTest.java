@@ -1,9 +1,7 @@
 package com.example.tumblbugclone.repository;
 
-import com.example.tumblbugclone.dto.UserReceivingDTO;
 import com.example.tumblbugclone.model.Project;
 import com.example.tumblbugclone.model.User;
-import com.example.tumblbugclone.service.ProjectCardService;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,7 +10,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -27,7 +25,7 @@ public class ProjectRepositoryListTest {
     /**
      * author : 장혁수
      */
-    Date today = new Date(2023, 05, 23);
+    LocalDate today = LocalDate.of(2023, 05, 23);
 
     @Test
     @Transactional
@@ -82,8 +80,8 @@ public class ProjectRepositoryListTest {
         //then
         Assertions.assertThat(ongoingList.size()).isEqualTo(20);
         for (Project project : ongoingList) {
-            Date date = project.getStartDate();
-            System.out.println("project.getStartDate() = " + date.getYear() + " "+ date.getMonth() + " "+date.getDate());
+            LocalDate date = project.getStartDate();
+            System.out.println("project.getStartDate() = " + date.getYear() + " "+ date.getMonth() + " "+date.getDayOfMonth());
             Assertions.assertThat(project.getStartDate()).isAfter(today);
         }
     }
@@ -180,8 +178,8 @@ public class ProjectRepositoryListTest {
         project.setCategory("category");
         project.setComment("comment");
         project.setGoalMoney(1000L);
-        project.setStartDate(new Date(2023, 2, 5));
-        project.setEndDate(new Date(2032, 3, 5));
+        project.setStartDate(LocalDate.of(2023, 2, 5));
+        project.setEndDate(LocalDate.of(2032, 3, 5));
         project.setPlanIntro("planIntro");
         project.setPlanBudget("planBudget");
         project.setPlanSchedule("planSchedule");
@@ -194,7 +192,7 @@ public class ProjectRepositoryListTest {
 
     public Project  makePrelaunchingProject(int i, User user){
         Project project = makeOngoingProject(i, user);
-        project.setStartDate(new Date(2025, 2, 5));
+        project.setStartDate(LocalDate.of(2025, 2, 5));
 
         return project;
     }

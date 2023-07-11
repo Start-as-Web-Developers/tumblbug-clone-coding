@@ -4,7 +4,6 @@ import com.example.tumblbugclone.Exception.updateException.CantFindUpdateExcepti
 import com.example.tumblbugclone.Exception.userexception.UnauthorizedUserException;
 import com.example.tumblbugclone.dto.ProjectUpdateDTO;
 import com.example.tumblbugclone.model.Project;
-import com.example.tumblbugclone.model.ProjectUpdate;
 import com.example.tumblbugclone.model.User;
 import com.example.tumblbugclone.repository.ProjectRepository;
 import com.example.tumblbugclone.repository.UserRepository;
@@ -16,10 +15,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:appConfig.xml")
@@ -203,8 +200,8 @@ public class ProjectUpdateServiceTest {
         project.setCategory("category");
         project.setComment("comment");
         project.setGoalMoney(1000L);
-        project.setStartDate(new Date());
-        project.setEndDate(new Date());
+        project.setStartDate(LocalDate.now());
+        project.setEndDate(LocalDate.now());
         project.setPlanIntro("planIntro");
         project.setPlanBudget("planBudget");
         project.setPlanSchedule("planSchedule");
@@ -217,7 +214,7 @@ public class ProjectUpdateServiceTest {
 
     private ProjectUpdateDTO makeUpdate(){
         ProjectUpdateDTO update = new ProjectUpdateDTO();
-        update.setUpdateDate(new Date());
+        update.setUpdateDate(LocalDate.now());
         update.setModified(false);
         update.setContent("");
 

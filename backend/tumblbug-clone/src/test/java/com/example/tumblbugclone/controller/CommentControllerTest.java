@@ -25,7 +25,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -298,8 +298,8 @@ public class CommentControllerTest {
         project.setCategory("category");
         project.setComment("comment");
         project.setGoalMoney(1000L);
-        project.setStartDate(new Date());
-        project.setEndDate(new Date());
+        project.setStartDate(LocalDate.now());
+        project.setEndDate(LocalDate.now());
         project.setPlanIntro("planIntro");
         project.setPlanBudget("planBudget");
         project.setPlanSchedule("planSchedule");
@@ -313,7 +313,7 @@ public class CommentControllerTest {
     private ProjectUpdate makeUpdate(User user, Project project){
         ProjectUpdate update = new ProjectUpdate();
         update.setProject(project);
-        update.setUpdateDate(new Date());
+        update.setUpdateDate(LocalDate.now());
         update.setModified(false);
         update.setCreater(user);
         update.setContent("");

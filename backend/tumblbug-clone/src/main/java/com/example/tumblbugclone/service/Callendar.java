@@ -4,6 +4,8 @@ import com.example.tumblbugclone.managedconst.ProjectConst;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class Callendar {
@@ -16,8 +18,20 @@ public class Callendar {
         return today;
     }
 
-    public static Date getToday(){
-        return new Date();
+    public static LocalDate getToday(){
+        return LocalDate.now();
+    }
+
+    public static Date convertDate(LocalDate date){
+        Date result = new Date(date.getYear(), date.getMonthValue(), date.getDayOfMonth());
+
+        return result;
+    }
+
+    public static LocalDate convertLocalDate(Date date){
+        LocalDate localDate = LocalDate.of(date.getYear(), date.getMonth(), date.getDate());
+
+        return localDate;
     }
 
     public static Date convertDate(String dateString) throws ParseException {
@@ -35,6 +49,10 @@ public class Callendar {
         String convert = Callendar.format.format(date);
         return convert;
 
+    }
+    public static String convertString(LocalDate date){
+        String convert = date.format(DateTimeFormatter.ofPattern(ProjectConst.DATE_FORMAT));
+        return convert;
     }
 
     public static boolean after(String dateString1, String dateString2) throws ParseException {

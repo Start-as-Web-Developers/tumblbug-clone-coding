@@ -1,8 +1,6 @@
 package com.example.tumblbugclone.repository;
 
 
-import com.example.tumblbugclone.dto.ProjectCardDTO;
-import com.example.tumblbugclone.dto.UserReceivingDTO;
 import com.example.tumblbugclone.model.Project;
 import com.example.tumblbugclone.model.User;
 import org.assertj.core.api.Assertions;
@@ -14,9 +12,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDate;
+
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:appConfig.xml")
@@ -32,58 +29,24 @@ public class ProjectRepositoryTest {
     public void save() throws Exception{
 
         //given
-        User user = new User();
-        user.setUserId("UserId");
-        user.setUserName("userName");
-        user.setUserEmail("userEmail");
-        user.setUserPassword("userPassword");
+        User user = saveUser();
 
-        Project project = new Project();
-        project.setUser(user);
-        project.setTitle("title");
-        project.setProjectImg("img");
-        project.setCategory("category");
-        project.setComment("comment");
-        project.setGoalMoney(1000L);
-        project.setStartDate(new Date());
-        project.setEndDate(new Date());
-        project.setPlanIntro("planIntro");
-        project.setPlanBudget("planBudget");
-        project.setPlanSchedule("planSchedule");
-        project.setPlanTeam("planTeam");
-        project.setPlanExplain("planExplain");
-        project.setPlanGuide("planGuide");
+        Project project = makeProject(user, LocalDate.now(), LocalDate.now());
 
         // when
         long projectId = projectRepository.save(project);
 
     }
 
+
+
     @Test
     @Transactional
     public void findProjectById() throws Exception{
         //given
-        User user = new User();
-        user.setUserId("UserId");
-        user.setUserName("userName");
-        user.setUserEmail("userEmail");
-        user.setUserPassword("userPassword");
+        User user = saveUser();
 
-        Project project = new Project();
-        project.setUser(user);
-        project.setTitle("title");
-        project.setProjectImg("img");
-        project.setCategory("category");
-        project.setComment("comment");
-        project.setGoalMoney(1000L);
-        project.setStartDate(new Date());
-        project.setEndDate(new Date());
-        project.setPlanIntro("planIntro");
-        project.setPlanBudget("planBudget");
-        project.setPlanSchedule("planSchedule");
-        project.setPlanTeam("planTeam");
-        project.setPlanExplain("planExplain");
-        project.setPlanGuide("planGuide");
+        Project project = makeProject(user, LocalDate.now(), LocalDate.now());
 
         //when
         long savedProjectIndex = projectRepository.save(project);
@@ -111,27 +74,9 @@ public class ProjectRepositoryTest {
     public void modify() throws Exception {
 
         //given
-        User user = new User();
-        user.setUserId("UserId");
-        user.setUserName("userName");
-        user.setUserEmail("userEmail");
-        user.setUserPassword("userPassword");
+        User user = saveUser();
 
-        Project project = new Project();
-        project.setUser(user);
-        project.setTitle("title");
-        project.setProjectImg("img");
-        project.setCategory("category");
-        project.setComment("comment");
-        project.setGoalMoney(1000L);
-        project.setStartDate(new Date());
-        project.setEndDate(new Date());
-        project.setPlanIntro("planIntro");
-        project.setPlanBudget("planBudget");
-        project.setPlanSchedule("planSchedule");
-        project.setPlanTeam("planTeam");
-        project.setPlanExplain("planExplain");
-        project.setPlanGuide("planGuide");
+        Project project = makeProject(user, LocalDate.now(), LocalDate.now());
 
         //when
         projectRepository.save(project);
@@ -149,27 +94,9 @@ public class ProjectRepositoryTest {
     public void delete() throws Exception {
 
         //given
-        User user = new User();
-        user.setUserId("UserId");
-        user.setUserName("userName");
-        user.setUserEmail("userEmail");
-        user.setUserPassword("userPassword");
+        User user = saveUser();
 
-        Project project = new Project();
-        project.setUser(user);
-        project.setTitle("title");
-        project.setProjectImg("img");
-        project.setCategory("category");
-        project.setComment("comment");
-        project.setGoalMoney(1000L);
-        project.setStartDate(new Date());
-        project.setEndDate(new Date());
-        project.setPlanIntro("planIntro");
-        project.setPlanBudget("planBudget");
-        project.setPlanSchedule("planSchedule");
-        project.setPlanTeam("planTeam");
-        project.setPlanExplain("planExplain");
-        project.setPlanGuide("planGuide");
+        Project project = makeProject(user, LocalDate.now(), LocalDate.now());
 
         //when
         long projectId = projectRepository.save(project);
@@ -180,6 +107,32 @@ public class ProjectRepositoryTest {
 
     }
 
+    private Project makeProject(User user, LocalDate statDate, LocalDate endDate) {
+        Project project = new Project();
+        project.setUser(user);
+        project.setTitle("title");
+        project.setProjectImg("img");
+        project.setCategory("category");
+        project.setComment("comment");
+        project.setGoalMoney(1000L);
+        project.setStartDate(statDate);
+        project.setEndDate(endDate);
+        project.setPlanIntro("planIntro");
+        project.setPlanBudget("planBudget");
+        project.setPlanSchedule("planSchedule");
+        project.setPlanTeam("planTeam");
+        project.setPlanExplain("planExplain");
+        project.setPlanGuide("planGuide");
+        return project;
+    }
 
+    private User saveUser() {
+        User user = new User();
+        user.setUserId("UserId");
+        user.setUserName("userName");
+        user.setUserEmail("userEmail");
+        user.setUserPassword("userPassword");
+        return user;
+    }
 
 }

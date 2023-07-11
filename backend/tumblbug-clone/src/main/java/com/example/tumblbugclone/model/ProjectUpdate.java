@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -16,7 +17,6 @@ import java.util.List;
 public class ProjectUpdate {
 
     @Id
-    @Column(name = "UPDATE_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "UPDATE_ID")
     private long id;
@@ -33,8 +33,7 @@ public class ProjectUpdate {
     private User creater;
 
     @Column(name = "UPDATE_DATE")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updateDate;
+    LocalDate updateDate;
 
     @Column(name = "IS_MODIFIED")
     private boolean modified = false;

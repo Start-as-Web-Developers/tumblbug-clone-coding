@@ -32,7 +32,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -483,8 +483,8 @@ public class UpdateControllerTest {
         project.setCategory("category");
         project.setComment("comment");
         project.setGoalMoney(1000L);
-        project.setStartDate(new Date());
-        project.setEndDate(new Date());
+        project.setStartDate(LocalDate.now());
+        project.setEndDate(LocalDate.now());
         project.setPlanIntro("planIntro");
         project.setPlanBudget("planBudget");
         project.setPlanSchedule("planSchedule");
@@ -497,7 +497,7 @@ public class UpdateControllerTest {
 
     private ProjectUpdateDTO makeUpdate(){
         ProjectUpdateDTO update = new ProjectUpdateDTO();
-        update.setUpdateDate(new Date());
+        update.setUpdateDate(LocalDate.now());
         update.setModified(false);
         update.setContent("");
 

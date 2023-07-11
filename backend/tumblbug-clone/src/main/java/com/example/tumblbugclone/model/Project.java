@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -44,10 +45,10 @@ public class Project {
     private Long totalMoney;
 
     @Column(name = "START_DATE", nullable = false)
-    private Date startDate;
+    private LocalDate startDate;
 
     @Column(name = "END_DATE", nullable = false)
-    private Date endDate;
+    private LocalDate endDate;
 
     @Column(name = "PLAN_INTRO", nullable = false)
     private String planIntro;

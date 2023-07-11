@@ -3,15 +3,13 @@ package com.example.tumblbugclone.repository;
 import com.example.tumblbugclone.Exception.TumblbugException;
 import com.example.tumblbugclone.Exception.projectException.ProjectSortException;
 import com.example.tumblbugclone.managedconst.ProjectListSort;
-import com.example.tumblbugclone.model.Like;
 import com.example.tumblbugclone.model.Project;
-import com.example.tumblbugclone.model.User;
 import jakarta.persistence.*;
 import jakarta.persistence.criteria.*;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
 
@@ -52,9 +50,9 @@ public class ProjectRepository {
      * - sort 사용해서 정렬 구현
      */
     public List<Project> findOngoingList(int startIndex, String sort) throws TumblbugException {
-        return findOngoingList(startIndex, sort, new Date());
+        return findOngoingList(startIndex, sort, LocalDate.now());
     }
-    public List<Project> findOngoingList(int startIndex, String sort, java.util.Date date) throws TumblbugException {
+    public List<Project> findOngoingList(int startIndex, String sort, LocalDate date) throws TumblbugException {
 
         CriteriaBuilder  queryBuilder = em.getCriteriaBuilder();
         CriteriaQuery<Project> selectQuery = queryBuilder.createQuery(Project.class);
@@ -101,10 +99,10 @@ public class ProjectRepository {
     }
 
     public List<Project> findPrelaunchingList(int startIndex, String sort) throws TumblbugException {
-        java.util.Date date = new Date();
-        return findPrelaunchingList(startIndex, sort, date);
+
+        return findPrelaunchingList(startIndex, sort, LocalDate.now());
     }
-    public List<Project> findPrelaunchingList(int startIndex, String sort, Date date) throws TumblbugException {
+    public List<Project> findPrelaunchingList(int startIndex, String sort, LocalDate date) throws TumblbugException {
 
         CriteriaBuilder  queryBuilder = em.getCriteriaBuilder();
         CriteriaQuery<Project> selectQuery = queryBuilder.createQuery(Project.class);

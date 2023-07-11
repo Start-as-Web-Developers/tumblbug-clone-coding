@@ -8,6 +8,7 @@ import com.example.tumblbugclone.managedconst.ExceptionConst;
 import com.example.tumblbugclone.managedconst.HttpConst;
 import com.example.tumblbugclone.service.ProjectCardService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class ProjectCardController {
             (@RequestParam(required = false,name = "start-idx")Integer startIdx, @RequestParam(required = false, name = "sort")String sort){
         List<ProjectCardDTO> projectCards;
 
-        Date today = new Date();
+        LocalDate today = LocalDate.now();
 
         if(startIdx == null)
             startIdx = 0;

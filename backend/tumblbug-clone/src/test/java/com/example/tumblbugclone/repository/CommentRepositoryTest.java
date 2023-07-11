@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -143,8 +143,8 @@ public class CommentRepositoryTest {
         project.setCategory("category");
         project.setComment("comment");
         project.setGoalMoney(1000L);
-        project.setStartDate(new Date());
-        project.setEndDate(new Date());
+        project.setStartDate(LocalDate.now());
+        project.setEndDate(LocalDate.now());
         project.setPlanIntro("planIntro");
         project.setPlanBudget("planBudget");
         project.setPlanSchedule("planSchedule");
@@ -158,7 +158,7 @@ public class CommentRepositoryTest {
     private ProjectUpdate makeUpdate(User user, Project project){
         ProjectUpdate update = new ProjectUpdate();
         update.setProject(project);
-        update.setUpdateDate(new Date());
+        update.setUpdateDate(LocalDate.now());
         update.setModified(false);
         update.setCreater(user);
         update.setContent("");
