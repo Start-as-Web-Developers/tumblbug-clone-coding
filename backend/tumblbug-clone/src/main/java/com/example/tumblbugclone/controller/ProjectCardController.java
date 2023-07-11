@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 @Slf4j
@@ -34,26 +36,41 @@ public class ProjectCardController {
     }
 
     @GetMapping(HttpConst.ON_GOING)
-    public ResponseEntity<List<ProjectCardDTO>> getOngoingProject(@RequestParam(required = false,name = "start-idx")int startIdx){
+    public ResponseEntity<List<ProjectCardDTO>> getOngoingProject
+            (@RequestParam(required = false,name = "start-idx")Integer startIdx, @RequestParam(required = false, name = "sort")String sort){
         List<ProjectCardDTO> projectCards;
 
+        Date today = new Date();
+
+        if(startIdx == null)
+            startIdx = 0;
         try {
-            projectCards = projectCardService.findOngoingFromIdx(startIdx);
+            projectCards = projectCardService.findOngoingFromIdx(startIdx, sort, today);
         } catch (TumblbugException e) {
             return ResponseEntity
                     .status(e.getErrorStatus())
                     .build();
         }
+
+        Iterator<ProjectCardDTO> iter = projectCards.iterator();
+        while(iter.hasNext()){
+            ProjectCardDTO card = iter.next();
+            System.out.println("card = " + card.getTitle());
+        }
+
         return ResponseEntity.ok()
                 .body(projectCards);
     }
 
     @GetMapping(HttpConst.PRE_LAUNCHING)
-    public ResponseEntity<List<ProjectCardDTO>> getPreLaunchingProject(@RequestParam(required = false,name = "start-idx") int startIdx){
+    public ResponseEntity<List<ProjectCardDTO>> getPreLaunchingProject
+            (@RequestParam(required = false,name = "start-idx") Integer startIdx, @RequestParam(required = false, name = "sort")String sort){
         List<ProjectCardDTO> projectCards;
 
+        if(startIdx == null)
+            startIdx = 0;
         try {
-            projectCards = projectCardService.findPreLaunchingFromIdx(startIdx);
+            projectCards = projectCardService.findPreLaunchingFromIdx(startIdx, sort);
         } catch (TumblbugException e) {
             return ResponseEntity
                     .status(e.getErrorStatus())

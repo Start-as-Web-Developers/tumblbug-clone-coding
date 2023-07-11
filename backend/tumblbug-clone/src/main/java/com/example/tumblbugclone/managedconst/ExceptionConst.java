@@ -27,6 +27,8 @@ public class ExceptionConst { //Tumblbug 내부에 작성하는 것이 좋았을
     public static final int ProjectCantModify = 651;
     public static final int ProjectCantFind = 652;
 
-    //== component exception const==//
-    public static final int ComponentCantModify = 661;
+    public static final int ProjectCantModify = 650;
+    public static final int ProjectSortException = 651;
+    public static final int ComponentCantModify = 652;
+
 }

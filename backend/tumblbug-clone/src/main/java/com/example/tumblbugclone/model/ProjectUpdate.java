@@ -16,6 +16,7 @@ import java.util.List;
 public class ProjectUpdate {
 
     @Id
+    @Column(name = "UPDATE_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "UPDATE_ID")
     private long id;
@@ -38,7 +39,9 @@ public class ProjectUpdate {
     @Column(name = "IS_MODIFIED")
     private boolean modified = false;
 
+
     @Column(name = "comment")
     @OneToMany(mappedBy = "update")
     private List<UpdateComment> comment;
+
 }

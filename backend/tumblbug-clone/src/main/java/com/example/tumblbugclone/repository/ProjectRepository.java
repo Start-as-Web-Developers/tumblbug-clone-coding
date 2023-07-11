@@ -1,19 +1,19 @@
 package com.example.tumblbugclone.repository;
 
+import com.example.tumblbugclone.Exception.TumblbugException;
+import com.example.tumblbugclone.Exception.projectException.ProjectSortException;
+import com.example.tumblbugclone.managedconst.ProjectListSort;
+import com.example.tumblbugclone.model.Like;
 import com.example.tumblbugclone.model.Project;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Query;
-import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
+import com.example.tumblbugclone.model.User;
+import jakarta.persistence.*;
+import jakarta.persistence.criteria.*;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 @Repository
 public class ProjectRepository {
@@ -51,10 +51,10 @@ public class ProjectRepository {
      * TODO
      * - sort 사용해서 정렬 구현
      */
-    public List<Project> findOngoingList(int startIndex, String sort){
-        return findOngoingList(startIndex, sort, new Date(System.currentTimeMillis()));
+    public List<Project> findOngoingList(int startIndex, String sort) throws TumblbugException {
+        return findOngoingList(startIndex, sort, new Date());
     }
-    public List<Project> findOngoingList(int startIndex, String sort, java.util.Date date){
+    public List<Project> findOngoingList(int startIndex, String sort, java.util.Date date) throws TumblbugException {
 
         CriteriaBuilder  queryBuilder = em.getCriteriaBuilder();
         CriteriaQuery<Project> selectQuery = queryBuilder.createQuery(Project.class);
@@ -62,6 +62,35 @@ public class ProjectRepository {
 
         Predicate start_date = queryBuilder.lessThan(root.get("startDate"), date);
         selectQuery.where(start_date);
+
+        Order order;
+        if(sort == null){
+            order = null;
+        }else if(sort.equals(ProjectListSort.POPULAR.name().toLowerCase(Locale.ROOT))){
+            /*Join<Project, Like> likeJoin = root.join("likePeople", JoinType.LEFT);
+
+            selectQuery = selectQuery.multiselect(root, queryBuilder.count(likeJoin).alias("numLikes"))
+                    .groupBy(root)
+                    .orderBy(queryBuilder.desc(queryBuilder.count(likeJoin)));
+
+            List<Project> projects = em.createQuery(selectQuery)
+                    .setFirstResult(startIndex)
+                    .setMaxResults(20)
+                    .getResultList();
+
+            return projects;*/
+            order = null;
+            //order = queryBuilder.desc(queryBuilder.size(root.get("likes")));
+        }else if(sort.equals(ProjectListSort.NEW.name().toLowerCase(Locale.ROOT))){
+            order = queryBuilder.asc(root.get("startDate"));
+        }else if(sort.equals(ProjectListSort.IMMINENT)){
+            order = queryBuilder.asc(root.get("endDate"));
+        }else{
+            throw new ProjectSortException();
+        }
+        if(order != null)
+            selectQuery.orderBy(order);
+
 
         List<Project> projects = em.createQuery(selectQuery)
                 .setFirstResult(startIndex)
@@ -71,15 +100,29 @@ public class ProjectRepository {
         return projects;
     }
 
-    public List<Project> findPrelaunchingList(int startIndex, String sort){
-        java.util.Date date = new Date(System.currentTimeMillis());
+    public List<Project> findPrelaunchingList(int startIndex, String sort) throws TumblbugException {
+        java.util.Date date = new Date();
         return findPrelaunchingList(startIndex, sort, date);
     }
-    public List<Project> findPrelaunchingList(int startIndex, String sort, java.util.Date date){
+    public List<Project> findPrelaunchingList(int startIndex, String sort, Date date) throws TumblbugException {
 
         CriteriaBuilder  queryBuilder = em.getCriteriaBuilder();
         CriteriaQuery<Project> selectQuery = queryBuilder.createQuery(Project.class);
         Root<Project> root = selectQuery.from(Project.class);
+
+        Order order;
+        if(sort == null){
+            order = null;
+        }else if(sort.equals(ProjectListSort.POPULAR.name().toLowerCase(Locale.ROOT))){
+            order = queryBuilder.desc(queryBuilder.size(root.get("likes")));
+        }else if(sort.equals(ProjectListSort.NEW.name().toLowerCase(Locale.ROOT))){
+            order = queryBuilder.asc(root.get("startDate"));
+        }else{
+            throw new ProjectSortException();
+        }
+
+        if(order != null)
+            selectQuery.orderBy(order);
 
         Predicate start_date = queryBuilder.greaterThan(root.get("startDate"), date);
         selectQuery.where(start_date);

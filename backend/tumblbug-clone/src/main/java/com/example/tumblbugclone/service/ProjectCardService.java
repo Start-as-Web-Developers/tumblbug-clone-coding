@@ -1,6 +1,7 @@
 
 package com.example.tumblbugclone.service;
 
+import com.example.tumblbugclone.Exception.TumblbugException;
 import com.example.tumblbugclone.Exception.projectlistexception.StartIndexException;
 import com.example.tumblbugclone.dto.ProjectCardDTO;
 import com.example.tumblbugclone.model.Project;
@@ -24,19 +25,19 @@ public class ProjectCardService {
     }
 
 
-    public ArrayList<ProjectCardDTO> findOngoingFromIdx(int startIdx) throws StartIndexException {
-        return findOngoingFromIdx(startIdx, new Date());
+    public ArrayList<ProjectCardDTO> findOngoingFromIdx(Integer startIdx, String sort) throws TumblbugException {
+        return findOngoingFromIdx(startIdx, sort, new Date());
     }
 
-    public ArrayList<ProjectCardDTO> findOngoingFromIdx(int startIdx, Date today) throws StartIndexException {
+    public ArrayList<ProjectCardDTO> findOngoingFromIdx(Integer startIdx, String sort,  Date today) throws TumblbugException {
         ArrayList<ProjectCardDTO> projectDTOList = new ArrayList<>();
         long findIndex = startIdx;
 
-        if(startIdx % 20 != 0){
+        if(startIdx == null || startIdx % 20 != 0){
             throw new StartIndexException("startIdx should be multiplier of 20");
         }
 
-        List<Project> ongoingList = projectRepository.findOngoingList(startIdx, "", today);
+        List<Project> ongoingList = projectRepository.findOngoingList(startIdx, sort, today);
 
         for (Project project : ongoingList) {
             projectDTOList.add(makeCardDTO(project));
@@ -46,13 +47,13 @@ public class ProjectCardService {
     }
 
 
-    public ArrayList<ProjectCardDTO> findPreLaunchingFromIdx(int startIdx) throws StartIndexException {
+    public ArrayList<ProjectCardDTO> findPreLaunchingFromIdx(int startIdx, String sort) throws TumblbugException {
         Date today = new Date();
 
-        return findPreLaunchingFromIdx(startIdx, today);
+        return findPreLaunchingFromIdx(startIdx, sort, today);
     }
 
-    public ArrayList<ProjectCardDTO> findPreLaunchingFromIdx(int startIdx, Date today) throws StartIndexException {
+    public ArrayList<ProjectCardDTO> findPreLaunchingFromIdx(int startIdx, String sort, Date today) throws TumblbugException {
         ArrayList<ProjectCardDTO> projectDTOList = new ArrayList<>();
         long findIndex = startIdx;
 
@@ -60,7 +61,7 @@ public class ProjectCardService {
             throw new StartIndexException("startIdx should be multiplier of 20");
         }
 
-        List<Project> ongoingList = projectRepository.findPrelaunchingList(startIdx, "", today);
+        List<Project> ongoingList = projectRepository.findPrelaunchingList(startIdx, sort, today);
 
         for (Project project : ongoingList) {
             projectDTOList.add(makeCardDTO(project));

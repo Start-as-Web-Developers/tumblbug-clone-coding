@@ -50,6 +50,8 @@ dependencies {
 	implementation 'org.hibernate:hibernate-core:6.1.7.Final'
 	//검증 설정
 	//implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	implementation 'org.jboss.logging:jboss-logging:3.5.0.Final'
 }
 
 test{
