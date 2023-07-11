@@ -7,7 +7,6 @@ import com.example.tumblbugclone.model.User;
 import com.example.tumblbugclone.repository.ProjectRepository;
 import com.example.tumblbugclone.repository.UserRepository;
 import org.assertj.core.api.Assertions;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:appConfig.xml")

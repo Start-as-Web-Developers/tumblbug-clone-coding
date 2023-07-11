@@ -7,6 +7,7 @@ import lombok.ToString;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "PROJECT_UPDATE")
@@ -16,28 +17,30 @@ import java.util.Date;
 public class ProjectUpdate {
 
     @Id
-    @Column(name = "UPDATE_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+    @Column(name = "UPDATE_ID")
+    private long id;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "PROJECT_ID")
-    Project project;
+    private Project project;
 
     @Column(name = "CONTENT")
-    String content;
+    private String content;
 
     @ManyToOne
     @JoinColumn(name = "USER_IDX")
-    User creater;
+    private User creater;
 
     @Column(name = "UPDATE_DATE")
     LocalDate updateDate;
 
     @Column(name = "IS_MODIFIED")
-    boolean modified = false;
+    private boolean modified = false;
 
-    //댓글
 
+    @Column(name = "comment")
+    @OneToMany(mappedBy = "update")
+    private List<UpdateComment> comment;
 
 }

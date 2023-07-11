@@ -1,7 +1,9 @@
 package com.example.tumblbugclone.service;
 
 import com.example.tumblbugclone.Exception.TumblbugException;
+import com.example.tumblbugclone.Exception.projectException.ProjectCantFindException;
 import com.example.tumblbugclone.Exception.projectException.ProjectCantModify;
+import com.example.tumblbugclone.Exception.userexception.UserCantFindException;
 import com.example.tumblbugclone.dto.PlanDTO;
 import com.example.tumblbugclone.dto.ProjectAllDTO;
 import com.example.tumblbugclone.dto.ProductDTO;
@@ -11,6 +13,7 @@ import com.example.tumblbugclone.model.User;
 import com.example.tumblbugclone.repository.ProjectRepository;
 import com.example.tumblbugclone.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -50,8 +53,7 @@ public class ProjectService {
 
         List<ProductDTO> productList = projectAllDTO.getProduct();
         for(ProductDTO product : productList) {
-            product.setProject(project);
-            productService.saveProduct(product);
+            productService.saveProduct(product, project.getProjectId(), userIndex);
         }
 
         return projectId;
@@ -157,5 +159,15 @@ public class ProjectService {
         projectAtDTO.setPlanGuide(project.getPlanGuide());
 
 
+    }
+
+    public Project findProjectById(long projectId) throws TumblbugException, ProjectCantFindException {
+        Project project;
+        try {
+            project = projectRepository.findProjectById(projectId);
+        } catch (EmptyResultDataAccessException e) {
+            throw new ProjectCantFindException();
+        }
+        return project;
     }
 }
