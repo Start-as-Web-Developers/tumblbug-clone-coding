@@ -1,10 +1,13 @@
 package com.example.tumblbugclone.controller;
 
+import com.example.tumblbugclone.Exception.TumblbugException;
+import com.example.tumblbugclone.Exception.componentException.ComponentCantModify;
 import com.example.tumblbugclone.managedconst.HttpConst;
 import com.example.tumblbugclone.model.Component;
 import com.example.tumblbugclone.model.Product;
 import com.example.tumblbugclone.service.ComponentService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,12 +32,15 @@ public class ComponentController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<String> createComponent(@RequestBody Component component, @PathVariable("product-id") long productId) {
-        Product product = new Product();
-        product.setProductId(productId);
+    public ResponseEntity<String> createComponent(@RequestBody Component component, @PathVariable("product-id") long productId, HttpSession session) throws ComponentCantModify {
+        long userIndex = (long)session.getAttribute(HttpConst.SESSION_USER_INDEX);
+        long componentId;
+        try {
+            componentId = componentService.saveComponent(component, productId, userIndex);
+        } catch (TumblbugException e) {
+            return ResponseEntity.status(e.getErrorStatus()).build();
+        }
 
-        component.setProduct(product);
-        long componentId = componentService.saveComponent(component);
         return ResponseEntity.ok(Long.toString(componentId));
     }
 
@@ -49,14 +55,17 @@ public class ComponentController {
 
     @PatchMapping("/{component-id}")
     @Transactional
-    public ResponseEntity<String> updateComponent(@RequestBody Component component, @PathVariable("product-id") long productId, @PathVariable("component-id") long componentId) {
-        Product product = new Product();
-        product.setProductId(productId);
+    public ResponseEntity<String> updateComponent(@RequestBody Component component, @PathVariable("product-id") long productId, @PathVariable("component-id") long componentId, HttpSession session) {
 
-        component.setProduct(product);
         component.setComponentId(componentId);
+        long userIndex = (long)session.getAttribute(HttpConst.SESSION_USER_INDEX);
+        long updateComponentId;
 
-        long updateComponentId = componentService.updateComponent(component);
+        try {
+            updateComponentId = componentService.updateComponent(component, productId, userIndex);
+        } catch (TumblbugException e) {
+            return ResponseEntity.status(e.getErrorStatus()).build();
+        }
         return ResponseEntity.ok(Long.toString(updateComponentId));
 
 
@@ -64,8 +73,16 @@ public class ComponentController {
 
     @DeleteMapping("/{component-id}")
     @Transactional
-    public ResponseEntity deleteComponent(@PathVariable("component-id") long componentId) throws Exception {
-        componentService.deleteComponentById(componentId);
+    public ResponseEntity deleteComponent(@PathVariable("product-id") long productId, @PathVariable("component-id") long componentId, HttpSession session) throws Exception {
+        long userIndex = (long)session.getAttribute(HttpConst.SESSION_USER_INDEX);
+
+        try {
+            componentService.deleteComponentById(componentId, productId, userIndex);
+        } catch (TumblbugException e) {
+            return ResponseEntity.status(e.getErrorStatus()).build();
+        }
+
+
         return new ResponseEntity(HttpStatus.OK);
     }
 }

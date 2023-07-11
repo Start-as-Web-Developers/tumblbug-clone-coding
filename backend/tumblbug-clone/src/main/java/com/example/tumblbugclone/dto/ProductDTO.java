@@ -12,7 +12,6 @@ import java.util.List;
 public class ProductDTO {
 
     private Long productId;
-    private Project project;
     private String name;
     private Integer price;
     private List<Component> component;
