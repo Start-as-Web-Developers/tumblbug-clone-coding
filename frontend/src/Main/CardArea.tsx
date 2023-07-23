@@ -1,22 +1,20 @@
-import React from "react";
+import React, {useState} from "react";
 import "./cardArea.scss";
 import { AiOutlineHeart } from "react-icons/ai";
 import { formatKoreanCurrency } from "../utils/commonFunction";
 
 type cardContent = {
   projectImg: string;
+  projectIdx: number;
   category: string;
-  author: string;
+  createrName: string;
   title: string;
   comment: string;
-  startDate: string;
   endDate: string;
+  like: number;
   goalMoney: number;
   totalMoney: number;
-  sponsor: number;
 };
-
-const cards: cardContent[] = [];
 
 // const cards: cardContent[] = [
 //   {
@@ -112,21 +110,24 @@ const getPercent = (totalMoney: number, goalMoney: number): string => {
   return `${percent}%`;
 };
 
-function CardArea() {
+interface props{
+  cards: cardContent[];
+}
+
+function CardArea(prop: props) {
+  const {cards}=prop;
+
   return (
     <section className="cardArea">
       {cards.map(
         ({
           projectImg,
           category,
-          author,
+          createrName,
           title,
           comment,
-          startDate,
-          endDate,
           goalMoney,
           totalMoney,
-          sponsor,
         }) => (
           <div className="cardContainer" key={title}>
             <div className="cardContainer__thumbNail">
@@ -136,7 +137,7 @@ function CardArea() {
             <div className="cardContainer__categoryArea">
               <span>{category}</span>
               <span>|</span>
-              <span>{author}</span>
+              <span>{createrName}</span>
             </div>
             <div className="cardContainer__cardTitle">{title}</div>
             <div className="cardContainer__cardExplain">{comment}</div>
@@ -163,4 +164,3 @@ function CardArea() {
 }
 
 export default CardArea;
-export { cards };
