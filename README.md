@@ -18,15 +18,15 @@
 
 - 프로젝트 확인 가능한 메인 화면, 필터 적용하여 프로젝트 분류 기능 <br>
 
-<img src="https://github.com/Start-as-Web-Developers/tumblbug-clone-coding/assets/45064913/d061e63e-7607-4e9d-86ed-a7f77a60f5f0" width="100%">
+<img src="https://user-images.githubusercontent.com/74173976/234723559-8e917e4e-3c66-4fed-9fee-eecccd6e513e.gif" width="100%">
 
 - 회원가입 및 로그인 기능 <br>
 
-<img src="https://github.com/Start-as-Web-Developers/tumblbug-clone-coding/assets/45064913/1ee0be3b-2c47-4165-a9d0-19decf5a4861" width="100%">
+<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/45064913/239012541-5d18665d-1f60-4c31-a74c-1a0b3ba7ea90.gif" width="100%">
 
 - 프로젝트 업로드, 프리뷰 <br>
 
-<img src="https://github.com/Start-as-Web-Developers/tumblbug-clone-coding/assets/45064913/d7ac82d1-2da9-45a1-8bac-d310a8b23439" width="100%">
+<img src="https://github.com/Start-as-Web-Developers/tumblbug-clone-coding/assets/45064913/e16618b3-8999-4714-b1eb-91b65ee7c0c2" width="100%">
 
 
 <br>
