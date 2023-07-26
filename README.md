@@ -72,7 +72,19 @@
 └─ 📂 utils ▶️ 유틸 함수, 기능 모음
 ```
 ```
-📂 backend > tumblbug-clone > src > main > java > com > example > tumblbugclone
+📂 
+📦backend/tumblbug-clone/src/main/java/com/example/tumblbugclone
+├─ 📂controller 
+├─ 📂dto 
+├─ 📂Exception ▶️ 커스텀 `Exception`
+├─ 📂filter ▶️ CORS 해결을 위한 필터
+├─ 📂managedconst ▶️ 상수 관리 클래스
+├─ 📂model 
+├─ 📂repository
+├─ 📂service  
+├─ 📜AppConfig.java
+├─ 📜ServletInitializer.java
+├─ 📜TumblbugCloneApplication.java
 ```
 - ERD
 ![image](https://github.com/Start-as-Web-Developers/tumblbug-clone-coding/assets/45064913/82cf8c2d-4b64-4c70-bef9-239481f39fb8)
