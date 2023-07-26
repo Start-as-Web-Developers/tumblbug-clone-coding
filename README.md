@@ -73,7 +73,7 @@
 ```
 ```
 📂 
-📦backend/tumblbug-clone/src/main/java/com/example/tumblbugclone
+📦backend > tumblbug-clone > src > main > java > com > example > tumblbugclone
 ├─ 📂controller 
 ├─ 📂dto 
 ├─ 📂Exception ▶️ 커스텀 `Exception`
