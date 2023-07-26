@@ -84,7 +84,7 @@
 ├─ 📂service  
 ├─ 📜AppConfig.java
 ├─ 📜ServletInitializer.java
-├─ 📜TumblbugCloneApplication.java
+└─ 📜TumblbugCloneApplication.java
 ```
 - ERD
 ![image](https://github.com/Start-as-Web-Developers/tumblbug-clone-coding/assets/45064913/82cf8c2d-4b64-4c70-bef9-239481f39fb8)
