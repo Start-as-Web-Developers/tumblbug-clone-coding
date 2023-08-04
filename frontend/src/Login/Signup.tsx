@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent } from "react";
+import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import Logo from "../TumblbugLogo/Logo";
 import "./Signup.scss";
 import "./LoginForm/LoginForm.scss";
@@ -17,6 +17,8 @@ function SignupContainer(props: LoginProps) {
     { id: 5, checked: false, required: false },
   ]);
   const [showMessage, setShowMessage] = useState(false);
+  const [username, setUsername] = useState("");
+  const [userId, setUserId] = useState("");
   const [email, setEmail] = useState("");
   const [emailConfirm, setEmailConfirm] = useState("");
   const [isValidEmail, setIsValidEmail] = useState(true);
@@ -25,6 +27,7 @@ function SignupContainer(props: LoginProps) {
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [isValidPassword, setIsValidPassword] = useState(true);
   const [isValidPasswordConfirm, setIsValidPasswordConfirm] = useState(true);
+  const [submitAvailable, setSubmitAvailable] = useState(false);
 
   const handleAllChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { checked } = event.target;
@@ -59,6 +62,14 @@ function SignupContainer(props: LoginProps) {
     setShowMessage(hasUncheckedRequired);
   }, [checkboxes]);
 
+  const handleUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const usernameValue = event.target.value;
+    setUsername(usernameValue);
+  };
+  const handleUserIdChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const userIdValue = event.target.value;
+    setUserId(userIdValue);
+  };
   const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
     const emailValue = event.target.value;
     setEmail(emailValue);
@@ -95,13 +106,61 @@ function SignupContainer(props: LoginProps) {
     transferBox(signinup);
   };
 
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const userData = {
+      userId,
+      userPassword: password,
+      userName: username,
+      userEmail: email,
+    };
+
+    fetch("https://zangsu-backend.store/user", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+      credentials: "include",
+    })
+      .then((response) => {
+        if (response.ok) {
+          console.log("회원가입이 성공했습니다.");
+
+          return fetch("https://zangsu-backend.store/user", {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          });
+        }
+        console.log("회원가입이 실패했습니다.");
+        return response;
+      })
+      .then((dataResponse) => {
+        if (dataResponse.ok) {
+          return dataResponse.json();
+        }
+        throw new Error("GET 요청이 실패했습니다.");
+      })
+      .then((data) => {
+        // 응답 데이터 처리
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   return (
     <section className="SignupSection">
       <div className="SignupImage" />
       <section className="SignupBox">
         <Logo />
         <h2 className="SignupTitle">이메일로 가입하기</h2>
-        <form className="SignupForm">
+        <form className="SignupForm" onSubmit={handleSubmit}>
           <label htmlFor="username" className="SignupLabel">
             <p className="LoginLabel">이름</p>
             <input
@@ -109,6 +168,8 @@ function SignupContainer(props: LoginProps) {
               id="username"
               className="LoginInput"
               placeholder="사용하실 이름을 입력해주세요."
+              value={username}
+              onChange={handleUsernameChange}
             />
           </label>
           <label htmlFor="userid" className="SignupLabel">
@@ -118,6 +179,8 @@ function SignupContainer(props: LoginProps) {
               id="userid"
               className="LoginInput"
               placeholder="사용하실 아이디를 입력해주세요."
+              value={userId}
+              onChange={handleUserIdChange}
             />
           </label>
           <label htmlFor="useremail" className="SignupLabel">
@@ -254,14 +317,18 @@ function SignupContainer(props: LoginProps) {
               </p>
             )}
           </div>
-          <button type="submit" className="LoginButton">
+          <button
+            type="submit"
+            className="LoginButton"
+            disabled={submitAvailable}
+          >
             가입하기
           </button>
         </form>
         <div className="SignuptoLogin">
           <p className="SignupSuggestion">이미 텀블벅 계정이 있으신가요?</p>
           <button
-            type="button"
+            type="submit"
             className="LoginSuggestionLink"
             onClick={() => clickTransfer("login")}
           >
