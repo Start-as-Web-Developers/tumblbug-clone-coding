@@ -1,0 +1,20 @@
+$preview-container-padding: 5%;
+$border-line-style:1px solid rgba(0, 0, 0, 0.1);
+
+.previewContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin:0 auto;
+  width: calc(100% - 2 * $preview-container-padding);
+  height: 88%;
+
+  & section {
+    border-bottom: $border-line-style;
+    
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}

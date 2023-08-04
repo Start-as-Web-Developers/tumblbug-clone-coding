@@ -1,0 +1,65 @@
+plugins {
+	id 'java'
+	id 'war'
+	id 'org.springframework.boot' version '3.0.6'
+	id 'io.spring.dependency-management' version '1.1.0'
+}
+
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	testImplementation 'org.projectlombok:lombok:1.18.26'
+
+
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	//새로 추가한 내용//JUnit4 추가
+	testImplementation("org.junit.vintage:junit-vintage-engine") {
+	exclude group: "org.hamcrest", module: "hamcrest-core"
+	}
+
+	// JPA 설정
+	//implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.mariadb.jdbc:mariadb-java-client:3.1.2'
+
+	//DB 커넥션 풀
+	implementation 'org.apache.tomcat:tomcat-jdbc:10.1.8'
+
+	//스프링 ORM
+	implementation 'org.springframework:spring-orm:6.0.8'
+
+	//하이버네이트
+	implementation 'org.hibernate:hibernate-core:6.1.7.Final'
+	//검증 설정
+	//implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	implementation 'org.jboss.logging:jboss-logging:3.5.0.Final'
+}
+
+test{
+	useJUnitPlatform()
+}
+//https://www.inflearn.com/questions/17098/unknown-entity-%EC%98%A4%EB%A5%98
+sourceSets {
+	main {
+		output.resourcesDir = java.outputDir
+	}
+}

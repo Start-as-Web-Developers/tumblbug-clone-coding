@@ -1,0 +1,82 @@
+$common-border-radius: 5px;
+$common-transition: 0.3s;
+
+.previewSummary {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 37.5%;
+  width: 100%;
+
+  & .previewSummary__thumbNail {
+    height: 100%;
+    width: 45%;
+    transition: $common-transition;
+    opacity: 0;
+  }
+
+  & .previewSummary__textBox {
+    height: 90%;
+    width: 45%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    & div {
+      transition: $common-transition;
+
+      &.previewSummary__dueDateRow,
+      &.previewSummary__dueMoneyRow,
+      &.previewSummary__sponsorNumber,
+      &.previewSummary__buttonBox {
+        opacity: 0;
+      }
+
+      & h5 {
+        font-size: 0.8rem;
+        font-weight: 500;
+      }
+
+      & h2 {
+        padding: 10% 0;
+        font-size: 1rem;
+        font-weight: 700;
+      }
+    }
+
+    & .previewSummary__buttonBox {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: $common-transition;
+
+      & button {
+        height: 100%;
+        padding: 3%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: $common-border-radius;
+
+        &.previewSummary__commonBtn {
+          outline: 1px solid rgb(228, 228, 228);
+        }
+
+        &.previewSummary__submitBtn {
+          color: #fff;
+          font-size: 0.9rem;
+          font-weight: 700;
+          background-color: rgb(250, 100, 98);
+        }
+
+        & svg {
+          width: 90%;
+          height: 90%;
+        }
+      }
+    }
+  }
+}

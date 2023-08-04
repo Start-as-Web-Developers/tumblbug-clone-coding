@@ -1,0 +1,39 @@
+.ProjectStory {
+  width: 40vw;
+  line-height: 1.5rem;
+
+  .ProjectArticleHead {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  .ProjectArticleHead::before {
+    content: "| ";
+  }
+
+  .ProjectBodyHr {
+    border: none;
+    height: 1px;
+    width: 100%;
+    margin: 1rem 0;
+    background-color: #ccc;
+  }
+
+  .ProjectArticleContent {
+    .ProjectArticleSubhead {
+      font-size: 1.125rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    h5 {
+      font-weight: 700;
+      margin: 0.5rem 0;
+    }
+    .ProjectArticleIcon {
+      color: tomato;
+      font-size: 1.125rem;
+      margin: 0 0.5rem;
+    }
+  }
+}

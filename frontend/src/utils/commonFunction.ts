@@ -50,6 +50,11 @@ const eventTo = (
   eventHandler: (() => void) | ((event:Event) => void),
   eventType = "click"
 ) => {
+  const validateEventTypes = ["click", "change"];
+
+  if (!validateEventTypes.includes(eventType)) {
+    throw new Error(`[Error] Invalid event type: ${eventType}`);
+  }
   $target.addEventListener(eventType, eventHandler);
 };
 
@@ -66,4 +71,34 @@ function $(cssSelector: string, root = document.body): HTMLElement | null {
   return null;
 }
 
-export { changeCSS, changeMultiCSS, eventTo, $ };
+const createElement = (tagName:string):HTMLElement => document.createElement(tagName);
+
+const createMultiElements = (tagNames: string[]):HTMLElement[] => {
+  const $elements:HTMLElement[] = [];
+  tagNames.forEach((tagName) => {
+    $elements.push(createElement(tagName));
+  })
+  return $elements;
+}
+
+const formatKoreanCurrency = (num:number | string): string => {
+  const money = num.toLocaleString("en");
+  const koreaMoney = money.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+  return koreaMoney;
+}
+
+const setElementVisible = ($target:HTMLElement) => {
+  changeCSS($target, "opacity", "1");
+}
+
+export {
+  changeCSS,
+  changeMultiCSS,
+  eventTo,
+  $,
+  createElement,
+  createMultiElements,
+  formatKoreanCurrency,
+  setElementVisible,
+};
+export type { cssObj };

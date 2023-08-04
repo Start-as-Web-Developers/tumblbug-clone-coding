@@ -1,0 +1,168 @@
+$button-right-margin: 5%;
+
+.infoArea {
+    width: 30%;
+    height: 70%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
+    & .mainBox {
+        width: 100%;
+        height: 60%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        &:after {
+            content: "";
+            display: block;
+            margin: 0 auto;
+            width: 95%;
+            height: 1px;
+            margin: 1px 0;
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        & .sponsorMoneyRow {
+            display: flex;
+            flex-wrap: wrap;
+
+            & h4 {
+                width: 100%;
+                font-size: 1rem;
+                margin-bottom: 2%;
+            }
+
+            & h3 {
+                font-size: 1.1rem;
+                margin-right: 5%;
+                align-self: flex-end;
+
+                & strong {
+                    align-self: center;
+                    font-size: 2rem;
+                    font-weight: 700;
+                }
+            }
+
+            & h2 {
+                align-self: flex-end;
+                font-size: 1.2rem;
+                font-weight: 700;
+            }
+        }
+
+        & .sponsorTimeRow {
+            display: flex;
+            flex-wrap: wrap;
+
+            & h4 {
+                width: 100%;
+                font-size: 1rem;
+                margin-bottom: 2%;
+            }
+
+            & h3 {
+                font-size: 1.1rem;
+                margin-right: 5%;
+                align-self: flex-end;
+
+                & strong {
+                    align-self: center;
+                    font-size: 2rem;
+                    font-weight: 700;
+                }
+            }
+        }
+
+        & .sponsorMemberRow {
+            display: flex;
+            flex-wrap: wrap;
+
+            & h4 {
+                width: 100%;
+                font-size: 1rem;
+                margin-bottom: 2%;
+            }
+
+            & h3 {
+                font-size: 1.1rem;
+                margin-right: 5%;
+                align-self: flex-end;
+
+                & strong {
+                    align-self: center;
+                    font-size: 2rem;
+                    font-weight: 700;
+                }
+            }
+        }
+    }
+
+    & .subBox {
+        width: 100%;
+        height: 20%;
+        padding: 2.5% 0;
+        display: grid;
+        grid-template-columns: 1fr 3fr;
+        grid-template-rows: 1fr 1fr 1fr;
+        
+        & span {
+            font-size: 0.8rem;
+
+            &:nth-child(2n + 1) {
+                font-weight: 700;
+            }
+
+            & strong {
+                border-radius: 5px;
+                font-weight: 700;
+                font-size: 0.7rem;
+                padding: 1.5%;
+                color: rgb(255, 87, 87);
+                background-color: rgb(253, 244, 243);
+            }
+        }
+    }
+
+    & .buttonBox {
+        width: 100%;
+        height: 15%;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        
+        & .buttonBox__heart {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-right: $button-right-margin;
+            width: 14.4%;
+            height: 80%;
+            outline: 1px solid rgba(0, 0, 0, 0.2);
+        }
+
+        & .buttonBox__share {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-right: $button-right-margin;
+            width: 14.4%;
+            height: 80%;
+            outline: 1px solid rgba(0, 0, 0, 0.2);
+        }
+
+        & button {
+            width: 55%;
+            height: 80%;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+            background-color: rgb(250, 100, 98);
+        }
+    }
+}
